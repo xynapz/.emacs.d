@@ -3,7 +3,6 @@
 ;; completion framewors for editor and minibuffers.
 
 ;;; Code:
-;; Vertico - Better minibuffer completion
 (use-package vertico
   :init
   (vertico-mode)
@@ -18,13 +17,6 @@
   (define-key vertico-map (kbd "C-d") #'vertico-scroll-up)
   (define-key vertico-map (kbd "C-u") #'vertico-scroll-down)
   (define-key vertico-map (kbd "C-g") #'abort-recursive-edit))
-
-;; Orderless - Better matching
-;; (use-package orderless
-;;   :custom
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-defaults nil)
-;;   (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package orderless
   :demand t
@@ -43,7 +35,6 @@
         read-file-name-completion-ignore-case t
         read-buffer-completion-ignore-case t
         completion-ignore-case t)
-
   ;; Orderless style dispatchers for more power
   (setq orderless-component-separator #'orderless-escapable-split-on-space
         orderless-matching-styles '(orderless-literal
@@ -84,6 +75,76 @@
   (consult-narrow-key "<")
   (consult-project-function #'projectile-project-root)
   :config
+  ;; Ignore directories for ripgrep
+  (setq consult-ripgrep-args
+        "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / \
+--smart-case --no-heading --with-filename --line-number --search-zip \
+--glob=!.git/ \
+--glob=!node_modules/ \
+--glob=!build/ \
+--glob=!dist/ \
+--glob=!target/ \
+--glob=!elpa/ \
+--glob=!eln-cache/ \
+--glob=!venv/ \
+--glob=!.venv/ \
+--glob=!vendor/ \
+--glob=!__pycache__/ \
+--glob=!*.pyc \
+--glob=!.next/ \
+--glob=!.cache/ \
+--glob=!.nuxt/ \
+--glob=!coverage/ \
+--glob=!.pytest_cache/ \
+--glob=!.cargo/ \
+--glob=!Cargo.lock \
+--glob=!package-lock.json \
+--glob=!yarn.lock \
+--glob=!pnpm-lock.yaml")
+
+  ;; Ignore directories for grep
+  (setq consult-grep-args
+        "grep --null --line-buffered --color=never --ignore-case \
+--exclude-dir=.git \
+--exclude-dir=node_modules \
+--exclude-dir=build \
+--exclude-dir=dist \
+--exclude-dir=target \
+--exclude-dir=elpa \
+--exclude-dir=eln-cache \
+--exclude-dir=venv \
+--exclude-dir=.venv \
+--exclude-dir=vendor \
+--exclude-dir=__pycache__ \
+--exclude-dir=.next \
+--exclude-dir=.cache \
+--exclude-dir=.nuxt \
+--exclude-dir=coverage \
+--exclude-dir=.pytest_cache \
+--exclude-dir=.cargo \
+--line-number -I -r")
+
+  ;; Ignore directories for find
+  (setq consult-find-args
+        "find . -not ( \
+-path '*/.git/*' -o \
+-path '*/node_modules/*' -o \
+-path '*/build/*' -o \
+-path '*/dist/*' -o \
+-path '*/target/*' -o \
+-path '*/elpa/*' -o \
+-path '*/eln-cache/*' -o \
+-path '*/venv/*' -o \
+-path '*/.venv/*' -o \
+-path '*/vendor/*' -o \
+-path '*/__pycache__/*' -o \
+-path '*/.next/*' -o \
+-path '*/.cache/*' -o \
+-path '*/.nuxt/*' -o \
+-path '*/coverage/*' -o \
+-path '*/.pytest_cache/*' -o \
+-path '*/.cargo/*' )")
+
   ;; Evil-compatible preview for consult
   (consult-customize
    consult-line
@@ -104,7 +165,6 @@
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none))))
-
   ;; Evil-like navigation in embark
   (define-key embark-general-map (kbd "j") #'embark-next-symbol)
   (define-key embark-general-map (kbd "k") #'embark-previous-symbol)

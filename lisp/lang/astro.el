@@ -68,7 +68,7 @@
       (beginning-of-line)
       (if (bobp)
           (setq indent-level 0)
-        ;; Check if we're inside frontmatter
+        ;; Check if inside frontmatter
         (if (astro--in-frontmatter-p)
             ;; Use basic 2-space indentation in frontmatter
             (progn
@@ -127,7 +127,18 @@
   (interactive)
   ;; Add Astro language server to eglot
   (add-to-list 'eglot-server-programs
-               '(astro-mode . ("astro-ls" "--stdio")))
+               '(astro-mode . ("astro-ls" "--stdio"
+                               :initializationOptions
+                               (:typescript (:tsdk "/usr/lib/node_modules/typescript/lib")))))
+
+  ;; ;; Configure TypeScript path from project base node_modules
+  ;; (let* ((project-root (or (and (fboundp 'projectile-project-root)
+  ;;                               (projectile-project-root))
+  ;;                          (project-root (project-current t))))
+  ;;        (tsdk-path (expand-file-name "/usr/lib/node_modules/typescript/lib" project-root)))
+  ;;   (when (file-exists-p tsdk-path)
+  ;;     (setq-local eglot-workspace-configuration
+  ;;                 `(:astro (:typescript (:tsdk ,tsdk-path))))))
 
   ;; Start eglot if not already running
   (unless (eglot-managed-p)
@@ -148,8 +159,8 @@
 (define-derived-mode astro-mode prog-mode "Astro"
   "Major mode for editing Astro framework files.
 
-Astro is a modern web framework for building fast, content-focused websites.
-This mode provides syntax highlighting, indentation, and LSP support via eglot.
+This mode provides Astro's syntax highlighting, indentation, and LSP
+support via eglot.
 
 Key bindings:
 \\{astro-mode-map}"
@@ -179,10 +190,7 @@ Key bindings:
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.astro\\'" . astro-mode))
 
-;; ============================================================================
 ;; Additional Utilities
-;; ============================================================================
-
 (defun astro-new-component (name)
   "Create a new Astro component with NAME."
   (interactive "sComponent name: ")
