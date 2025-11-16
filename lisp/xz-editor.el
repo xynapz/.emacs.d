@@ -57,7 +57,7 @@
 (use-package display-line-numbers
   :ensure nil
   :init
-  (setq display-line-numbers-type 'relative
+  (setq display-line-numbers-type 't
         display-line-numbers-width-start t)
   :config
   (dolist (hook '(prog-mode-hook conf-mode-hook nxml-mode-hook text-mode-hook))
@@ -164,7 +164,8 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown")
   :bind (:map markdown-mode-map
-              ("C-c C-e" . markdown-do)))
+              ;; ("C-c C-e" . markdown-do)
+              ))
 
 ;; Compile settings
 (use-package compile
@@ -238,5 +239,5 @@
 
 (setq dired-sidebar-theme 'nerd-icons)
 
-(provide 'editing)
+(provide 'xz-editor)
 ;;; xz-editor.el ends here

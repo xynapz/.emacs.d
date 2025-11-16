@@ -1,4 +1,4 @@
-;;; mypackage.el --- Package configuration -*- lexical-binding:t; -*-
+;;; xz-package.el --- Package configuration -*- lexical-binding:t; -*-
 ;;; Commentary:
 ;; initializing the package repositories and some base initial packages
 
@@ -180,6 +180,6 @@
   :after dired
   :hook (dired-mode . nerd-icons-dired-mode))
 
-(provide 'mypackage)
-;;; mypackage.el ends here
+(provide 'xz-package)
+;;; xz-package.el ends here
 

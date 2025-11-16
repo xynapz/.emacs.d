@@ -136,11 +136,12 @@
   :ensure t
   :after (consult projectile)
   :bind
-  (("C-c p h" . consult-projectile)
-   ("C-c p C-f" . consult-projectile-find-file)
-   ("C-c p C-d" . consult-projectile-find-dir)
-   ("C-c p C-p" . consult-projectile-switch-project)
-   ("C-c p C-b" . consult-projectile-switch-to-buffer)))
+  ;; (("C-c p h" . consult-projectile)
+  ;;  ("C-c p C-f" . consult-projectile-find-file)
+  ;;  ("C-c p C-d" . consult-projectile-find-dir)
+  ;;  ("C-c p C-p" . consult-projectile-switch-project)
+  ;;  ("C-c p C-b" . consult-projectile-switch-to-buffer))
+  )
 
 ;; Helpful - Better help buffers
 (use-package helpful
@@ -150,5 +151,5 @@
   ([remap describe-key] . helpful-key)
   ([remap describe-command] . helpful-command))
 
-(provide 'completion)
+(provide 'xz-completion)
 ;;; xz-completion.el ends here

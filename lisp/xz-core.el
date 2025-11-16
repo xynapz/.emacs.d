@@ -1,4 +1,4 @@
-;;; core.el --- Core settings -*-lexical-binding: t; -*-
+;;; xz-core.el --- Core settings -*-lexical-binding: t; -*-
 ;;; Commentary:
 ;; code config.
 
@@ -51,5 +51,5 @@
 ;; Recent files
 (recentf-mode 1)
 
-(provide 'core)
-;;; core.el ends here
+(provide 'xz-core)
+;;; xz-core.el ends here
