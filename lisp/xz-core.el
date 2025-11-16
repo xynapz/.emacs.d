@@ -50,7 +50,6 @@
 
 ;; Recent files
 (recentf-mode 1)
-(setq recentf-max-saved-items 100)
 
 (provide 'core)
 ;;; core.el ends here
