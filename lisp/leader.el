@@ -147,6 +147,17 @@
   "jl" '(evil-avy-goto-line :which-key "jump to line")
   "jw" '(evil-avy-goto-word-1 :which-key "jump to word")
 
+  ;; Server Manager
+  "m" '(:ignore t :which-key "manage")
+  "ms" '(server-manager-start :which-key "start server")
+  "mk" '(server-manager-stop :which-key "stop server")
+  "mr" '(server-manager-restart :which-key "restart server")
+  "ml" '(server-manager-list :which-key "list servers")
+  "mc" '(server-manager-custom :which-key "custom server")
+  "ma" '(server-manager-stop-all :which-key "stop all servers")
+  "md" '(server-manager-detect-and-start :which-key "detect & start")
+  "mb" '(server-manager-open-browser :which-key "open browser")
+
   ;; Notes/Org
   "n" '(:ignore t :which-key "notes")
   "na" '(org-agenda :which-key "org agenda")

@@ -19,6 +19,8 @@
 (load "completion")
 (load "org-config")
 (load "git")
+(load "server-manager")
+(load "vterm-config")
 
 ;; Languages
 (load "cc")
