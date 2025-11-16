@@ -24,41 +24,6 @@
 ;; Essential packages loaded early
 (use-package diminish)
 
-;; Evil mode - Vim emulation
-(use-package evil
-  :init
-  (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-want-C-u-scroll t
-        evil-want-C-d-scroll t
-        evil-want-C-i-jump nil
-        evil-respect-visual-line-mode t
-        evil-undo-system 'undo-redo
-        evil-search-module 'evil-search
-        evil-split-window-below t
-        evil-vsplit-window-right t)
-  :config
-  (evil-mode 1)
-  ;; Use visual line motions even outside of visual-line-mode buffers
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init 'magit))
-
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-commentary
-  :after evil
-  :diminish
-  :config
-  (evil-commentary-mode))
-
 ;; Which-key - Shows available keybindings
 (use-package which-key
   :diminish
@@ -77,14 +42,6 @@
   :config
   (which-key-mode)
 
-  ;; Hide all default evil bindings that aren't explicitly defined
-  (push '((nil . "evil-") . t) which-key-replacement-alist)
-  (push '((nil . "Evil") . t) which-key-replacement-alist)
-
-  ;; Hide evilem (evil-easymotion) bindings
-  (push '((nil . "evilem-") . t) which-key-replacement-alist)
-  (push '((nil . "^evilem") . t) which-key-replacement-alist)
-
   ;; Hide digit-argument bindings
   (push '(("\\`[0-9]\\'" . nil) . t) which-key-replacement-alist)
   (push '((nil . "digit-argument") . t) which-key-replacement-alist)
@@ -96,38 +53,14 @@
   ;; Hide other common bindings you don't want to see
   (push '((nil . "self-insert-command") . t) which-key-replacement-alist)
   (push '((nil . "ignore") . t) which-key-replacement-alist)
-  (push '((nil . "undefined") . t) which-key-replacement-alist)
+  (push '((nil . "undefined") . t) which-key-replacement-alist))
 
-  ;; Add custom replacements for your defined prefixes
-  (which-key-add-key-based-replacements
-    "SPC b" "buffers"
-    "SPC f" "files"
-    "SPC f e" "emacs"
-    "SPC p" "project"
-    "SPC w" "windows"
-    "SPC t" "toggle"
-    "SPC h" "help"
-    "SPC n" "notes"
-    "SPC c" "code"
-    "SPC g" "git"
-    "SPC a" "applications"
-    "SPC i" "insert"
-    "SPC j" "jump"
-    "SPC o" "open"
-    "SPC q" "quit"
-    "SPC s" "search"
-    "SPC x" "execute"))
-
-;; General - Better key definition
-(use-package general
+(use-package magit
+  :commands (magit-status magit-dispatch magit-file-dispatch)
   :config
-  (general-evil-setup t)
-
-  ;; Set up SPC as leader key
-  (general-create-definer my/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC"))
+  ;; Performance
+  (setq magit-refresh-status-buffer nil
+        magit-git-executable "git"))
 
 ;; Projectile - Project management
 (use-package projectile
@@ -162,19 +95,6 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-(use-package evil-org
-  :after (evil org)
-  :hook (org-mode . evil-org-mode)
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-
-(use-package treemacs-nerd-icons
-  :after treemacs
-  :config
-  (treemacs-load-theme "nerd-icons"))
-
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
@@ -182,7 +102,6 @@
 (use-package nerd-icons-dired
   :after dired
   :hook (dired-mode . nerd-icons-dired-mode))
-
 
 (use-package dashboard
   :ensure t
@@ -254,15 +173,6 @@
                                 (search-forward "Projects:" nil t)
                                 (forward-line 1)
                                 (beginning-of-line)))))
-
-  ;; Evil mode keybindings
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal dashboard-mode-map
-      "gr" 'dashboard-refresh-buffer
-      "gp" 'projectile-switch-project
-      "ga" 'org-agenda
-      "gc" 'org-capture
-      "gn" (lambda () (interactive) (find-file "~/org/"))))
 
   ;; Also add emacs-state binding
   (define-key dashboard-mode-map (kbd "C-c d") 'dashboard-refresh-buffer))

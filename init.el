@@ -12,20 +12,14 @@
 ;; Load modules in order
 (load "core")
 (load "mypackage")
-(load "evil-config")
-(load "leader")
 (load "ui")
 (load "editing")
-(load "completion")
-(load "org-config")
-(load "git")
+;; (load "completion")
 (load "server-manager")
-(load "vterm-config")
 
 ;; Languages
 (load "cc")
 (load "astro")
-
 
 ;;; init.el ends here
 
@@ -41,4 +35,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
+

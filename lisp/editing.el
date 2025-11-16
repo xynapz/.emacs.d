@@ -19,21 +19,12 @@
   :after dired
   :config (diredfl-global-mode 1))
 
-;; Better dired navigation with evil
-(with-eval-after-load 'dired
-  (evil-define-key 'normal dired-mode-map
-    (kbd "h") 'dired-up-directory
-    (kbd "l") 'dired-find-file
-    (kbd "RET") 'dired-find-file))
-
 ;; Smartparens
 (use-package smartparens
   :diminish
   :hook ((prog-mode text-mode markdown-mode) . smartparens-mode)
   :config
-  (require 'smartparens-config)
-  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-  (sp-local-pair 'emacs-lisp-mode "`" nil :actions nil))
+  (require 'smartparens-config))
 
 ;; Whitespace
 (use-package whitespace
@@ -80,18 +71,11 @@
         `(("." . ,(expand-file-name "undo-tree-hist/" user-emacs-directory))))
   (global-undo-tree-mode))
 
-;; Multiple cursors
-(use-package evil-multiedit
-  :after evil
-  :config
-  (evil-multiedit-default-keybinds))
-
 ;; Move text
 (use-package drag-stuff
   :diminish
   :config
-  (drag-stuff-global-mode 1)
-  (drag-stuff-define-keys))
+  (drag-stuff-global-mode 1))
 
 ;; Better search/replace
 (use-package anzu
@@ -99,20 +83,6 @@
   :config
   (global-anzu-mode +1)
   (setq anzu-cons-mode-line-p nil))
-
-(use-package evil-anzu
-  :after (evil anzu))
-
-;; Better completion in region
-(use-package corfu
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)
-  (corfu-auto-delay 0.2)
-  (corfu-auto-prefix 2)
-  (corfu-quit-no-match 'separator)
-  :init
-  (global-corfu-mode))
 
 ;; Snippets
 (use-package yasnippet
@@ -130,10 +100,134 @@
   (setq avy-timeout-seconds 0.3
         avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
-(use-package evil-easymotion
-  :after evil
+(require 'org)
+
+;; Org directories
+(setq org-directory "~/org/"
+      org-default-notes-file (expand-file-name "notes.org" org-directory))
+
+;; Create org directory if it doesn't exist
+(unless (file-exists-p org-directory)
+  (make-directory org-directory t))
+
+;; Org settings
+(setq org-startup-folded 'content
+      org-startup-indented t
+      org-hide-emphasis-markers t
+      org-pretty-entities t
+      org-ellipsis " ▾"
+      org-log-done 'time
+      org-log-into-drawer t
+      org-return-follows-link t
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-edit-src-content-indentation 0
+      org-fontify-quote-and-verse-blocks t
+      org-hide-block-startup nil
+      org-src-preserve-indentation nil
+      org-startup-with-inline-images t
+      org-cycle-separator-lines 2)
+
+;; Org agenda
+(setq org-agenda-files (list org-directory)
+      org-deadline-warning-days 7)
+
+;; TODO keywords
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)")
+        (sequence "[ ](T)" "[-](P)" "[?](M)" "|" "[X](D)")))
+
+;; TODO keyword faces
+(setq org-todo-keyword-faces
+      '(("TODO" . (:foreground "#ff6c6b" :weight bold))
+        ("NEXT" . (:foreground "#da8548" :weight bold))
+        ("PROG" . (:foreground "#ECBE7B" :weight bold))
+        ("WAIT" . (:foreground "#51afef" :weight bold))
+        ("DONE" . (:foreground "#98be65" :weight bold))
+        ("CANCELLED" . (:foreground "#5B6268" :weight bold))))
+
+;; Org tags
+(setq org-tag-alist
+      '((:startgroup)
+        (:endgroup)
+        ("@work" . ?w)
+        ("@home" . ?h)
+        ("@errand" . ?e)
+        ("planning" . ?p)
+        ("idea" . ?i)
+        ("note" . ?n)))
+
+;; Org capture templates
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("n" "Note" entry (file+headline org-default-notes-file "Notes")
+         "* %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree (lambda () (expand-file-name "journal.org" org-directory)))
+         "* %?\nEntered on %U\n  %i\n  %a")
+        ("m" "Meeting" entry (file+headline org-default-notes-file "Meetings")
+         "* MEETING %? :meeting:\n  %U")
+        ("i" "Idea" entry (file+headline org-default-notes-file "Ideas")
+         "* %? :idea:\n  %U\n  %i\n  %a")))
+
+;; Org babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (shell . t)
+   (C . t)))
+
+;; Don't ask for confirmation before evaluating
+(setq org-confirm-babel-evaluate nil)
+
+;; Org modern for better aesthetics
+(use-package org-modern
+  :hook (org-mode . org-modern-mode)
   :config
-  (evilem-default-keybindings "SPC"))
+  (setq org-modern-star '("●" "○" "✸" "✿" "◆" "◇")
+        org-modern-table-vertical 1
+        org-modern-table-horizontal 0.2
+        org-modern-list '((43 . "➤") (45 . "–") (42 . "•"))
+        org-modern-block-fringe nil
+        org-modern-block-name
+        '((t . t)
+          ("src" "»" "«")
+          ("example" "»–" "–«")
+          ("quote" "❝" "❞"))
+        org-modern-progress nil
+        org-modern-priority nil
+        org-modern-horizontal-rule (make-string 36 ?─)
+        org-modern-keyword nil
+        org-modern-timestamp t
+        org-modern-todo t))
+
+;; Org appear - Show emphasis markers on demand
+(use-package org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil))
+
+;; Org present - Presentations
+(use-package org-present
+  :after org
+  :config
+  (add-hook 'org-present-mode-hook
+            (lambda ()
+              (org-display-inline-images)
+              ))
+  (add-hook 'org-present-mode-quit-hook
+            (lambda ()
+              (org-remove-inline-images))))
+
+;; Visual fill for better org reading
+(use-package visual-fill-column
+  :hook (org-mode . (lambda ()
+                      (setq visual-fill-column-width 100
+                            visual-fill-column-center-text t)
+                      (visual-fill-column-mode 1))))
 
 (provide 'editing)
 ;;; editing.el ends here

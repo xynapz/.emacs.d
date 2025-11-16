@@ -52,7 +52,6 @@
         doom-modeline-enable-word-count nil
         doom-modeline-buffer-encoding nil
         doom-modeline-indent-info nil
-        doom-modeline-checker-simple-format t
         doom-modeline-vcs-max-length 12
         doom-modeline-env-version t
         doom-modeline-project-detection 'projectile)
@@ -67,29 +66,6 @@
   (load-theme 'doom-one t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
-
-;; Treemacs
-(use-package treemacs
-  :bind (("<f9>" . treemacs)
-         :map treemacs-mode-map
-         ([mouse-1] . treemacs-single-click-expand-action))
-  :config
-  (setq treemacs-width 30
-        treemacs-follow-mode t
-        treemacs-filewatch-mode t
-        treemacs-fringe-indicator-mode 'always
-        treemacs-indent-guide-style 'line
-        treemacs-show-hidden-files t
-        treemacs-silent-refresh t
-        treemacs-silent-filewatch t
-        treemacs-is-never-other-window t))
-
-(use-package treemacs-evil
-  :after (treemacs evil))
-
-(use-package treemacs-projectile
-  :after (treemacs projectile))
-
 
 ;; Rainbow delimiters
 (use-package rainbow-delimiters
