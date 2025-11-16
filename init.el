@@ -14,7 +14,7 @@
 (load "mypackage")
 (load "ui")
 (load "editing")
-;; (load "completion")
+(load "completion")
 (load "server-manager")
 
 ;; Languages
