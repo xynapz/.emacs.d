@@ -30,7 +30,7 @@
   :ensure t
   :init
   (setq dashboard-banner-logo-title "Welcome to Emacs, Angel 🧠")
-  (setq dashboard-startup-banner "~/.emacs.d/banner.png")  ;; can also be a path to an image or 'logo
+  (setq dashboard-startup-banner "~/.emacs.d/banner.png")
   (setq dashboard-center-content t)
   (setq dashboard-show-shortcuts nil)
 

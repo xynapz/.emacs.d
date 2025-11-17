@@ -187,13 +187,10 @@
   ;; IMPORTANT: Automatically kill buffers for deleted/moved files
   (dired-clean-up-buffers-too t)
 
-  ;; Move files to trash instead of permanent deletion
-  (delete-by-moving-to-trash t)
-
   ;; If you have two dired windows open, use the other as default target
   (dired-dwim-target t)
 
-  ;; Emacs 28+: Kill old dired buffer when opening new directory
+  ;; Kill old dired buffer when opening new directory
   ;; This prevents accumulation of dired buffers
   (dired-kill-when-opening-new-dired-buffer t)
 

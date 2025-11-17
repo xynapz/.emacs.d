@@ -2,7 +2,7 @@
 
 ;;; Commentary:
 ;; Global keybindings that span multiple packages or core Emacs functions.
-;; Package-specific bindings should stay in their use-package declarations.
+;; Package-specific bindings are in their use-package declarations.
 
 ;;; Code:
 
@@ -10,7 +10,7 @@
 ;; Better defaults that should be global
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-x k") 'kill-this-buffer) ; skip prompt for current buffer
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;;;; Window Management
 (winner-mode 1)
@@ -89,7 +89,7 @@
 (global-set-key (kbd "C-c /") 'comment-line)
 (global-set-key (kbd "C-c M-/") 'comment-or-uncomment-region)
 
-;; Multiple cursors (if you add this package)
+;; Multiple cursors
 ;; (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 ;; (global-set-key (kbd "C-c m n") 'mc/mark-next-like-this)
 ;; (global-set-key (kbd "C-c m p") 'mc/mark-previous-like-this)
