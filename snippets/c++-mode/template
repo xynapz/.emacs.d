@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: template
+# key: temp
+# --
+template<typename ${1:T}>
+${2:void} ${3:function}(${4:$1 arg}) {
+    $0
+}

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: range-based for
+# key: fori
+# --
+for (${1:auto}${2:&} ${3:item} : ${4:container}) {
+    $0
+}

@@ -180,6 +180,8 @@
   :after dired
   :hook (dired-mode . nerd-icons-dired-mode))
 
+(use-package vscode-icon :ensure t)
+
 (provide 'xz-package)
 ;;; xz-package.el ends here
 

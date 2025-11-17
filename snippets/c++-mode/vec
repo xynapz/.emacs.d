@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: vector
+# key: vec
+# --
+std::vector<${1:int}> ${2:name}${3:($4)};$0

@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: xynapz post
+# key: xzpost
+# --
+---
+title: '${1:Post Title}'
+slug: '${1:$(downcase (replace-regexp-in-string "[^a-z0-9]+" "-" (yas-text)))}'
+description: '${2:Brief description}'
+pubDate: '`(format-time-string "%b %d %Y")`'
+tags: [${3:'astro'}]
+updatedDate: '`(format-time-string "%b %d %Y")`'
+---
+
+# ${1:$(yas-text)}
+
+## Introduction
+
+$0
+
+## Conclusion

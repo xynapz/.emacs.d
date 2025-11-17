@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: try-catch
+# key: try
+# --
+try {
+    $1
+} catch (${2:const std::exception& e}) {
+    ${3:std::cerr << e.what() << std::endl;}
+}$0

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: case statement
+# key: case
+# --
+case "${1:variable}" in
+    ${2:pattern1})
+        ${3:command}
+        ;;
+    *)
+        ${4:default}
+        ;;
+esac$0

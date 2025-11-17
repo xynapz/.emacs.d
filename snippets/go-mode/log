@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fmt.Println
+# key: log
+# --
+fmt.Println(${1:"${2:value}:", }$2)$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: grid
+# key: grid
+# --
+display: grid;
+grid-template-columns: ${1:repeat(3, 1fr)};
+${2:gap: ${3:1rem};}$0

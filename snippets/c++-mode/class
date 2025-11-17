@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: class
+# key: cls
+# --
+class ${1:ClassName} {
+private:
+    ${2:// private members}
+
+public:
+    ${1:$(yas-text)}();
+    ~${1:$(yas-text)}();
+    
+    $0
+};

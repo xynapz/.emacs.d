@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: main
+# key: main
+# --
+#include <iostream>
+
+int main(int argc, char* argv[]) {
+    $0
+    return 0;
+}

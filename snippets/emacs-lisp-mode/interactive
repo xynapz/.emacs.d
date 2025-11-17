@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: interactive function
+# key: interactive
+# --
+(defun ${1:function-name} (${2:args})
+  "${3:Documentation}"
+  (interactive${4: "${5:spec}"})
+  $0)

@@ -52,10 +52,12 @@
 ;;;; Project Management (Projectile)
 ;; Use C-c p as projectile prefix (standard convention)
 (global-set-key (kbd "C-c p") 'projectile-command-map)
-
+(global-set-key (kbd "C-c p a") 'projectile-add-known-project)
+(global-set-key (kbd "C-c p A") 'projectile-find-other-file)
 ;; Quick project actions with consult integration
 (global-set-key (kbd "C-c p f") 'consult-projectile-find-file)
-(global-set-key (kbd "C-c p s") 'consult-projectile-switch-project)
+(global-set-key (kbd "C-c p p") 'consult-projectile-switch-project)
+(global-set-key (kbd "C-c p s") 'projectile-switch-project)
 (global-set-key (kbd "C-c p b") 'consult-projectile-switch-to-buffer)
 
 ;;;; File Tree (Dired Sidebar)

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: export
+# key: exp
+# --
+export ${1:const} ${2:name} = $0;

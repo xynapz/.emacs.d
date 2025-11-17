@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: list comprehension
+# key: lc
+# --
+[${1:expr} for ${2:item} in ${3:iterable}${4: if ${5:condition}}]$0

@@ -132,16 +132,10 @@
   (setq flycheck-indication-mode 'right-fringe)
   (setq flycheck-emacs-lisp-load-path 'inherit))
 
+;; keybinds are in xz-keybindings.el
 (use-package consult-projectile
   :ensure t
-  :after (consult projectile)
-  :bind
-  ;; (("C-c p h" . consult-projectile)
-  ;;  ("C-c p C-f" . consult-projectile-find-file)
-  ;;  ("C-c p C-d" . consult-projectile-find-dir)
-  ;;  ("C-c p C-p" . consult-projectile-switch-project)
-  ;;  ("C-c p C-b" . consult-projectile-switch-to-buffer))
-  )
+  :after (consult projectile))
 
 ;; Helpful - Better help buffers
 (use-package helpful

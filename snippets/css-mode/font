@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: font import
+# key: font
+# --
+@import url('https://fonts.googleapis.com/css2?family=${1:Roboto}:wght@${2:400;700}&display=swap');$0

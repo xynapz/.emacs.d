@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: with statement
+# key: with
+# --
+with ${1:open('${2:file}')} as ${3:f}:
+    $0

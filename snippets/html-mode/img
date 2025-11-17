@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: image tag
+# key: img
+# --
+<img src="${1:path}" alt="${2:description}">$0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: input
+# key: input
+# --
+<input type="${1:text}" name="${2:name}" id="${3:$2}" ${4:placeholder="${5:placeholder}"}/>$0

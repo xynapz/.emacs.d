@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: html5 boilerplate
+# key: html
+# --
+<!DOCTYPE html>
+<html lang="${1:en}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${2:Document}</title>
+    $3
+</head>
+<body>
+    $0
+</body>
+</html>

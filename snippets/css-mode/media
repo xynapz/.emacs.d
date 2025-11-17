@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: media query
+# key: media
+# --
+@media (${1:min-width}: ${2:768px}) {
+    $0
+}

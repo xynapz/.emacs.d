@@ -1,4 +1,4 @@
-;;; editing.el --- Editing behavior -*- lexical-binding: t; -*-
+;;; Editing.el --- Editing behavior -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; editor settings.
 
@@ -219,8 +219,26 @@
   (setq avy-timeout-seconds 0.3
         avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
+;; (use-package dired-sidebar
+;;   :ensure t
+;;   :commands (dired-sidebar-toggle-sidebar)
+;;   :init
+;;   (add-hook 'dired-sidebar-mode-hook
+;;             (lambda ()
+;;               (unless (file-remote-p default-directory)
+;;                 (auto-revert-mode))))
+;;   :config
+;;   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+;;   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+;;   (setq dired-sidebar-subtree-line-prefix "__")
+;;   (setq dired-sidebar-theme 'vscode)
+;;   (setq dired-sidebar-use-term-integration t)
+;;   (setq dired-sidebar-use-custom-font t))
+
+
+
 (use-package dired-sidebar
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :init
@@ -231,11 +249,38 @@
   :config
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-
   (setq dired-sidebar-subtree-line-prefix "__")
-  (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-theme 'nerd-icons)
   (setq dired-sidebar-use-term-integration t)
-  (setq dired-sidebar-use-custom-font t))
+  (setq dired-sidebar-use-custom-font t)
+
+  ;; (defun my/dired-sidebar-truncate-symlinks ()
+  ;;   "Show symlink targets with an icon and filename only."
+  ;;   (require 'nerd-icons)
+  ;;   (save-excursion
+  ;;     (goto-char (point-min))
+  ;;     (while (re-search-forward " -> \\(.+\\)$" nil t)
+  ;;       (let* ((target (match-string 1))
+  ;;              (filename (concat " " (file-name-nondirectory target)))
+  ;;              (formatted (concat " ")))
+  ;;         (replace-match formatted)))))
+
+  (defun my/dired-sidebar-truncate-symlinks ()
+  "Show symlink targets with an icon and filename only."
+  (require 'nerd-icons)
+  (let ((literal " "))  ;; Declare string literal at the top
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward " -> \\(.+\\)$" nil t)
+        (let* ((target (match-string 1))
+               (formatted (concat " " literal)))  ;; Add literal here
+          (replace-match formatted))))))
+
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (add-hook 'dired-after-readin-hook
+                        #'my/dired-sidebar-truncate-symlinks nil t))))
+
 
 (setq dired-sidebar-theme 'nerd-icons)
 

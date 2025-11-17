@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: debug print
+# key: log
+# --
+print(f"${1:var}={${1:$(yas-text)}}")$0
