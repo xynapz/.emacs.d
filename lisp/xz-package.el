@@ -175,12 +175,66 @@
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
+;; Basic Dired configuration
+(use-package dired
+  :ensure nil  ; built-in package
+  :commands (dired dired-jump)
+  :bind (("C-x C-j" . dired-jump))  ; Quick jump to dired for current file
+  :custom
+  ;; Use human-readable sizes, group directories first
+  (dired-listing-switches "-alhgo --group-directories-first")
+
+  ;; IMPORTANT: Automatically kill buffers for deleted/moved files
+  (dired-clean-up-buffers-too t)
+
+  ;; Move files to trash instead of permanent deletion
+  (delete-by-moving-to-trash t)
+
+  ;; If you have two dired windows open, use the other as default target
+  (dired-dwim-target t)
+
+  ;; Emacs 28+: Kill old dired buffer when opening new directory
+  ;; This prevents accumulation of dired buffers
+  (dired-kill-when-opening-new-dired-buffer t)
+
+  :config
+  ;; Load dired-x for extra features
+  (require 'dired-x)
+
+  ;; Enable 'a' command to reuse buffer (instead of creating new ones)
+  (put 'dired-find-alternate-file 'disabled nil)
+
+  ;; Better key bindings for navigation
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+  (define-key dired-mode-map (kbd "^")
+              (lambda () (interactive) (find-alternate-file ".."))))
+
+;; Hide dotfiles by default (toggle with '.')
+(use-package dired-hide-dotfiles
+  :ensure t
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+  :bind (:map dired-mode-map
+              ("." . dired-hide-dotfiles-mode)))
+
+;; Dired subtree - expand/collapse directories in place
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :bind (:map dired-mode-map
+              ("i" . dired-subtree-insert)
+              ("I" . dired-subtree-remove)))
+
 ;; Dired icons
 (use-package nerd-icons-dired
   :after dired
   :hook (dired-mode . nerd-icons-dired-mode))
 
-(use-package vscode-icon :ensure t)
+;; Hide details in dired by default, but keep permissions visible
+(add-hook 'dired-mode-hook 'dired-hide-details-mode)
+
+;; Customize what dired-hide-details-mode hides
+(setq dired-hide-details-hide-symlink-targets nil
+      dired-hide-details-hide-information-lines nil)
 
 (provide 'xz-package)
 ;;; xz-package.el ends here

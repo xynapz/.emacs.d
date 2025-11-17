@@ -60,9 +60,6 @@
 (global-set-key (kbd "C-c p s") 'projectile-switch-project)
 (global-set-key (kbd "C-c p b") 'consult-projectile-switch-to-buffer)
 
-;;;; File Tree (Dired Sidebar)
-(global-set-key (kbd "C-c t") 'dired-sidebar-toggle-sidebar)
-
 ;;;; Org Mode Quick Access
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
