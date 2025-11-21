@@ -207,11 +207,11 @@
               (lambda () (interactive) (find-alternate-file ".."))))
 
 ;; Hide dotfiles by default (toggle with '.')
-(use-package dired-hide-dotfiles
-  :ensure t
-  :hook (dired-mode . dired-hide-dotfiles-mode)
-  :bind (:map dired-mode-map
-              ("." . dired-hide-dotfiles-mode)))
+;; (use-package dired-hide-dotfiles
+;;   :ensure t
+;;   :hook (dired-mode . dired-hide-dotfiles-mode)
+;;   :bind (:map dired-mode-map
+;;               ("." . dired-hide-dotfiles-mode)))
 
 ;; Dired subtree - expand/collapse directories in place
 (use-package dired-subtree

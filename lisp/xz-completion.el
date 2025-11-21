@@ -145,5 +145,7 @@
   ([remap describe-key] . helpful-key)
   ([remap describe-command] . helpful-command))
 
+(setq eldoc-documentation-strategy #'eldoc-documentation-compose)
+
 (provide 'xz-completion)
 ;;; xz-completion.el ends here
