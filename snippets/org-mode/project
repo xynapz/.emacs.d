@@ -3,8 +3,8 @@
 #+DATE: `(format-time-string "%Y-%m-%d")`
 #+DESCRIPTION: ${2:Project description}
 #+KEYWORDS: ${3:tech, stack, tags}
-#+HTML_HEAD: <meta name="pub_date" content="(format-time-string "%Y-%m-%d")" />
-#+HTML_HEAD: <meta name="updated_date" content="(format-time-string "%Y-%m-%d")" />
+#+HTML_HEAD: <meta name="pub_date" content="`(format-time-string "%Y-%m-%d")`" />
+#+HTML_HEAD: <meta name="updated_date" content="`(format-time-string "%Y-%m-%d")`" />
 #+HTML_HEAD: <meta name="stack" content="${4:Go, TypeScript, Astro}" />
 #+HTML_HEAD: <meta name="platform" content="${5:Web}" />
 #+HTML_HEAD: <meta name="website" content="${6:https://example.com}" />

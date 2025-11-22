@@ -4,8 +4,8 @@
 #+DESCRIPTION: ${2:Short description for SEO}
 #+KEYWORDS: ${3:tag1, tag2, tag3}
 #+OPTIONS: ^:{} num:nil toc:5
-#+HTML_HEAD: <meta name="pub_date" content="(format-time-string "%Y-%m-%d")" />
-#+HTML_HEAD: <meta name="updated_date" content="(format-time-string "%Y-%m-%d")" />
+#+HTML_HEAD: <meta name="pub_date" content="`(format-time-string "%Y-%m-%d")`" />
+#+HTML_HEAD: <meta name="updated_date" content="`(format-time-string "%Y-%m-%d")`" />
 #+EXPORT_FILE_NAME: /home/angel/xynapz/angeld.me/src/content/post/postfile.html
 
 * ${1:Title}
