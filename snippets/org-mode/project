@@ -1,0 +1,16 @@
+#+TITLE: ${1:Project Name}
+#+AUTHOR: Angel Dhakal
+#+DATE: `(format-time-string "%Y-%m-%d")`
+#+DESCRIPTION: ${2:Project description}
+#+KEYWORDS: ${3:tech, stack, tags}
+#+HTML_HEAD: <meta name="pub_date" content="(format-time-string "%Y-%m-%d")" />
+#+HTML_HEAD: <meta name="updated_date" content="(format-time-string "%Y-%m-%d")" />
+#+HTML_HEAD: <meta name="stack" content="${4:Go, TypeScript, Astro}" />
+#+HTML_HEAD: <meta name="platform" content="${5:Web}" />
+#+HTML_HEAD: <meta name="website" content="${6:https://example.com}" />
+#+HTML_HEAD: <meta name="github" content="${7:https://github.com/xynapz/repo}" />
+#+OPTIONS: ^:{} num:nil toc:5
+#+EXPORT_FILE_NAME: /home/angel/xynapz/angeld.me/src/content/project/project-name.html
+
+* ${1:Project Name}
+${0}
