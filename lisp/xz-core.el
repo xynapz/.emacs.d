@@ -25,9 +25,11 @@
 (setopt frame-title-format "Angel - %b")
 
 ;; Fonts
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 134)
-(set-face-attribute 'fixed-pitch nil :font "JetBrainsMono Nerd Font" :height 134)
-(set-face-attribute 'variable-pitch nil :font "JetBrainsMono Nerd Font" :height 134)
+;; Classic Power User Choice: Iosevka
+;; Alternatives: "IBM Plex Mono", "Inconsolata", "Fira Code", "Hack"
+(set-face-attribute 'default nil :font "Iosevka Nerd Font" :height 134)
+(set-face-attribute 'fixed-pitch nil :font "Iosevka Nerd Font" :height 134)
+(set-face-attribute 'variable-pitch nil :font "Iosevka Nerd Font" :height 134)
 
 ;; Performance
 (setq-default bidi-display-reordering nil
