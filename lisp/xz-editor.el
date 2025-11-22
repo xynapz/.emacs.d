@@ -5,7 +5,7 @@
 ;;; Code:
 (use-package dashboard :ensure t)
 
-(setq-default cursor-type 'bar)
+(setq-default cursor-type 'box)
 (setq visible-bell nil
       ring-bell-function 'ignore)
 
@@ -204,6 +204,25 @@
   :config
   (setq avy-timeout-seconds 0.3
         avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+;; Git Gutter (diff-hl)
+(use-package diff-hl
+  :ensure t
+  :hook ((magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :init
+  (global-diff-hl-mode)
+  (diff-hl-flydiff-mode))
+
+;; Semantic Selection (expand-region)
+(use-package expand-region
+  :ensure t)
+
+;; Multiple Cursors
+(use-package multiple-cursors
+  :ensure t
+  :config
+  (setq mc/always-run-for-all t))
 
 (provide 'xz-editor)
 ;;; xz-editor.el ends here

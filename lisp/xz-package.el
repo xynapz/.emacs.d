@@ -57,72 +57,56 @@
   :hook ((org-mode . visual-line-mode)
          (org-mode . org-indent-mode))
   :config
+  ;; Org directories
   (setq org-directory "~/org/"
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-agenda-files (list org-directory)
-        org-startup-folded 'content
+        org-default-notes-file (expand-file-name "notes.org" org-directory))
+
+  ;; Create org directory if it doesn't exist
+  (unless (file-exists-p org-directory)
+    (make-directory org-directory t))
+
+  ;; Org settings
+  (setq org-startup-folded 'content
+        org-startup-indented t
         org-hide-emphasis-markers t
         org-pretty-entities t
         org-ellipsis " ▾"
         org-log-done 'time
-        org-log-into-drawer t))
+        org-log-into-drawer t
+        org-return-follows-link t
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 0
+        org-fontify-quote-and-verse-blocks t
+        org-hide-block-startup nil
+        org-src-preserve-indentation nil
+        org-startup-with-inline-images t
+        org-cycle-separator-lines 2
+        org-export-with-sub-superscripts '{})
 
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  ;; Org agenda
+  (setq org-agenda-files (list org-directory)
+        org-deadline-warning-days 7)
 
-(require 'org)
+  ;; TODO keyword faces
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "#ff6c6b" :weight bold))
+          ("NEXT" . (:foreground "#da8548" :weight bold))
+          ("PROG" . (:foreground "#ECBE7B" :weight bold))
+          ("WAIT" . (:foreground "#51afef" :weight bold))
+          ("DONE" . (:foreground "#98be65" :weight bold))
+          ("CANCELLED" . (:foreground "#5B6268" :weight bold))))
 
-;; Org directories
-(setq org-directory "~/org/"
-      org-default-notes-file (expand-file-name "notes.org" org-directory))
+  ;; Org babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)
+     (shell . t)
+     (C . t)))
 
-;; Create org directory if it doesn't exist
-(unless (file-exists-p org-directory)
-  (make-directory org-directory t))
-
-;; Org settings
-(setq org-startup-folded 'content
-      org-startup-indented t
-      org-hide-emphasis-markers t
-      org-pretty-entities t
-      org-ellipsis " ▾"
-      org-log-done 'time
-      org-log-into-drawer t
-      org-return-follows-link t
-      org-src-fontify-natively t
-      org-src-tab-acts-natively t
-      org-edit-src-content-indentation 0
-      org-fontify-quote-and-verse-blocks t
-      org-hide-block-startup nil
-      org-src-preserve-indentation nil
-      org-startup-with-inline-images t
-      org-cycle-separator-lines 2)
-
-;; Org agenda
-(setq org-agenda-files (list org-directory)
-      org-deadline-warning-days 7)
-;; TODO keyword faces
-(setq org-todo-keyword-faces
-      '(("TODO" . (:foreground "#ff6c6b" :weight bold))
-        ("NEXT" . (:foreground "#da8548" :weight bold))
-        ("PROG" . (:foreground "#ECBE7B" :weight bold))
-        ("WAIT" . (:foreground "#51afef" :weight bold))
-        ("DONE" . (:foreground "#98be65" :weight bold))
-        ("CANCELLED" . (:foreground "#5B6268" :weight bold))))
-
-;; Org babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)
-   (shell . t)
-   (C . t)))
-
-;; Don't ask for confirmation before evaluating
-(setq org-confirm-babel-evaluate nil)
+  ;; Don't ask for confirmation before evaluating
+  (setq org-confirm-babel-evaluate nil))
 
 ;; Org modern for better aesthetics
 (use-package org-modern
@@ -239,4 +223,3 @@
 
 (provide 'xz-package)
 ;;; xz-package.el ends here
-
