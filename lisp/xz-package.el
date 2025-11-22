@@ -172,6 +172,10 @@
                             visual-fill-column-center-text t)
                       (visual-fill-column-mode 1))))
 
+;; Ensure htmlize is installed for org-mode HTML export
+(use-package htmlize
+  :ensure t)
+
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
