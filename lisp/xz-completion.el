@@ -147,5 +147,11 @@
 
 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
 
+;; Wgrep - Editable grep buffers
+(use-package wgrep
+  :ensure t
+  :config
+  (setq wgrep-auto-save-buffer t))
+
 (provide 'xz-completion)
 ;;; xz-completion.el ends here
