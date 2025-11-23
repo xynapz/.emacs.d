@@ -174,10 +174,8 @@
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-  
   ;; Remove temporary files after export
   (setq org-latex-remove-logfiles t)
-  
   ;; Default LaTeX packages for better PDF output
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
@@ -185,13 +183,10 @@
           ("" "xunicode" t)
           ("" "listings" nil)
           ("" "color" nil)))
-  
   ;; Enable code highlighting in exported PDFs
   (setq org-latex-listings t)
-  
   ;; Better default document class
   (setq org-latex-default-class "article")
-  
   ;; Customize LaTeX classes if needed
   (add-to-list 'org-latex-classes
                '("article"
