@@ -46,9 +46,13 @@
   :init
   (setq projectile-project-search-path '("~/xynapz/")
         projectile-completion-system 'default
-        projectile-enable-caching t)
+        projectile-enable-caching t
+        projectile-known-projects-file
+        (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :config
-  (projectile-mode +1))
+  (projectile-mode +1)
+  ;; Save known projects on exit
+  (add-hook 'kill-emacs-hook #'projectile-save-known-projects))
 
 ;; Org mode
 (use-package org
