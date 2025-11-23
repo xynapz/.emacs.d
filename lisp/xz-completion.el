@@ -129,8 +129,23 @@
   :ensure t
   :config
   (global-flycheck-mode)
-  (setq flycheck-indication-mode 'right-fringe)
-  (setq flycheck-emacs-lisp-load-path 'inherit))
+  (setq flycheck-indication-mode 'right-fringe
+        flycheck-emacs-lisp-load-path 'inherit)
+
+  ;; C/C++ specific configuration
+  (with-eval-after-load 'cc-mode
+    ;; Set C++20 standard for C/C++ flycheck
+    (setq flycheck-clang-language-standard "c++20"
+          flycheck-gcc-language-standard "c++20")
+
+    ;; Pass clang-tidy checks to clang via flycheck-clang-args
+    ;; This works with the built-in c/c++-clang checker
+    (setq flycheck-clang-args
+          '("-Wall" "-Wextra"))
+
+    ;; since clangd is running via eglot, it handles clang-tidy automatically
+    ;; configured it with --clang-tidy in cc.el
+    ))
 
 ;; keybinds are in xz-keybindings.el
 (use-package consult-projectile

@@ -243,11 +243,16 @@
   :ensure t
   :after dired
   :config
-  ;; Set keybindings in a hook to ensure they take precedence even in evil_mode
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
-              (define-key dired-mode-map (kbd "I") 'dired-subtree-remove))))
+  ;; Set keybindings for Evil mode
+  ;; Use eval-after-load to run after both evil and evil-collection are loaded
+  (with-eval-after-load 'evil
+    (with-eval-after-load 'evil-collection
+      ;; Force our keybindings after evil-collection by using a dired-mode-hook
+      (defun my-dired-subtree-evil-setup ()
+        "Set up dired-subtree keybindings for evil mode."
+        (evil-local-set-key 'normal (kbd "i") 'dired-subtree-insert)
+        (evil-local-set-key 'normal (kbd "I") 'dired-subtree-remove))
+      (add-hook 'dired-mode-hook 'my-dired-subtree-evil-setup))))
 
 ;; Dired icons
 (use-package nerd-icons-dired

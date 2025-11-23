@@ -63,23 +63,8 @@
           (lambda ()
             (add-hook 'before-save-hook #'my/c++-format-on-save nil 'local)))
 
-;; Flycheck with Clang-Tidy (Google Style)
-(use-package flycheck
-  :ensure t
-  :hook ((c-mode c++-mode) . flycheck-mode)
-  :config
-  ;; Set C++20 standard
-  (setq flycheck-clang-language-standard "c++20"
-        flycheck-gcc-language-standard "c++20")
-
-  ;; Configure clang-tidy with Google checks
-  (setq flycheck-clang-tidy-extra-options
-        '("--checks=google-*,modernize-*,readability-*,performance-*")))
-
-;; Enable clang-tidy checker
-(with-eval-after-load 'flycheck
-  (when (require 'flycheck-clang-tidy nil 'noerror)
-    (flycheck-clang-tidy-setup)))
+;; Flycheck configuration (including C/C++ specific settings) is in xz-completion.el
+;; global-flycheck-mode is enabled there, which covers c-mode and c++-mode
 
 ;; CMake Support
 (use-package cmake-mode
