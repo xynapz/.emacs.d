@@ -242,9 +242,12 @@
 (use-package dired-subtree
   :ensure t
   :after dired
-  :bind (:map dired-mode-map
-              ("i" . dired-subtree-insert)
-              ("I" . dired-subtree-remove)))
+  :config
+  ;; Set keybindings in a hook to ensure they take precedence even in evil_mode
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
+              (define-key dired-mode-map (kbd "I") 'dired-subtree-remove))))
 
 ;; Dired icons
 (use-package nerd-icons-dired
