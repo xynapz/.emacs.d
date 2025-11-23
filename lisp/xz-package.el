@@ -160,6 +160,44 @@
 (use-package htmlize
   :ensure t)
 
+;; Org to PDF export configuration
+(use-package ox-latex
+  :ensure nil  ; built-in
+  :after org
+  :config
+  ;; Use pdflatex for PDF export
+  (setq org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  
+  ;; Remove temporary files after export
+  (setq org-latex-remove-logfiles t)
+  
+  ;; Default LaTeX packages for better PDF output
+  (setq org-latex-packages-alist
+        '(("margin=1in" "geometry" nil)
+          ("" "fontspec" t)
+          ("" "xunicode" t)
+          ("" "listings" nil)
+          ("" "color" nil)))
+  
+  ;; Enable code highlighting in exported PDFs
+  (setq org-latex-listings t)
+  
+  ;; Better default document class
+  (setq org-latex-default-class "article")
+  
+  ;; Customize LaTeX classes if needed
+  (add-to-list 'org-latex-classes
+               '("article"
+                 "\\documentclass[11pt]{article}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
