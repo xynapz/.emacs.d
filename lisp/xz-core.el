@@ -25,10 +25,9 @@
 (setopt frame-title-format "Angel - %b")
 
 ;; Fonts
-;; Alternatives: "IBM Plex Mono", "Inconsolata", "Fira Code", "Hack"
-(set-face-attribute 'default nil :font "Iosevka Nerd Font" :height 154)
-(set-face-attribute 'fixed-pitch nil :font "Iosevka Nerd Font" :height 154)
-(set-face-attribute 'variable-pitch nil :font "Iosevka Nerd Font" :height 154)
+(set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 194)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font" :height 194)
+(set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font" :height 194)
 
 ;; Performance
 (setq-default bidi-display-reordering nil
