@@ -60,23 +60,25 @@
   :mode ("\\.org\\'" . org-mode)
   :hook ((org-mode . visual-line-mode)
          (org-mode . org-indent-mode))
-  :config
+  :custom
   ;; Org directories
-  (setq org-directory "~/org/"
-        org-default-notes-file (expand-file-name "notes.org" org-directory))
+  (org-directory "~/org/")
+  (org-default-notes-file (expand-file-name "notes.org" org-directory))
+  
+  ;; Link abbreviations - Usage: [[img:path/to/image.png]]
+  ;; Expands to: https://cdn.jsdelivr.net/gh/xynapz/pub_img/path/to/image.png
+  (org-link-abbrev-alist
+   '(("img"         . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")
+     ("kb_cpp"      . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")
+     ("kb_writings" . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
+  
+  ;; Allow remote images to be displayed inline
+  (org-display-remote-inline-images 'cache)    ; Cache remote images
 
-  ;; my repo link abbrev through cdn
-  (setq org-link-abbrev-alist
-        '(("img"         . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")
-          ("kb_cpp"      . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")
-          ("kb_writings" . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
-
+  :config
   ;; Create org directory if it doesn't exist
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
-
-  ;; Allow remote images to be displayed inline
-  (setq org-display-remote-inline-images 'cache)    ; Cache remote images
 
   ;; Org settings
   (setq org-startup-folded 'content
