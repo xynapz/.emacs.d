@@ -77,24 +77,64 @@
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
 
-  ;; Enable URL handler mode for remote image support
-  (require 'url-handlers)
-  (url-handler-mode 1)
+  ;; Hybrid Image Handling: Local Display + CDN Export
+  ;; ----------------------------------------------------------------
   
-  ;; Remote image settings
-  (setq org-display-remote-inline-images 'download)  ; Download and cache remote images
-  (setq org-image-actual-width '(800))               ; Max width of 800 pixels
-  
-  ;; Interactive fix command for the user
-  (defun xz/fix-remote-images ()
-    "Force enable remote images and refresh display."
-    (interactive)
-    (setq org-display-remote-inline-images 'download)
-    (setq org-image-actual-width '(800))
-    (message "Remote images set to 'download. Refreshing...")
-    (org-redisplay-inline-images)
-    (message "Done. If images still don't appear, try toggling with C-c C-x C-v"))
+  ;; 1. Define the base path for local images
+  (defvar xz/pub-img-local-path "~/xynapz/pub_img/"
+    "Local path to the pub_img repository.")
 
+  ;; 2. Helper function to export to CDN
+  (defun xz/org-export-img-link (path desc backend _info base-url)
+    "Export function for custom image links."
+    (let ((url (concat base-url path)))
+      (cond
+       ((org-export-derived-backend-p backend 'html)
+        (format "<img src=\"%s\" alt=\"%s\" />" url (or desc "")))
+       ((org-export-derived-backend-p backend 'latex)
+        (format "\\includegraphics{%s}" url))
+       (t (format "[[%s][%s]]" url (or desc ""))))))
+
+  ;; 3. Define custom link types
+  ;; "img" -> Local: ~/xynapz/pub_img/ | Export: https://cdn.../pub_img/
+  (org-link-set-parameters "img"
+   :follow (lambda (path) (find-file (expand-file-name path xz/pub-img-local-path)))
+   :export (lambda (path desc backend info)
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/"))
+   :image-data-fun (lambda (_protocol link _description)
+                     (let ((file (expand-file-name link xz/pub-img-local-path)))
+                       (when (file-exists-p file)
+                         (with-temp-buffer
+                           (insert-file-contents-literally file)
+                           (buffer-string))))))
+
+  ;; "kb_cpp" -> Local: .../pub_img/cpp/ | Export: .../pub_img/cpp/
+  (org-link-set-parameters "kb_cpp"
+   :follow (lambda (path) (find-file (expand-file-name (concat "cpp/" path) xz/pub-img-local-path)))
+   :export (lambda (path desc backend info)
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/"))
+   :image-data-fun (lambda (_protocol link _description)
+                     (let ((file (expand-file-name (concat "cpp/" link) xz/pub-img-local-path)))
+                       (when (file-exists-p file)
+                         (with-temp-buffer
+                           (insert-file-contents-literally file)
+                           (buffer-string))))))
+
+  ;; "kb_writings" -> Local: .../pub_img/writings/ | Export: .../pub_img/writings/
+  (org-link-set-parameters "kb_writings"
+   :follow (lambda (path) (find-file (expand-file-name (concat "writings/" path) xz/pub-img-local-path)))
+   :export (lambda (path desc backend info)
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/"))
+   :image-data-fun (lambda (_protocol link _description)
+                     (let ((file (expand-file-name (concat "writings/" link) xz/pub-img-local-path)))
+                       (when (file-exists-p file)
+                         (with-temp-buffer
+                           (insert-file-contents-literally file)
+                           (buffer-string))))))
+
+  ;; Image display settings
+  (setq org-image-actual-width '(800))
+  
   ;; Automatically redisplay inline images after executing blocks
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
