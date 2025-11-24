@@ -65,6 +65,12 @@
   (setq org-directory "~/org/"
         org-default-notes-file (expand-file-name "notes.org" org-directory))
 
+  ;; my repo link abbrev through cdn
+  (setq org-link-abbrev-alist
+        '(("img"         . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")
+          ("kb_cpp"      . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")
+          ("kb_writings" . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
+
   ;; Create org directory if it doesn't exist
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
@@ -143,15 +149,7 @@
 
 ;; Org present - Presentations
 (use-package org-present
-  :after org
-  :config
-  (add-hook 'org-present-mode-hook
-            (lambda ()
-              (org-display-inline-images)
-              ))
-  (add-hook 'org-present-mode-quit-hook
-            (lambda ()
-              (org-remove-inline-images))))
+  :after org)
 
 ;; Visual fill for better org reading
 (use-package visual-fill-column
