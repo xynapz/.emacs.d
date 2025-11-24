@@ -85,6 +85,16 @@
   (setq org-display-remote-inline-images 'download)  ; Download and cache remote images
   (setq org-image-actual-width '(800))               ; Max width of 800 pixels
   
+  ;; Interactive fix command for the user
+  (defun xz/fix-remote-images ()
+    "Force enable remote images and refresh display."
+    (interactive)
+    (setq org-display-remote-inline-images 'download)
+    (setq org-image-actual-width '(800))
+    (message "Remote images set to 'download. Refreshing...")
+    (org-redisplay-inline-images)
+    (message "Done. If images still don't appear, try toggling with C-c C-x C-v"))
+
   ;; Automatically redisplay inline images after executing blocks
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
