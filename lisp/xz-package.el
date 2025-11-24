@@ -83,27 +83,7 @@
   
   ;; Remote image settings
   (setq org-display-remote-inline-images 'download)  ; Download and cache remote images
-  
-  ;; Control image width (list = max width in pixels)
-  (setq org-image-actual-width '(800))  ; Max width of 800 pixels
-  
-  ;; Make inline image display recognize our custom link abbreviations
-  ;; We'll advise org-display-inline-images to expand abbreviations
-  (defun xz/org-display-inline-images--expand-abbrevs (orig-fun &rest args)
-    "Expand link abbreviations before displaying inline images."
-    (let ((org-link-abbrev-alist-local org-link-abbrev-alist))
-      (apply orig-fun args)))
-  
-  (advice-add 'org-display-inline-images :around #'xz/org-display-inline-images--expand-abbrevs)
-  
-  ;; Alternative: Add file type patterns that org-mode recognizes as images
-  ;; This makes our custom protocols work with inline images
-  (defun xz/org-link-is-image-p (link)
-    "Check if LINK is an image, including abbreviated links."
-    (when (stringp link)
-      (let ((expanded (org-link-expand-abbrev link)))
-        (and (string-match "^https?://" expanded)
-             (string-match (image-file-name-regexp) expanded)))))
+  (setq org-image-actual-width '(800))               ; Max width of 800 pixels
   
   ;; Automatically redisplay inline images after executing blocks
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
