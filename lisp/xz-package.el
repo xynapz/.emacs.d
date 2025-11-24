@@ -65,12 +65,8 @@
   (org-directory "~/org/")
   (org-default-notes-file (expand-file-name "notes.org" org-directory))
   
-  ;; Link abbreviations - Usage: [[img:path/to/image.png]]
-  ;; Expands to: https://cdn.jsdelivr.net/gh/xynapz/pub_img/path/to/image.png
-  (org-link-abbrev-alist
-   '(("img"         . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")
-     ("kb_cpp"      . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")
-     ("kb_writings" . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
+  ;; Link abbreviations removed to allow custom link types to handle logic
+  ;; (org-link-abbrev-alist ...) removed
 
   :config
   ;; Create org directory if it doesn't exist
