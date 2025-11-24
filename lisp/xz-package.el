@@ -84,6 +84,33 @@
   ;; Remote image settings - must be in :config for url-handler-mode
   (setq org-display-remote-inline-images 'cache)  ; Cache remote images
   
+  ;; Define custom link types to support inline image display
+  ;; This tells org-mode that these link types should be treated as images
+  (org-link-set-parameters "img" 
+                           :image-data-fun #'org-link-img-data-fun
+                           :follow (lambda (path) (browse-url (concat "https://cdn.jsdelivr.net/gh/xynapz/pub_img/" path))))
+  
+  (org-link-set-parameters "kb_cpp"
+                           :image-data-fun #'org-link-img-data-fun
+                           :follow (lambda (path) (browse-url (concat "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/" path))))
+  
+  (org-link-set-parameters "kb_writings"
+                           :image-data-fun #'org-link-img-data-fun
+                           :follow (lambda (path) (browse-url (concat "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/" path))))
+  
+  ;; Helper function to fetch image data for custom link types
+  (defun org-link-img-data-fun (protocol link _description)
+    "Fetch image data for custom link types."
+    (let ((url (org-link-expand-abbrev (concat protocol ":" link))))
+      (when (string-match "^https?://" url)
+        (with-current-buffer (url-retrieve-synchronously url t)
+          (goto-char (point-min))
+          (when (re-search-forward "\n\n" nil t)
+            (buffer-substring (point) (point-max)))))))
+  
+  ;; Control image width (nil = actual width, number = fixed width, list = max width)
+  (setq org-image-actual-width '(800))  ; Max width of 800 pixels
+  
   ;; Automatically redisplay inline images after executing blocks
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
