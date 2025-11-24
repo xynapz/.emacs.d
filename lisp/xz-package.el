@@ -71,14 +71,21 @@
    '(("img"         . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")
      ("kb_cpp"      . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")
      ("kb_writings" . "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
-  
-  ;; Allow remote images to be displayed inline
-  (org-display-remote-inline-images 'cache)    ; Cache remote images
 
   :config
   ;; Create org directory if it doesn't exist
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
+
+  ;; Enable URL handler mode for remote image support
+  (require 'url-handlers)
+  (url-handler-mode 1)
+  
+  ;; Remote image settings - must be in :config for url-handler-mode
+  (setq org-display-remote-inline-images 'cache)  ; Cache remote images
+  
+  ;; Automatically redisplay inline images after executing blocks
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
   ;; Org settings
   (setq org-startup-folded 'content
