@@ -75,6 +75,9 @@
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
 
+  ;; Allow remote images to be displayed inline
+  (setq org-display-remote-inline-images 'cache)    ; Cache remote images
+
   ;; Org settings
   (setq org-startup-folded 'content
         org-startup-indented t
