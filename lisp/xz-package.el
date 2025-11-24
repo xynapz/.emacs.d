@@ -92,41 +92,53 @@
        (t (format "[[%s][%s]]" url (or desc ""))))))
 
   ;; 3. Define custom link types
-  ;; "img" -> Local: ~/xynapz/pub_img/ | Export: https://cdn.../pub_img/
+  ;; "img" -> Export: https://cdn.../pub_img/
   (org-link-set-parameters "img"
    :follow (lambda (path) (find-file (expand-file-name path xz/pub-img-local-path)))
    :export (lambda (path desc backend info)
-             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/"))
-   :image-data-fun (lambda (_protocol link _description)
-                     (let ((file (expand-file-name link xz/pub-img-local-path)))
-                       (when (file-exists-p file)
-                         (with-temp-buffer
-                           (insert-file-contents-literally file)
-                           (buffer-string))))))
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/")))
 
-  ;; "kb_cpp" -> Local: .../pub_img/cpp/ | Export: .../pub_img/cpp/
+  ;; "kb_cpp" -> Export: .../pub_img/cpp/
   (org-link-set-parameters "kb_cpp"
    :follow (lambda (path) (find-file (expand-file-name (concat "cpp/" path) xz/pub-img-local-path)))
    :export (lambda (path desc backend info)
-             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/"))
-   :image-data-fun (lambda (_protocol link _description)
-                     (let ((file (expand-file-name (concat "cpp/" link) xz/pub-img-local-path)))
-                       (when (file-exists-p file)
-                         (with-temp-buffer
-                           (insert-file-contents-literally file)
-                           (buffer-string))))))
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/cpp/")))
 
-  ;; "kb_writings" -> Local: .../pub_img/writings/ | Export: .../pub_img/writings/
+  ;; "kb_writings" -> Export: .../pub_img/writings/
   (org-link-set-parameters "kb_writings"
    :follow (lambda (path) (find-file (expand-file-name (concat "writings/" path) xz/pub-img-local-path)))
    :export (lambda (path desc backend info)
-             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/"))
-   :image-data-fun (lambda (_protocol link _description)
-                     (let ((file (expand-file-name (concat "writings/" link) xz/pub-img-local-path)))
-                       (when (file-exists-p file)
-                         (with-temp-buffer
-                           (insert-file-contents-literally file)
-                           (buffer-string))))))
+             (xz/org-export-img-link path desc backend info "https://cdn.jsdelivr.net/gh/xynapz/pub_img/writings/")))
+
+  ;; 4. Advice to make inline images work
+  ;; Instead of :image-data-fun (which can be flaky), we advise the display function
+  ;; to temporarily see these links as file links.
+  (defun xz/org-display-inline-images--expand-custom-links (orig-fun &rest args)
+    "Temporarily expand custom links to file paths for inline display."
+    (let ((org-link-abbrev-alist-local org-link-abbrev-alist))
+      ;; Add temporary abbreviations that map our custom types to local file paths
+      (add-to-list 'org-link-abbrev-alist-local 
+                   (cons "img" (expand-file-name xz/pub-img-local-path)))
+      (add-to-list 'org-link-abbrev-alist-local 
+                   (cons "kb_cpp" (expand-file-name "cpp/" xz/pub-img-local-path)))
+      (add-to-list 'org-link-abbrev-alist-local 
+                   (cons "kb_writings" (expand-file-name "writings/" xz/pub-img-local-path)))
+      
+      ;; We need to trick org into thinking these are "file" links for a moment
+      (cl-letf (((symbol-function 'org-link-expand-abbrev)
+                 (lambda (link)
+                   (let ((type (car (split-string link ":"))))
+                     (cond
+                      ((string= type "img")
+                       (concat "file:" (expand-file-name (substring link 4) xz/pub-img-local-path)))
+                      ((string= type "kb_cpp")
+                       (concat "file:" (expand-file-name (concat "cpp/" (substring link 7)) xz/pub-img-local-path)))
+                      ((string= type "kb_writings")
+                       (concat "file:" (expand-file-name (concat "writings/" (substring link 12)) xz/pub-img-local-path)))
+                      (t link))))))
+        (apply orig-fun args))))
+  
+  (advice-add 'org-display-inline-images :around #'xz/org-display-inline-images--expand-custom-links)
 
   ;; Image display settings
   (setq org-image-actual-width '(800))
