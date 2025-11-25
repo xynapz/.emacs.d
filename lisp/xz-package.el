@@ -236,170 +236,178 @@
   (setq org-html-htmlize-output-type 'css)
   (setq org-html-htmlize-font-prefix "org-"))
 
-;; Enhanced HTML Export for Code Blocks
+;; Enhanced HTML Export for Code Blocks (DISABLED for org-html-themes)
 ;; ----------------------------------------------------------------
 
-(defconst xz/org-html-code-style
-  "<style>
-  :root {
-    --code-bg: #fafafa;
-    --code-border: #e1e4e8;
-    --code-header-bg: #f6f8fa;
-    --code-header-text: #24292e;
-    --code-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --code-bg: #1e1e1e;
-      --code-border: #30363d;
-      --code-header-bg: #21262d;
-      --code-header-text: #c9d1d9;
-    }
-  }
-  
-  /* Container for the whole block */
-  .xz-code-container {
-    margin: 1.5em 0;
-    border: 1px solid var(--code-border);
-    border-radius: 6px;
-    overflow: hidden;
-    background: var(--code-bg);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
+;; (defconst xz/org-html-code-style
+;;   "<style>
+;;   :root {
+;;     --code-bg: #fafafa;
+;;     --code-border: #e1e4e8;
+;;     --code-header-bg: #f6f8fa;
+;;     --code-header-text: #24292e;
+;;     --code-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+;;   }
+;;   @media (prefers-color-scheme: dark) {
+;;     :root {
+;;       --code-bg: #1e1e1e;
+;;       --code-border: #30363d;
+;;       --code-header-bg: #21262d;
+;;       --code-header-text: #c9d1d9;
+;;     }
+;;   }
+;;   
+;;   /* Container for the whole block */
+;;   .xz-code-container {
+;;     margin: 1.5em 0;
+;;     border: 1px solid var(--code-border);
+;;     border-radius: 6px;
+;;     overflow: hidden;
+;;     background: var(--code-bg);
+;;     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+;;   }
 
-  /* Header with filename and copy button */
-  .xz-code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    background: var(--code-header-bg);
-    border-bottom: 1px solid var(--code-border);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-size: 0.85em;
-    color: var(--code-header-text);
-  }
+;;   /* Header with filename and copy button */
+;;   .xz-code-header {
+;;     display: flex;
+;;     justify-content: space-between;
+;;     align-items: center;
+;;     padding: 8px 12px;
+;;     background: var(--code-header-bg);
+;;     border-bottom: 1px solid var(--code-border);
+;;     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+;;     font-size: 0.85em;
+;;     color: var(--code-header-text);
+;;   }
 
-  .xz-code-filename {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  
-  /* Mac-like dots if no filename, or just decoration */
-  .xz-code-dots {
-    display: flex;
-    gap: 4px;
-    margin-right: 8px;
-  }
-  .xz-code-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #e1e4e8;
-  }
-  .xz-code-dot.red { background-color: #ff5f56; }
-  .xz-code-dot.yellow { background-color: #ffbd2e; }
-  .xz-code-dot.green { background-color: #27c93f; }
+;;   .xz-code-filename {
+;;     font-weight: 600;
+;;     display: flex;
+;;     align-items: center;
+;;     gap: 6px;
+;;   }
+;;   
+;;   /* Mac-like dots if no filename, or just decoration */
+;;   .xz-code-dots {
+;;     display: flex;
+;;     gap: 4px;
+;;     margin-right: 8px;
+;;   }
+;;   .xz-code-dot {
+;;     width: 10px;
+;;     height: 10px;
+;;     border-radius: 50%;
+;;     background-color: #e1e4e8;
+;;   }
+;;   .xz-code-dot.red { background-color: #ff5f56; }
+;;   .xz-code-dot.yellow { background-color: #ffbd2e; }
+;;   .xz-code-dot.green { background-color: #27c93f; }
 
-  /* Copy button */
-  .xz-copy-btn {
-    background: transparent;
-    border: 1px solid var(--code-border);
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 4px 8px;
-    font-size: 0.8em;
-    color: var(--code-header-text);
-    transition: all 0.2s;
-    opacity: 0.7;
-  }
-  .xz-copy-btn:hover {
-    opacity: 1;
-    background: var(--code-border);
-  }
-  .xz-copy-btn:active {
-    transform: translateY(1px);
-  }
+;;   /* Copy button */
+;;   .xz-copy-btn {
+;;     background: transparent;
+;;     border: 1px solid var(--code-border);
+;;     border-radius: 4px;
+;;     cursor: pointer;
+;;     padding: 4px 8px;
+;;     font-size: 0.8em;
+;;     color: var(--code-header-text);
+;;     transition: all 0.2s;
+;;     opacity: 0.7;
+;;   }
+;;   .xz-copy-btn:hover {
+;;     opacity: 1;
+;;     background: var(--code-border);
+;;   }
+;;   .xz-copy-btn:active {
+;;     transform: translateY(1px);
+;;   }
 
-  /* The actual code block */
-  .xz-code-container pre.src {
-    margin: 0;
-    padding: 12px;
-    font-family: var(--code-font);
-    font-size: 0.9em;
-    line-height: 1.5;
-    overflow-x: auto;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
-  
-  /* Remove default Org src container styling if present */
-  .org-src-container {
-    border: none;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-  }
-</style>")
+;;   /* The actual code block */
+;;   .xz-code-container pre.src {
+;;     margin: 0;
+;;     padding: 12px;
+;;     font-family: var(--code-font);
+;;     font-size: 0.9em;
+;;     line-height: 1.5;
+;;     overflow-x: auto;
+;;     background: transparent;
+;;     border: none;
+;;     box-shadow: none;
+;;   }
+;;   
+;;   /* Remove default Org src container styling if present */
+;;   .org-src-container {
+;;     border: none;
+;;     box-shadow: none;
+;;     margin: 0;
+;;     padding: 0;
+;;   }
+;; </style>")
 
-(defconst xz/org-html-code-script
-  "<script>
-  function copyCode(button) {
-    const container = button.closest('.xz-code-container');
-    const pre = container.querySelector('pre');
-    const code = pre.innerText;
-    
-    navigator.clipboard.writeText(code).then(() => {
-      const originalText = button.innerText;
-      button.innerText = 'Copied!';
-      setTimeout(() => {
-        button.innerText = originalText;
-      }, 2000);
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-      button.innerText = 'Error';
-    });
-  }
-</script>")
+;; (defconst xz/org-html-code-script
+;;   "<script>
+;;   function copyCode(button) {
+;;     const container = button.closest('.xz-code-container');
+;;     const pre = container.querySelector('pre');
+;;     const code = pre.innerText;
+;;     
+;;     navigator.clipboard.writeText(code).then(() => {
+;;       const originalText = button.innerText;
+;;       button.innerText = 'Copied!';
+;;       setTimeout(() => {
+;;         button.innerText = originalText;
+;;       }, 2000);
+;;     }).catch(err => {
+;;       console.error('Failed to copy:', err);
+;;       button.innerText = 'Error';
+;;     });
+;;   }
+;; </script>")
 
-(with-eval-after-load 'ox-html
-  (setq org-html-head-extra
-        (concat (or org-html-head-extra "")
-                xz/org-html-code-style
-                xz/org-html-code-script)))
+;; (with-eval-after-load 'ox-html
+;;   (setq org-html-head-extra
+;;         (concat (or org-html-head-extra "")
+;;                 xz/org-html-code-style
+;;                 xz/org-html-code-script)))
 
-(defun xz/org-html-format-src-block-advice (orig-fun src-block contents info)
-  "Wrap the exported source block in a custom container with filename and copy button."
-  (let* ((formatted-block (funcall orig-fun src-block contents info))
-         (params (org-element-property :parameters src-block))
-         ;; Try to get filename from :filename header arg (parsed from params), then #+NAME
-         (filename (or (and params 
-                            (string-match ":filename\\s-+\"\\([^\"]+\\)\"" params)
-                            (match-string 1 params))
-                       (org-element-property :name src-block)))
-         (lang (org-element-property :language src-block)))
-    
-    (concat
-     "<div class=\"xz-code-container\">"
-     "<div class=\"xz-code-header\">"
-     "<div class=\"xz-code-filename\">"
-     ;; Add dots for decoration
-     "<div class=\"xz-code-dots\">"
-     "<div class=\"xz-code-dot red\"></div>"
-     "<div class=\"xz-code-dot yellow\"></div>"
-     "<div class=\"xz-code-dot green\"></div>"
-     "</div>"
-     (if filename (format "<span>%s</span>" filename) (if lang (format "<span>%s</span>" lang) ""))
-     "</div>"
-     "<button class=\"xz-copy-btn\" onclick=\"copyCode(this)\">Copy</button>"
-     "</div>"
-     formatted-block
-     "</div>")))
+;; (defun xz/org-html-format-src-block-advice (orig-fun src-block contents info)
+;;   "Wrap the exported source block in a custom container with filename and copy button."
+;;   (let* ((formatted-block (funcall orig-fun src-block contents info))
+;;          (params (org-element-property :parameters src-block))
+;;          ;; Try to get filename from :filename header arg (parsed from params), then #+NAME
+;;          (filename (or (and params 
+;;                             (string-match ":filename\\s-+\"\\([^\"]+\\)\"" params)
+;;                             (match-string 1 params))
+;;                        (org-element-property :name src-block)))
+;;          (lang (org-element-property :language src-block)))
+;;     
+;;     (concat
+;;      "<div class=\"xz-code-container\">"
+;;      "<div class=\"xz-code-header\">"
+;;      "<div class=\"xz-code-filename\">"
+;;      ;; Add dots for decoration
+;;      "<div class=\"xz-code-dots\">"
+;;      "<div class=\"xz-code-dot red\"></div>"
+;;      "<div class=\"xz-code-dot yellow\"></div>"
+;;      "<div class=\"xz-code-dot green\"></div>"
+;;      "</div>"
+;;      (if filename (format "<span>%s</span>" filename) (if lang (format "<span>%s</span>" lang) ""))
+;;      "</div>"
+;;      "<button class=\"xz-copy-btn\" onclick=\"copyCode(this)\">Copy</button>"
+;;      "</div>"
+;;      formatted-block
+;;      "</div>")))
 
-(advice-add 'org-html-src-block :around #'xz/org-html-format-src-block-advice)
+;; (advice-add 'org-html-src-block :around #'xz/org-html-format-src-block-advice)
+
+;; Org HTML Themes
+(use-package org-html-themes
+  :ensure t
+  :config
+  ;; You can set a default theme here if you want, or use #+SETUPFILE in your org files
+  ;; Example: (setq org-html-themes-theme "readtheorg")
+  )
 
 ;; Org to PDF export configuration
 (use-package ox-latex
