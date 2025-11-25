@@ -366,8 +366,10 @@
 </script>")
 
 (with-eval-after-load 'ox-html
-  (add-to-list 'org-html-head-extra xz/org-html-code-style)
-  (add-to-list 'org-html-head-extra xz/org-html-code-script))
+  (setq org-html-head-extra
+        (concat (or org-html-head-extra "")
+                xz/org-html-code-style
+                xz/org-html-code-script)))
 
 (defun xz/org-html-format-src-block-advice (orig-fun src-block contents info)
   "Wrap the exported source block in a custom container with filename and copy button."
