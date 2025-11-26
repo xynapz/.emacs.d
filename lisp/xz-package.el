@@ -179,7 +179,9 @@
     (if (xz/is-site-content-file-p)
         (progn
           (setq-local org-html-head-include-default-style nil)
-          (setq-local org-html-head-include-scripts nil))
+          (setq-local org-html-head-include-scripts nil)
+          ;; Suppress MathJax template for site content (handled by Astro)
+          (setq-local org-html-mathjax-template ""))
       (progn
         (setq-local org-html-head-include-default-style t)
         (setq-local org-html-head-include-scripts t))))
@@ -358,8 +360,8 @@ Document List:
   :config
   ;; MathJax settings - always use mathjax but with empty template
   ;; Astro adds its own MathJax script for site-content files
+  ;; Note: org-html-mathjax-template is handled conditionally in xz/org-html-head-filter
   (setq org-html-with-latex 'mathjax)
-  (setq org-html-mathjax-template "")
   ;; Use xelatex for PDF export (required for fontspec package)
   (setq org-latex-pdf-process
         '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
