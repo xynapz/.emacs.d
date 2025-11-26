@@ -265,7 +265,11 @@ Document List:
       (xz/log-export "INFO" "Starting site content export...")
       
       (let ((success-count 0)
-            (fail-count 0))
+            (fail-count 0)
+            ;; Disable hooks to prevent timers from firing on killed buffers
+            (org-mode-hook nil)
+            (vc-handled-backends nil)
+            (find-file-hook nil))
         
         (dolist (file files)
           (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
