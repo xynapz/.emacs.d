@@ -191,7 +191,60 @@
      (C . t)))
 
   ;; Don't ask for confirmation before evaluating
-  (setq org-confirm-babel-evaluate nil))
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; Site Content Export
+  (defvar xz/site-content-path "~/xynapz/angeld.me/site-content/"
+    "Path to the site content directory.")
+  
+  (defvar xz/site-log-path "~/xynapz/angeld.me/logs/"
+    "Path to the site export logs.")
+
+  (defvar xz/current-export-log-file nil
+    "Current log file for the export process.")
+
+  (defun xz/log-export (level message)
+    "Log a message to the current export log file."
+    (let ((formatted-msg (format "[%s] [%s] %s\n" 
+                                 (format-time-string "%Y-%m-%d %H:%M:%S")
+                                 level
+                                 message)))
+      ;; Write to file
+      (when xz/current-export-log-file
+        (write-region formatted-msg nil xz/current-export-log-file 'append))
+      ;; Also print to *Messages*
+      (message "[Site Export] %s: %s" level message)))
+
+  (defun xz/export-all-site-content ()
+    "Export all .org files in `xz/site-content-path` to HTML with logging."
+    (interactive)
+    (unless (file-exists-p xz/site-log-path)
+      (make-directory xz/site-log-path t))
+    
+    (setq xz/current-export-log-file 
+          (expand-file-name (format "export-%s.log" (format-time-string "%Y-%m-%d_%H-%M-%S"))
+                            xz/site-log-path))
+    
+    (xz/log-export "INFO" "Starting site content export...")
+    
+    (let ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
+          (success-count 0)
+          (fail-count 0))
+      
+      (dolist (file files)
+        (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
+        (condition-case err
+            (with-current-buffer (find-file-noselect file)
+              (org-html-export-to-html)
+              (kill-buffer)
+              (setq success-count (1+ success-count))
+              (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
+          (error
+           (setq fail-count (1+ fail-count))
+           (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
+      
+      (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
+      (message "Site content export complete! Check logs at %s" xz/current-export-log-file))))
 
 ;; Org modern for better aesthetics
 (use-package org-modern
