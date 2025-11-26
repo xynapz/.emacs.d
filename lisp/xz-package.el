@@ -242,8 +242,9 @@
   :ensure nil  ; built-in
   :after org
   :config
-  ;; Ensure HTML export uses MathJax
+  ;; Ensure HTML export uses MathJax but relies on external script
   (setq org-html-with-latex 'mathjax)
+  (setq org-html-mathjax-template "")
   ;; Use pdflatex for PDF export
   (setq org-latex-pdf-process
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
