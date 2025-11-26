@@ -64,7 +64,7 @@
   ;; Org directories
   (org-directory "~/org/")
   (org-default-notes-file (expand-file-name "notes.org" org-directory))
-  
+
   ;; Link abbreviations removed to allow custom link types to handle logic
   ;; (org-link-abbrev-alist ...) removed
 
@@ -75,7 +75,7 @@
 
   ;; Hybrid Image Handling: Local Display + CDN Export
   ;; ----------------------------------------------------------------
-  
+
   ;; 1. Define the base path for local images
   (defvar xz/pub-img-local-path "~/xynapz/pub_img/"
     "Local path to the pub_img repository.")
@@ -117,13 +117,13 @@
     "Temporarily expand custom links to file paths for inline display."
     (let ((org-link-abbrev-alist-local org-link-abbrev-alist))
       ;; Add temporary abbreviations that map our custom types to local file paths
-      (add-to-list 'org-link-abbrev-alist-local 
+      (add-to-list 'org-link-abbrev-alist-local
                    (cons "img" (expand-file-name xz/pub-img-local-path)))
-      (add-to-list 'org-link-abbrev-alist-local 
+      (add-to-list 'org-link-abbrev-alist-local
                    (cons "kb_cpp" (expand-file-name "cpp/" xz/pub-img-local-path)))
-      (add-to-list 'org-link-abbrev-alist-local 
+      (add-to-list 'org-link-abbrev-alist-local
                    (cons "kb_writings" (expand-file-name "writings/" xz/pub-img-local-path)))
-      
+
       ;; We need to trick org into thinking these are "file" links for a moment
       (cl-letf (((symbol-function 'org-link-expand-abbrev)
                  (lambda (link)
@@ -137,12 +137,12 @@
                        (concat "file:" (expand-file-name (concat "writings/" (substring link 12)) xz/pub-img-local-path)))
                       (t link))))))
         (apply orig-fun args))))
-  
+
   (advice-add 'org-display-inline-images :around #'xz/org-display-inline-images--expand-custom-links)
 
   ;; Image display settings
   (setq org-image-actual-width '(800))
-  
+
   ;; Automatically redisplay inline images after executing blocks
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
@@ -219,7 +219,7 @@
   ;; Site Content Export
   (defvar xz/site-content-path "~/xynapz/angeld.me/site-content/"
     "Path to the site content directory.")
-  
+
   (defvar xz/site-log-path "~/xynapz/angeld.me/logs/"
     "Path to the site export logs.")
 
@@ -228,7 +228,7 @@
 
   (defun xz/log-export (level message)
     "Log a message to the current export log file."
-    (let ((formatted-msg (format "[%s] [%s] %s\n" 
+    (let ((formatted-msg (format "[%s] [%s] %s\n"
                                  (format-time-string "%Y-%m-%d %H:%M:%S")
                                  level
                                  message)))
@@ -243,27 +243,27 @@
     (interactive)
     (unless (file-exists-p xz/site-log-path)
       (make-directory xz/site-log-path t))
-    
-    (setq xz/current-export-log-file 
+
+    (setq xz/current-export-log-file
           (expand-file-name (format "export-%s.log" (format-time-string "%Y-%m-%d_%H-%M-%S"))
                             xz/site-log-path))
-    
+
     ;; Collect stats
     (let* ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
            (total-docs (length files))
            (total-size 0)
            (doc-stats '()))
-      
+
       ;; Calculate stats
       (dolist (file files)
         (let ((attrs (file-attributes file)))
           (setq total-size (+ total-size (file-attribute-size attrs)))
-          (push (format "%s (%s, %s)" 
+          (push (format "%s (%s, %s)"
                         (file-name-nondirectory file)
                         (file-size-human-readable (file-attribute-size attrs))
                         (format-time-string "%Y-%m-%d %H:%M:%S" (file-attribute-modification-time attrs)))
                 doc-stats)))
-      
+
       ;; Write Header
       (let ((header (format "================================================================================
 SITE CONTENT EXPORT STATISTICS
@@ -286,14 +286,14 @@ Document List:
         (write-region header nil xz/current-export-log-file))
 
       (xz/log-export "INFO" "Starting site content export...")
-      
+
       (let ((success-count 0)
             (fail-count 0)
             ;; Disable hooks to prevent timers from firing on killed buffers
             (org-mode-hook nil)
             (vc-handled-backends nil)
             (find-file-hook nil))
-        
+
         (dolist (file files)
           (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
           (condition-case err
@@ -305,7 +305,7 @@ Document List:
             (error
              (setq fail-count (1+ fail-count))
              (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
-        
+
         (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
         (message "Site content export complete! Check logs at %s" xz/current-export-log-file)))))
 
@@ -367,13 +367,13 @@ Document List:
         '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-  
+
   ;; Set XeLaTeX as the default compiler
   (setq org-latex-compiler "xelatex")
-  
+
   ;; Remove temporary files after export
   (setq org-latex-remove-logfiles nil)
-  
+
   ;; Default LaTeX packages for better PDF output with XeLaTeX
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
@@ -382,7 +382,7 @@ Document List:
           ("" "ulem" nil)        ; Underlining package
           ("" "listings" nil)    ; Code listings
           ("" "color" nil)))     ; Color support
-  
+
   ;; Enable code highlighting in exported PDFs
   (setq org-latex-listings t)
   ;; Better default document class
