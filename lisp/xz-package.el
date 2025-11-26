@@ -164,10 +164,31 @@
         org-startup-with-inline-images t
         org-cycle-separator-lines 2
         org-export-with-sub-superscripts '{}
-        ;; Disable default CSS and Scripts for cleaner HTML export
-        org-html-head-include-default-style nil
-        org-html-head-include-scripts nil
         org-html-table-default-attributes '(:border "0" :cellspacing "0" :cellpadding "0"))
+
+  ;; Conditional LaTeX style stripping for site-content exports
+  ;; Only strip default CSS/Scripts when exporting from site-content directory
+  (defun xz/is-site-content-file-p ()
+    "Check if the current buffer file is within the site-content directory."
+    (when (buffer-file-name)
+      (string-prefix-p (expand-file-name "~/xynapz/angeld.me/site-content/")
+                       (expand-file-name (buffer-file-name)))))
+
+  (defun xz/org-html-head-filter (_output _backend _info)
+    "Set HTML head inclusion based on whether we're exporting site-content."
+    (if (xz/is-site-content-file-p)
+        (progn
+          (setq-local org-html-head-include-default-style nil)
+          (setq-local org-html-head-include-scripts nil))
+      (progn
+        (setq-local org-html-head-include-default-style t)
+        (setq-local org-html-head-include-scripts t))))
+
+  ;; Add the filter to org-export-before-processing-hook
+  (add-hook 'org-export-before-processing-hook
+            (lambda (_backend)
+              (when (eq _backend 'html)
+                (xz/org-html-head-filter nil nil nil))))
 
   ;; Org agenda
   (setq org-agenda-files (list org-directory)
@@ -335,7 +356,8 @@ Document List:
   :ensure nil  ; built-in
   :after org
   :config
-  ;; Ensure HTML export uses MathJax but relies on external script
+  ;; MathJax settings - always use mathjax but with empty template
+  ;; Astro adds its own MathJax script for site-content files
   (setq org-html-with-latex 'mathjax)
   (setq org-html-mathjax-template "")
   ;; Use pdflatex for PDF export
