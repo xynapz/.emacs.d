@@ -251,7 +251,7 @@
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
   ;; Remove temporary files after export
-  (setq org-latex-remove-logfiles t)
+  (setq org-latex-remove-logfiles nil)
   ;; Default LaTeX packages for better PDF output
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
