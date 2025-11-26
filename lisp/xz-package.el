@@ -360,20 +360,27 @@ Document List:
   ;; Astro adds its own MathJax script for site-content files
   (setq org-html-with-latex 'mathjax)
   (setq org-html-mathjax-template "")
-  ;; Use pdflatex for PDF export
+  ;; Use xelatex for PDF export (required for fontspec package)
   (setq org-latex-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  
+  ;; Set XeLaTeX as the default compiler
+  (setq org-latex-compiler "xelatex")
+  
   ;; Remove temporary files after export
   (setq org-latex-remove-logfiles nil)
-  ;; Default LaTeX packages for better PDF output
+  
+  ;; Default LaTeX packages for better PDF output with XeLaTeX
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
-          ("" "fontspec" t)
-          ("" "xunicode" t)
-          ("" "listings" nil)
-          ("" "color" nil)))
+          ("" "fontspec" t)      ; Modern font support (requires XeLaTeX/LuaLaTeX)
+          ("" "xunicode" t)      ; Unicode support for XeLaTeX
+          ("" "ulem" nil)        ; Underlining package
+          ("" "listings" nil)    ; Code listings
+          ("" "color" nil)))     ; Color support
+  
   ;; Enable code highlighting in exported PDFs
   (setq org-latex-listings t)
   ;; Better default document class
