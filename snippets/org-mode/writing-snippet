@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Writing Post
+# key: writing
+# --
+#+TITLE: ${1:Title}
+#+AUTHOR: Angel Dhakal
+#+DATE: `(format-time-string "%Y-%m-%d")`
+#+DESCRIPTION: ${2:Short description for SEO}
+#+KEYWORDS: ${3:tag1, tag2, tag3}
+#+OPTIONS: ^:{} num:nil toc:5 html-postamble:nil
+#+HTML_HEAD: <meta name="pub_date" content="`(format-time-string "%Y-%m-%d")`" />
+#+HTML_HEAD: <meta name="updated_date" content="`(format-time-string "%Y-%m-%d")`" />
+#+EXPORT_FILE_NAME: `(let ((src-path (buffer-file-name))) (if (and src-path (string-match "/knowledge_base/\\(.*\\)\\.org" src-path)) (concat "/home/angel/xynapz/angeld.me/src/content/writings/" (match-string 1 src-path) ".html") (concat "/home/angel/xynapz/angeld.me/src/content/writings/" (file-name-base (or src-path "untitled")) ".html")))`
+
+* ${1:Title}
+$0

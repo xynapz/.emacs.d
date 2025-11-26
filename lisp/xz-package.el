@@ -163,7 +163,11 @@
         org-src-preserve-indentation nil
         org-startup-with-inline-images t
         org-cycle-separator-lines 2
-        org-export-with-sub-superscripts '{})
+        org-export-with-sub-superscripts '{}
+        ;; Disable default CSS and Scripts for cleaner HTML export
+        org-html-head-include-default-style nil
+        org-html-head-include-scripts nil
+        org-html-table-default-attributes '(:border "0" :cellspacing "0" :cellpadding "0"))
 
   ;; Org agenda
   (setq org-agenda-files (list org-directory)
@@ -238,6 +242,8 @@
   :ensure nil  ; built-in
   :after org
   :config
+  ;; Ensure HTML export uses MathJax
+  (setq org-html-with-latex 'mathjax)
   ;; Use pdflatex for PDF export
   (setq org-latex-pdf-process
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
