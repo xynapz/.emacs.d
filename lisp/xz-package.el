@@ -239,75 +239,112 @@
       (message "[Site Export] %s: %s" level message)))
 
   (defun xz/export-all-site-content ()
-    "Export all .org files in `xz/site-content-path` to HTML with logging."
+    "Export all .org files in `xz/site-content-path` to HTML with logging, clean build, and directory sync."
     (interactive)
-    (unless (file-exists-p xz/site-log-path)
-      (make-directory xz/site-log-path t))
+    (save-window-excursion ;; Prevent buffer popping/layout changes
+      (unless (file-exists-p xz/site-log-path)
+        (make-directory xz/site-log-path t))
 
-    (setq xz/current-export-log-file
-          (expand-file-name (format "export-%s.log" (format-time-string "%Y-%m-%d_%H-%M-%S"))
-                            xz/site-log-path))
+      (setq xz/current-export-log-file
+            (expand-file-name (format "export-%s.log" (format-time-string "%Y-%m-%d_%H-%M-%S"))
+                              xz/site-log-path))
 
-    ;; Collect stats
-    (let* ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
-           (total-docs (length files))
-           (total-size 0)
-           (doc-stats '()))
+      ;; Collect stats and valid output paths
+      (let* ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
+             (total-docs (length files))
+             (total-size 0)
+             (doc-stats '())
+             (valid-html-outputs '())) ;; List to store expected HTML file paths
 
-      ;; Calculate stats
-      (dolist (file files)
-        (let ((attrs (file-attributes file)))
-          (setq total-size (+ total-size (file-attribute-size attrs)))
-          (push (format "%s (%s, %s)"
-                        (file-name-nondirectory file)
-                        (file-size-human-readable (file-attribute-size attrs))
-                        (format-time-string "%Y-%m-%d %H:%M:%S" (file-attribute-modification-time attrs)))
-                doc-stats)))
-
-      ;; Write Header
-      (let ((header (format "================================================================================
-SITE CONTENT EXPORT STATISTICS
-================================================================================
-Execution Time:   %s
-Target Directory: %s
-Total Documents:  %d
-Total Size:       %s
-
-Document List:
-%s
-================================================================================
-[LOGS START]
-"
-                            (format-time-string "%Y-%m-%d %H:%M:%S")
-                            xz/site-content-path
-                            total-docs
-                            (file-size-human-readable total-size)
-                            (mapconcat (lambda (s) (concat "- " s)) (nreverse doc-stats) "\n"))))
-        (write-region header nil xz/current-export-log-file))
-
-      (xz/log-export "INFO" "Starting site content export...")
-
-      (let ((success-count 0)
-            (fail-count 0)
-            ;; Disable hooks to prevent timers from firing on killed buffers
-            (org-mode-hook nil)
-            (vc-handled-backends nil)
-            (find-file-hook nil))
-
+        ;; Calculate stats and pre-scan for export paths
         (dolist (file files)
-          (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
-          (condition-case err
-              (with-current-buffer (find-file-noselect file)
-                (org-html-export-to-html)
-                (kill-buffer)
-                (setq success-count (1+ success-count))
-                (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
-            (error
-             (setq fail-count (1+ fail-count))
-             (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
+          (let ((attrs (file-attributes file)))
+            (setq total-size (+ total-size (file-attribute-size attrs)))
+            (push (format "%s (%s, %s)"
+                          (file-name-nondirectory file)
+                          (file-size-human-readable (file-attribute-size attrs))
+                          (format-time-string "%Y-%m-%d %H:%M:%S" (file-attribute-modification-time attrs)))
+                  doc-stats)
+            ;; Extract #+EXPORT_FILE_NAME
+            (with-temp-buffer
+              (insert-file-contents file)
+              (goto-char (point-min))
+              (when (re-search-forward "^#\\+EXPORT_FILE_NAME:[ \t]*\\(.*\\)$" nil t)
+                (push (expand-file-name (match-string 1)) valid-html-outputs)))))
 
-        (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
-        (message "Site content export complete! Check logs at %s" xz/current-export-log-file)))))
+        ;; Write Header
+        (let ((header (format "================================================================================
+ SITE CONTENT EXPORT STATISTICS
+ ================================================================================
+ Execution Time:   %s
+ Target Directory: %s
+ Total Documents:  %d
+ Total Size:       %s
+ 
+ Document List:
+ %s
+ ================================================================================
+ [LOGS START]
+ "
+                              (format-time-string "%Y-%m-%d %H:%M:%S")
+                              xz/site-content-path
+                              total-docs
+                              (file-size-human-readable total-size)
+                              (mapconcat (lambda (s) (concat "- " s)) (nreverse doc-stats) "\n"))))
+          (write-region header nil xz/current-export-log-file))
+
+        (xz/log-export "INFO" "Starting site content export...")
+
+        (let ((success-count 0)
+              (fail-count 0)
+              ;; Disable hooks to prevent timers from firing on killed buffers
+              (org-mode-hook nil)
+              (vc-handled-backends nil)
+              (find-file-hook nil))
+
+          (dolist (file files)
+            (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
+            (condition-case err
+                (with-current-buffer (find-file-noselect file)
+                  ;; Ensure target directory exists if EXPORT_FILE_NAME is set
+                  (save-excursion
+                    (goto-char (point-min))
+                    (when (re-search-forward "^#\\+EXPORT_FILE_NAME:[ \t]*\\(.*\\)$" nil t)
+                      (let ((target-dir (file-name-directory (match-string 1))))
+                        (unless (file-exists-p target-dir)
+                          (make-directory target-dir t)
+                          (xz/log-export "INFO" (format "Created directory: %s" target-dir))))))
+                  
+                  (org-html-export-to-html)
+                  (kill-buffer) ;; Kill the Org buffer
+                  ;; Also kill the generated HTML buffer if it exists (it usually does after export)
+                  (let ((html-buffer (find-buffer-visiting (concat (file-name-sans-extension file) ".html"))))
+                     (when html-buffer (kill-buffer html-buffer)))
+                  
+                  (setq success-count (1+ success-count))
+                  (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
+              (error
+               (setq fail-count (1+ fail-count))
+               (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
+
+          ;; Clean Build: Remove dangling HTML files
+          (xz/log-export "INFO" "Starting Clean Build (removing orphans)...")
+          (let ((orphans-removed 0))
+            ;; We assume the root of valid outputs is the common prefix or a known root.
+            ;; For safety, we'll only scan directories that contain at least one valid output.
+            (let ((scanned-dirs (delete-dups (mapcar 'file-name-directory valid-html-outputs))))
+              (dolist (dir scanned-dirs)
+                (when (file-exists-p dir)
+                  (dolist (f (directory-files dir t "\\.html$"))
+                    (unless (member (expand-file-name f) valid-html-outputs)
+                      (delete-file f)
+                      (setq orphans-removed (1+ orphans-removed))
+                      (xz/log-export "CLEAN" (format "Removed orphan: %s" f)))))))
+            
+            (xz/log-export "INFO" (format "Clean Build complete. Orphans removed: %d" orphans-removed)))
+
+          (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
+          (message "Site content export complete! Check logs at %s" xz/current-export-log-file)))))
 
 ;; Org modern for better aesthetics
 (use-package org-modern
