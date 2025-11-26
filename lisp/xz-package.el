@@ -225,26 +225,62 @@
           (expand-file-name (format "export-%s.log" (format-time-string "%Y-%m-%d_%H-%M-%S"))
                             xz/site-log-path))
     
-    (xz/log-export "INFO" "Starting site content export...")
-    
-    (let ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
-          (success-count 0)
-          (fail-count 0))
+    ;; Collect stats
+    (let* ((files (directory-files-recursively (expand-file-name xz/site-content-path) "\\.org$"))
+           (total-docs (length files))
+           (total-size 0)
+           (doc-stats '()))
       
+      ;; Calculate stats
       (dolist (file files)
-        (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
-        (condition-case err
-            (with-current-buffer (find-file-noselect file)
-              (org-html-export-to-html)
-              (kill-buffer)
-              (setq success-count (1+ success-count))
-              (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
-          (error
-           (setq fail-count (1+ fail-count))
-           (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
+        (let ((attrs (file-attributes file)))
+          (setq total-size (+ total-size (file-attribute-size attrs)))
+          (push (format "%s (%s, %s)" 
+                        (file-name-nondirectory file)
+                        (file-size-human-readable (file-attribute-size attrs))
+                        (format-time-string "%Y-%m-%d %H:%M:%S" (file-attribute-modification-time attrs)))
+                doc-stats)))
       
-      (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
-      (message "Site content export complete! Check logs at %s" xz/current-export-log-file))))
+      ;; Write Header
+      (let ((header (format "================================================================================
+SITE CONTENT EXPORT STATISTICS
+================================================================================
+Execution Time:   %s
+Target Directory: %s
+Total Documents:  %d
+Total Size:       %s
+
+Document List:
+%s
+================================================================================
+[LOGS START]
+"
+                            (format-time-string "%Y-%m-%d %H:%M:%S")
+                            xz/site-content-path
+                            total-docs
+                            (file-size-human-readable total-size)
+                            (mapconcat (lambda (s) (concat "- " s)) (nreverse doc-stats) "\n"))))
+        (write-region header nil xz/current-export-log-file))
+
+      (xz/log-export "INFO" "Starting site content export...")
+      
+      (let ((success-count 0)
+            (fail-count 0))
+        
+        (dolist (file files)
+          (xz/log-export "INFO" (format "Processing %s..." (file-name-nondirectory file)))
+          (condition-case err
+              (with-current-buffer (find-file-noselect file)
+                (org-html-export-to-html)
+                (kill-buffer)
+                (setq success-count (1+ success-count))
+                (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
+            (error
+             (setq fail-count (1+ fail-count))
+             (xz/log-export "ERROR" (format "Failed to export %s: %s" (file-name-nondirectory file) err)))))
+        
+        (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
+        (message "Site content export complete! Check logs at %s" xz/current-export-log-file)))))
 
 ;; Org modern for better aesthetics
 (use-package org-modern
