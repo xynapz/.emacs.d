@@ -548,6 +548,10 @@
   (citar-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib"))
   (citar-library-paths '("~/xynapz/angeld.me/site-content/bibliography/pdfs/"))
   (citar-notes-paths '("~/xynapz/angeld.me/site-content/bibliography/notes.org"))
+  (setq org-cite-global-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib")
+  (setq org-cite-insert-processor 'citar)
+  (setq org-cite-follow-processor 'citar)
+  (setq org-cite-activate-processor 'citar))
   :hook
   (LaTeX-mode . citar-capf-setup)
   (org-mode . citar-capf-setup))
@@ -557,16 +561,6 @@
   :after citar embark
   :no-require
   :config (citar-embark-mode))
-
-(use-package citar-org
-  :ensure t
-  :after citar org
-  :config
-  (setq org-cite-global-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib"))
-  (setq org-cite-insert-processor 'citar)
-  (setq org-cite-follow-processor 'citar)
-  (setq org-cite-activate-processor 'citar)
-  (citar-org-activate))
 
 (provide 'xz-package)
 ;;; xz-package.el ends here
