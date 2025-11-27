@@ -503,5 +503,61 @@
 (setq dired-hide-details-hide-symlink-targets nil
       dired-hide-details-hide-information-lines nil)
 
+;; LaTeX Configuration (Overleaf-like setup)
+;; ----------------------------------------------------------------
+
+;; AUCTeX - Advanced LaTeX editing
+(use-package tex
+  :ensure auctex
+  :hook ((LaTeX-mode . turn-on-reftex)
+         (LaTeX-mode . visual-line-mode)
+         (LaTeX-mode . flyspell-mode)
+         (LaTeX-mode . LaTeX-math-mode))
+  :config
+  (setq TeX-auto-save t
+        TeX-parse-self t
+        TeX-master nil
+        ;; Use PDF Tools for preview
+        TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-source-correlate-start-server t)
+  ;; Update PDF buffers after compilation
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer))
+
+;; CDLaTeX - Fast math insertion
+(use-package cdlatex
+  :ensure t
+  :hook ((LaTeX-mode . turn-on-cdlatex)
+         (org-mode . turn-on-org-cdlatex)))
+
+;; PDF Tools - Better PDF viewer
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  ;; Install without prompting if possible, otherwise user must run M-x pdf-tools-install
+  (pdf-tools-install :no-query)
+  (setq pdf-view-use-scaling t
+        pdf-view-use-imagemagick nil)
+  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+
+;; Org Ref - Bibliography management
+(use-package org-ref
+  :ensure t
+  :after org
+  :init
+  ;; Set up bibliography paths
+  ;; These are placeholders - user should adjust
+  (setq org-ref-default-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib")
+        org-ref-pdf-directory "~/xynapz/angeld.me/site-content/bibliography/pdfs/"
+        org-ref-bibliography-notes "~/xynapz/angeld.me/site-content/bibliography/notes.org")
+  :config
+  ;; Use standard completing-read (enhanced by Vertico)
+  (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+        org-ref-insert-cite-function 'org-ref-cite-insert-helm ;; fallback/default
+        org-ref-insert-label-function 'org-ref-insert-label-link
+        org-ref-insert-ref-function 'org-ref-insert-ref-link
+        org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body))))
+
 (provide 'xz-package)
 ;;; xz-package.el ends here
