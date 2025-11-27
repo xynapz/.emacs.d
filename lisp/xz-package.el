@@ -524,14 +524,19 @@
         ;; Use PDF Tools for preview
         TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t)
-  ;; Define LatexMk command
-  ;; We use -output-directory=%o to put files in the build dir (configured below)
-  (add-to-list 'TeX-command-list
-               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=%o %f" TeX-run-TeX nil t :help "Run LatexMk"))
-
   ;; Use a build directory for all output (keeps source clean)
-  ;; This requires AUCTeX 13.0+ (standard on Arch)
-  (setq TeX-output-dir "build-el")
+  (setq-default TeX-output-dir "build-el")
+  
+  ;; Define LatexMk command with explicit output directory
+  (add-to-list 'TeX-command-list
+               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=build-el %f" TeX-run-TeX nil t :help "Run LatexMk"))
+  
+  ;; Ensure build directory exists before compilation
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (let ((output-dir (expand-file-name "build-el" default-directory)))
+                (unless (file-exists-p output-dir)
+                  (make-directory output-dir t)))))
   
   ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
