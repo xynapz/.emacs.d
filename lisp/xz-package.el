@@ -344,7 +344,7 @@
             (xz/log-export "INFO" (format "Clean Build complete. Orphans removed: %d" orphans-removed)))
 
           (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
-          (message "Site content export complete! Check logs at %s" xz/current-export-log-file)))))
+          (message "Site content export complete! Check logs at %s" xz/current-export-log-file))))))
 
 ;; Org modern for better aesthetics
 (use-package org-modern
