@@ -531,7 +531,7 @@
 
   ;; Use a build directory for all output (keeps source clean)
   ;; This requires AUCTeX 13.0+ (standard on Arch)
-  (setq TeX-output-dir "build")
+  (setq TeX-output-dir "build-el")
   
   ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
