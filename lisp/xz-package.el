@@ -524,19 +524,18 @@
         ;; Use PDF Tools for preview
         TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t)
+  ;; Define LatexMk command
+  ;; We use -output-directory=%o to put files in the build dir (configured below)
+  (add-to-list 'TeX-command-list
+               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=%o %f" TeX-run-TeX nil t :help "Run LatexMk"))
+
+  ;; Use a build directory for all output (keeps source clean)
+  ;; This requires AUCTeX 13.0+ (standard on Arch)
+  (setq TeX-output-dir "build")
+  
   ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
-  
-  ;; Define LatexMk command if not present
-  (add-to-list 'TeX-command-list
-               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode %f" TeX-run-TeX nil t :help "Run LatexMk"))
-
-  ;; Auto-clean using latexmk -c (Orthodox way)
-  (add-hook 'TeX-after-compilation-finished-functions
-            (lambda (file status)
-              (when (string-match-p "finished" status)
-                (start-process "latex-clean" nil "latexmk" "-c" file)))))
+            #'TeX-revert-document-buffer))
 
 ;; CDLaTeX - Fast math insertion
 (use-package cdlatex
