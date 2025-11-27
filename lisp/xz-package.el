@@ -526,7 +526,15 @@
         TeX-source-correlate-start-server t)
   ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer))
+            #'TeX-revert-document-buffer)
+  
+  ;; Auto-clean intermediate files after successful compilation
+  (add-hook 'TeX-after-compilation-finished-functions
+            (lambda (_file status)
+              (when (string-match-p "finished" status)
+                ;; (TeX-clean) cleans intermediate files. 
+                ;; We set TeX-clean-confirm to nil above so it won't ask.
+                (TeX-clean)))))
 
 ;; CDLaTeX - Fast math insertion
 (use-package cdlatex
