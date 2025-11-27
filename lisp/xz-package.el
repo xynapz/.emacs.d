@@ -541,23 +541,32 @@
         pdf-view-use-imagemagick nil)
   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
 
-;; Org Ref - Bibliography management
-(use-package org-ref
+;; Citar - Bibliography management (Better for Vertico)
+(use-package citar
   :ensure t
-  :after org
-  :init
-  ;; Set up bibliography paths
-  ;; These are placeholders - user should adjust
-  (setq org-ref-default-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib")
-        org-ref-pdf-directory "~/xynapz/angeld.me/site-content/bibliography/pdfs/"
-        org-ref-bibliography-notes "~/xynapz/angeld.me/site-content/bibliography/notes.org")
+  :custom
+  (citar-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib"))
+  (citar-library-paths '("~/xynapz/angeld.me/site-content/bibliography/pdfs/"))
+  (citar-notes-paths '("~/xynapz/angeld.me/site-content/bibliography/notes.org"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
+
+(use-package citar-embark
+  :ensure t
+  :after citar embark
+  :no-require
+  :config (citar-embark-mode))
+
+(use-package citar-org
+  :ensure t
+  :after citar org
   :config
-  ;; Use standard completing-read (enhanced by Vertico)
-  (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-        org-ref-insert-cite-function 'org-ref-cite-insert-helm ;; fallback/default
-        org-ref-insert-label-function 'org-ref-insert-label-link
-        org-ref-insert-ref-function 'org-ref-insert-ref-link
-        org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body))))
+  (setq org-cite-global-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib"))
+  (setq org-cite-insert-processor 'citar)
+  (setq org-cite-follow-processor 'citar)
+  (setq org-cite-activate-processor 'citar)
+  (citar-org-activate))
 
 (provide 'xz-package)
 ;;; xz-package.el ends here
