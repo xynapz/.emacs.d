@@ -528,13 +528,15 @@
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer)
   
-  ;; Auto-clean intermediate files after successful compilation
+  ;; Define LatexMk command if not present
+  (add-to-list 'TeX-command-list
+               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode %f" TeX-run-TeX nil t :help "Run LatexMk"))
+
+  ;; Auto-clean using latexmk -c (Orthodox way)
   (add-hook 'TeX-after-compilation-finished-functions
-            (lambda (_file status)
+            (lambda (file status)
               (when (string-match-p "finished" status)
-                ;; (TeX-clean) cleans intermediate files. 
-                ;; We set TeX-clean-confirm to nil above so it won't ask.
-                (TeX-clean)))))
+                (start-process "latex-clean" nil "latexmk" "-c" file)))))
 
 ;; CDLaTeX - Fast math insertion
 (use-package cdlatex
