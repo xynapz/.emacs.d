@@ -399,17 +399,17 @@
   ;; Astro adds its own MathJax script for site-content files
   ;; Note: org-html-mathjax-template is handled conditionally in xz/org-html-head-filter
   (setq org-html-with-latex 'mathjax)
-  ;; Use xelatex for PDF export (required for fontspec package)
+  ;; Use latexmk for PDF export (handles bibtex/biber automatically)
   (setq org-latex-pdf-process
-        '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        '("latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
 
   ;; Set XeLaTeX as the default compiler
   (setq org-latex-compiler "xelatex")
 
   ;; Remove temporary files after export
-  (setq org-latex-remove-logfiles nil)
+  (setq org-latex-remove-logfiles t)
+  (setq org-latex-logfiles-extensions
+        '("aux" "bcf" "blg" "fdb_latexmk" "fls" "fig" "idx" "log" "out" "run.xml" "toc" "vrb" "xdv" "snm" "nav"))
 
   ;; Default LaTeX packages for better PDF output with XeLaTeX
   (setq org-latex-packages-alist
@@ -517,6 +517,10 @@
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-master nil
+        ;; Use LatexMk by default
+        TeX-command-default "LatexMk"
+        ;; Don't ask to clean
+        TeX-clean-confirm nil
         ;; Use PDF Tools for preview
         TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t)
@@ -548,13 +552,14 @@
   (citar-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib"))
   (citar-library-paths '("~/xynapz/angeld.me/site-content/bibliography/pdfs/"))
   (citar-notes-paths '("~/xynapz/angeld.me/site-content/bibliography/notes.org"))
-  (setq org-cite-global-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib")
-  (setq org-cite-insert-processor 'citar)
-  (setq org-cite-follow-processor 'citar)
-  (setq org-cite-activate-processor 'citar))
   :hook
   (LaTeX-mode . citar-capf-setup)
-  (org-mode . citar-capf-setup))
+  (org-mode . citar-capf-setup)
+  :config
+  (setq org-cite-global-bibliography '("~/xynapz/angeld.me/site-content/bibliography/references.bib")
+        org-cite-insert-processor 'citar
+        org-cite-follow-processor 'citar
+        org-cite-activate-processor 'citar))
 
 (use-package citar-embark
   :ensure t
