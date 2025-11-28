@@ -16,7 +16,6 @@
 (load "xz-evil")
 (load "xz-completion")
 (load "xz-keybindings")
-;; (load "xz-server")
 
 ;; Languages
 (load "cc")
