@@ -280,7 +280,7 @@
  Target Directory: %s
  Total Documents:  %d
  Total Size:       %s
- 
+
  Document List:
  %s
  ================================================================================
@@ -314,13 +314,13 @@
                         (unless (file-exists-p target-dir)
                           (make-directory target-dir t)
                           (xz/log-export "INFO" (format "Created directory: %s" target-dir))))))
-                  
+
                   (org-html-export-to-html)
                   (kill-buffer) ;; Kill the Org buffer
                   ;; Also kill the generated HTML buffer if it exists (it usually does after export)
                   (let ((html-buffer (find-buffer-visiting (concat (file-name-sans-extension file) ".html"))))
                      (when html-buffer (kill-buffer html-buffer)))
-                  
+
                   (setq success-count (1+ success-count))
                   (xz/log-export "INFO" (format "Successfully exported %s" (file-name-nondirectory file))))
               (error
@@ -340,7 +340,7 @@
                       (delete-file f)
                       (setq orphans-removed (1+ orphans-removed))
                       (xz/log-export "CLEAN" (format "Removed orphan: %s" f)))))))
-            
+
             (xz/log-export "INFO" (format "Clean Build complete. Orphans removed: %d" orphans-removed)))
 
           (xz/log-export "INFO" (format "Export complete. Success: %d, Failed: %d" success-count fail-count))
@@ -526,18 +526,18 @@
         TeX-source-correlate-start-server t)
   ;; Use a build directory for all output (keeps source clean)
   (setq-default TeX-output-dir "build-el")
-  
+
   ;; Define LatexMk command with explicit output directory
   (add-to-list 'TeX-command-list
                '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=build-el %f" TeX-run-TeX nil t :help "Run LatexMk"))
-  
+
   ;; Ensure build directory exists before compilation
   (add-hook 'LaTeX-mode-hook
             (lambda ()
               (let ((output-dir (expand-file-name "build-el" default-directory)))
                 (unless (file-exists-p output-dir)
                   (make-directory output-dir t)))))
-  
+
   ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer))

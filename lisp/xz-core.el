@@ -22,7 +22,7 @@
 ;; Frame basics
 (add-to-list 'default-frame-alist '(alpha-background . 100))
 (add-to-list 'default-frame-alist '(undecorated . t))
-(setopt frame-title-format "Angel - %b")
+(setopt frame-title-format "Emacs - %b")
 
 ;; Fonts
 (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 194)
