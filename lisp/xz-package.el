@@ -51,6 +51,7 @@
         (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :config
   (projectile-mode +1)
+  :custom
   ;; Save known projects on exit
   (add-hook 'kill-emacs-hook #'projectile-save-known-projects))
 
@@ -68,7 +69,8 @@
   (unless (file-exists-p org-directory)
     (make-directory org-directory t))
 
-  (advice-add 'org-display-inline-images :around #'xz/org-display-inline-images--expand-custom-links)
+  (require 'org-tempo)
+
   (setq org-image-actual-width '(800))
   (setq org-startup-folded 'content
         org-startup-indented t
@@ -157,23 +159,16 @@
   :ensure nil  ; built-in
   :after org
   :config
-  ;; MathJax settings - always use mathjax but with empty template
-  ;; Astro adds its own MathJax script for site-content files
-  ;; Note: org-html-mathjax-template is handled conditionally in xz/org-html-head-filter
   (setq org-html-with-latex 'mathjax)
-  ;; Use latexmk for PDF export (handles bibtex/biber automatically)
   (setq org-latex-pdf-process
         '("latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
 
-  ;; Set XeLaTeX as the default compiler
   (setq org-latex-compiler "xelatex")
 
-  ;; Remove temporary files after export
   (setq org-latex-remove-logfiles t)
   (setq org-latex-logfiles-extensions
         '("aux" "bcf" "blg" "fdb_latexmk" "fls" "fig" "idx" "log" "out" "run.xml" "toc" "vrb" "xdv" "snm" "nav"))
 
-  ;; Default LaTeX packages for better PDF output with XeLaTeX
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
           ("" "fontspec" t)      ; Modern font support (requires XeLaTeX/LuaLaTeX)
@@ -182,11 +177,8 @@
           ("" "listings" nil)    ; Code listings
           ("" "color" nil)))     ; Color support
 
-  ;; Enable code highlighting in exported PDFs
-  (setq org-latex-listings t)
-  ;; Better default document class
+  (setq org-latex-src-block-backend 'listings)
   (setq org-latex-default-class "article")
-  ;; Customize LaTeX classes if needed
   (add-to-list 'org-latex-classes
                '("article"
                  "\\documentclass[11pt]{article}"
@@ -199,43 +191,23 @@
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
-;; Basic Dired configuration
+
 (use-package dired
-  :ensure nil  ; built-in package
+  :ensure nil
   :commands (dired dired-jump)
-  :bind (("C-x C-j" . dired-jump))  ; Quick jump to dired for current file
+  :bind (("C-x C-j" . dired-jump))
   :custom
-  ;; Use human-readable sizes, group directories first
   (dired-listing-switches "-alhgo --group-directories-first")
-
-  ;; IMPORTANT: Automatically kill buffers for deleted/moved files
   (dired-clean-up-buffers-too t)
-
-  ;; If you have two dired windows open, use the other as default target
   (dired-dwim-target t)
-
-  ;; Kill old dired buffer when opening new directory
-  ;; This prevents accumulation of dired buffers
   (dired-kill-when-opening-new-dired-buffer t)
-
   :config
-  ;; Load dired-x for extra features
   (require 'dired-x)
-
-  ;; Enable 'a' command to reuse buffer (instead of creating new ones)
   (put 'dired-find-alternate-file 'disabled nil)
-
-  ;; Better key bindings for navigation
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
   (define-key dired-mode-map (kbd "^")
               (lambda () (interactive) (find-alternate-file ".."))))
 
-;; Hide dotfiles by default (toggle with '.')
-;; (use-package dired-hide-dotfiles
-;;   :ensure t
-;;   :hook (dired-mode . dired-hide-dotfiles-mode)
-;;   :bind (:map dired-mode-map
-;;               ("." . dired-hide-dotfiles-mode)))
 
 ;; Dired subtree - expand/collapse directories in place
 (use-package dired-subtree
@@ -266,28 +238,19 @@
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-master nil
-        ;; Use LatexMk by default
         TeX-command-default "LatexMk"
-        ;; Don't ask to clean
         TeX-clean-confirm nil
-        ;; Use PDF Tools for preview
         TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t)
-  ;; Use a build directory for all output (keeps source clean)
   (setq-default TeX-output-dir "build-el")
-
-  ;; Define LatexMk command with explicit output directory
   (add-to-list 'TeX-command-list
                '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=build-el %f" TeX-run-TeX nil t :help "Run LatexMk"))
-
-  ;; Ensure build directory exists before compilation
   (add-hook 'LaTeX-mode-hook
             (lambda ()
               (let ((output-dir (expand-file-name "build-el" default-directory)))
                 (unless (file-exists-p output-dir)
                   (make-directory output-dir t)))))
 
-  ;; Update PDF buffers after compilation
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer))
 
