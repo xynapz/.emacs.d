@@ -13,7 +13,6 @@
 (load "xz-core")
 (load "xz-package")
 (load "xz-editor")
-(load "xz-evil")
 (load "xz-completion")
 (load "xz-keybindings")
 
