@@ -130,20 +130,20 @@
   (setq org-confirm-babel-evaluate nil))
 
 ;; Org modern for better aesthetics
-(use-package org-modern
-  :hook (org-mode . org-modern-mode)
-  :config
-  (setq org-modern-star '("●" "○" "✸" "✿" "◆" "◇")
-        org-modern-table-vertical 1
-        org-modern-table-horizontal 0.2
-        org-modern-list '((43 . "➤") (45 . "–") (42 . "•"))
-        org-modern-block-fringe nil
-        org-modern-progress nil
-        org-modern-priority nil
-        org-modern-horizontal-rule (make-string 36 ?─)
-        org-modern-keyword nil
-        org-modern-timestamp t
-        org-modern-todo t))
+;; (use-package org-modern
+;;   :hook (org-mode . org-modern-mode)
+;;   :config
+;;   (setq org-modern-star '("●" "○" "✸" "✿" "◆" "◇")
+;;         org-modern-table-vertical 1
+;;         org-modern-table-horizontal 0.2
+;;         org-modern-list '((43 . "➤") (45 . "–") (42 . "•"))
+;;         org-modern-block-fringe nil
+;;         org-modern-progress nil
+;;         org-modern-priority nil
+;;         org-modern-horizontal-rule (make-string 36 ?─)
+;;         org-modern-keyword nil
+;;         org-modern-timestamp t
+;;         org-modern-todo t))
 
 ;; Org appear - Show emphasis markers on demand
 (use-package org-appear
