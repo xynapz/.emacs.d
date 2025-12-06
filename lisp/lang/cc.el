@@ -29,7 +29,8 @@
   :preface
   (defun my/eglot-ensure ()
     "Start eglot unless we are in an org export buffer."
-    (unless (bound-and-true-p org-export-current-backend)
+    (when (and (buffer-file-name)
+               (not (bound-and-true-p org-export-current-backend)))
       (eglot-ensure)))
   :config
   ;; Configure clangd with C++20 and clang-tidy

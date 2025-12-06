@@ -115,7 +115,10 @@
 
 ;; Indent guides
 (use-package highlight-indent-guides
-  :hook (prog-mode . highlight-indent-guides-mode)
+  :hook (prog-mode . (lambda ()
+                       (unless (bound-and-true-p org-export-current-backend)
+                         (highlight-indent-guides-mode))))
+
   :config
   (setq highlight-indent-guides-method 'character
         highlight-indent-guides-responsive 'top
