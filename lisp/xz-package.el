@@ -91,6 +91,20 @@
         org-export-with-sub-superscripts '{}
         org-html-table-default-attributes '(:border "0" :cellspacing "0" :cellpadding "0"))
 
+  ;; Suppress hooks during htmlize (export)
+  (defun my/suppress-hooks-during-export (orig-fun &rest args)
+    "Suppress major mode hooks during htmlize to prevent heavy modes from starting."
+    (let ((prog-mode-hook nil)
+          (c-mode-common-hook nil)
+          (c-mode-hook nil)
+          (c++-mode-hook nil)
+          (flycheck-mode-hook nil)
+          (eglot-stay-out-of '(c-mode c++-mode))
+          (inhibit-message t))
+      (apply orig-fun args)))
+
+  (advice-add 'org-html-fontify-code :around #'my/suppress-hooks-during-export)
+
   ;; Org agenda
   (setq org-agenda-files (list org-directory)
         org-deadline-warning-days 7)
