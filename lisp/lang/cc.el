@@ -21,11 +21,16 @@
 ;; Eglot LSP Configuration
 (use-package eglot
   :ensure nil
-  :hook ((c-mode c++-mode) . eglot-ensure)
+  :hook ((c-mode c++-mode) . my/eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c r" . eglot-rename)
               ("C-c a" . eglot-code-actions)
               ("C-c f" . eglot-format-buffer))
+  :preface
+  (defun my/eglot-ensure ()
+    "Start eglot unless we are in an org export buffer."
+    (unless (bound-and-true-p org-export-current-backend)
+      (eglot-ensure)))
   :config
   ;; Configure clangd with C++20 and clang-tidy
   (setq-default eglot-workspace-configuration
