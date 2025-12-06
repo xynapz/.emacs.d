@@ -116,7 +116,8 @@
 ;; Indent guides
 (use-package highlight-indent-guides
   :hook (prog-mode . (lambda ()
-                       (unless (bound-and-true-p org-export-current-backend)
+                       (when (and (buffer-file-name)
+                                  (not (bound-and-true-p org-export-current-backend)))
                          (highlight-indent-guides-mode))))
 
   :config

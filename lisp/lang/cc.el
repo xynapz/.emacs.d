@@ -27,8 +27,10 @@
               ("C-c a" . eglot-code-actions)
               ("C-c f" . eglot-format-buffer))
   :preface
+  :preface
   (defun my/eglot-ensure ()
     "Start eglot unless we are in an org export buffer."
+    (message "[Debugging] my/eglot-ensure called in buffer: %s, file: %s" (buffer-name) (buffer-file-name))
     (when (and (buffer-file-name)
                (not (bound-and-true-p org-export-current-backend)))
       (eglot-ensure)))

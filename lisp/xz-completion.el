@@ -131,7 +131,8 @@
   (global-flycheck-mode)
   (add-hook 'flycheck-mode-hook
             (lambda ()
-              (when (bound-and-true-p org-export-current-backend)
+              (unless (and (buffer-file-name)
+                           (not (bound-and-true-p org-export-current-backend)))
                 (flycheck-mode -1))))
 
   (setq flycheck-indication-mode 'right-fringe
