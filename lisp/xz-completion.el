@@ -67,7 +67,7 @@
   (corfu-quit-at-boundary 'separator)
   (corfu-quit-no-match 'separator)
   (corfu-preview-current 'insert)
-  (corfu-preselect-first nil)
+  (corfu-preselect 'first) ; Always select the first candidate
   (corfu-on-exact-match nil)
   (corfu-echo-documentation nil)
   (corfu-scroll-margin 5)
@@ -83,13 +83,21 @@
   (corfu-echo-mode)
   (corfu-popupinfo-mode))
 
+;; Add icons to completion
+(use-package nerd-icons-corfu
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
 ;; Cape for additional completion backends
 (use-package cape
   :ensure t
   :init
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-keyword))
+  ;; adding cape backends to the end (append) so they don't override LSP
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev t)
+  (add-to-list 'completion-at-point-functions #'cape-file t)
+  (add-to-list 'completion-at-point-functions #'cape-keyword t))
 
 ;; Eglot (Keybindings)
 (use-package eglot
