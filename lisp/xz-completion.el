@@ -127,15 +127,13 @@
 ;; flycheck for syntax checking
 (use-package flycheck
   :ensure t
+  :hook
+  ((c-mode . flycheck-mode)
+   (c++-mode . flycheck-mode)
+   (astro-mode . flycheck-mode)
+   (typescript-mode . flycheck-mode)
+   (js-mode . flycheck-mode))
   :config
-  (global-flycheck-mode)
-  (add-hook 'flycheck-mode-hook
-            (lambda ()
-              (when (and flycheck-mode
-                         (or (not (buffer-file-name))
-                             (bound-and-true-p org-export-current-backend)))
-                (flycheck-mode -1))))
-
   (setq flycheck-indication-mode 'right-fringe
         flycheck-emacs-lisp-load-path 'inherit)
 

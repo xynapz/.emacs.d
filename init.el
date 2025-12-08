@@ -19,6 +19,7 @@
 ;; Languages
 (load "cc")
 (load "astro")
+(load "ts")
 
 ;;; init.el ends here
 
