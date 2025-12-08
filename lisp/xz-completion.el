@@ -148,42 +148,6 @@
         eglot-connect-timeout 60          ; Increase timeout for heavy LSPs
         eglot-autoshutdown t))            ; Shutdown unused servers
 
-;; flycheck for syntax checking
-(use-package flycheck
-  :ensure t
-  :hook
-  ((c-mode . flycheck-mode)
-   (c++-mode . flycheck-mode)
-   (astro-mode . flycheck-mode)
-   (typescript-ts-mode . flycheck-mode)
-   (tsx-ts-mode . flycheck-mode)
-   (js-ts-mode . flycheck-mode)
-   (python-ts-mode . flycheck-mode))
-  :bind (:map flycheck-mode-map
-              ("C-c ! l" . flycheck-list-errors)
-              ("C-c ! n" . flycheck-next-error)
-              ("C-c ! p" . flycheck-previous-error)
-              ("C-c ! v" . flycheck-verify-setup))
-  :config
-  (setq flycheck-indication-mode 'right-fringe
-        flycheck-emacs-lisp-load-path 'inherit)
-
-  ;; C/C++ specific configuration
-  (with-eval-after-load 'cc-mode
-    ;; Set C++20 standard for C/C++ flycheck
-    (setq flycheck-clang-language-standard "c++20"
-          flycheck-gcc-language-standard "c++20")
-
-    ;; Pass clang-tidy checks to clang via flycheck-clang-args
-    ;; This works with the built-in c/c++-clang checker
-    (setq flycheck-clang-args
-          '("-Wall" "-Wextra"))
-
-    ;; since clangd is running via eglot, it handles clang-tidy automatically
-    ;; configured it with --clang-tidy in cc.el
-    ))
-
-
 (use-package consult-projectile
   :ensure t
   :after (consult projectile))

@@ -30,6 +30,9 @@
 (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font" :height 194)
 
 ;; Performance
+(setq gc-cons-threshold 100000000) ; 100MB
+(setq read-process-output-max (* 1024 1024)) ; 1MB
+
 (setq-default bidi-display-reordering nil
               bidi-paragraph-direction 'left-to-right)
 

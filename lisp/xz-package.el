@@ -45,11 +45,12 @@
 ;; Projectile - Project management
 (use-package projectile
   :diminish
-  :bind ("C-c p" . projectile-command-map)
+  :bind-keymap ("C-c p" . projectile-command-map)
   :init
   (setq projectile-project-search-path '("~/xynapz/")
         projectile-completion-system 'default
         projectile-enable-caching t
+        projectile-indexing-method 'alien
         projectile-known-projects-file
         (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :config
