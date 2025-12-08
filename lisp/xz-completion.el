@@ -122,7 +122,8 @@
   :init
   (global-corfu-mode)
   (corfu-history-mode)
-  (corfu-echo-mode))
+  (corfu-echo-mode)
+  (corfu-popupinfo-mode))
 
 ;; Cape for additional completion backends
 (use-package cape
@@ -140,7 +141,12 @@
               ("C-c e a" . eglot-code-actions)
               ("C-c e f" . eglot-format)
               ("C-c e o" . eglot-code-action-organize-imports)
-              ("C-h ." . eldoc-doc-buffer)))
+              ("C-h ." . eldoc-doc-buffer))
+  :config
+  ;; Performance optimizations
+  (setq eglot-events-buffer-size 0        ; Disable logging for speed
+        eglot-connect-timeout 60          ; Increase timeout for heavy LSPs
+        eglot-autoshutdown t))            ; Shutdown unused servers
 
 ;; flycheck for syntax checking
 (use-package flycheck
@@ -151,7 +157,8 @@
    (astro-mode . flycheck-mode)
    (typescript-ts-mode . flycheck-mode)
    (tsx-ts-mode . flycheck-mode)
-   (js-ts-mode . flycheck-mode))
+   (js-ts-mode . flycheck-mode)
+   (python-ts-mode . flycheck-mode))
   :bind (:map flycheck-mode-map
               ("C-c ! l" . flycheck-list-errors)
               ("C-c ! n" . flycheck-next-error)

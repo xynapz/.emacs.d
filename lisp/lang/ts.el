@@ -3,20 +3,6 @@
 (require 'eglot)
 (require 'treesit)
 
-;; Define grammar sources
-(setq treesit-language-source-alist
-      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")))
-
-;; Function to ensure grammars are installed (optional helper)
-(defun ts/install-grammars ()
-  "Install tree-sitter grammars if missing."
-  (interactive)
-  (dolist (lang '(typescript tsx javascript))
-    (unless (treesit-language-available-p lang)
-      (treesit-install-language-grammar lang))))
-
 ;; TypeScript (Tree-sitter)
 (use-package typescript-ts-mode
   :ensure nil ; Built-in in Emacs 29+

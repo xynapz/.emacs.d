@@ -285,5 +285,27 @@
         pdf-view-use-imagemagick nil)
   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
 
+(use-package treesit
+  :ensure nil
+  :mode (("\\.tsx\\'" . tsx-ts-mode)
+         ("\\.ts\\'" . typescript-ts-mode)
+         ("\\.js\\'" . js-ts-mode)
+         ("\\.py\\'" . python-ts-mode))
+  :config
+  ;; Define grammar sources for all languages
+  (setq treesit-language-source-alist
+        '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+          (python "https://github.com/tree-sitter/tree-sitter-python" "master" "src")))
+
+  ;; Generic installer for all grammars
+  (defun xz/install-treesit-grammars ()
+    "Install tree-sitter grammars if they are missing."
+    (interactive)
+    (dolist (lang (mapcar #'car treesit-language-source-alist))
+      (unless (treesit-language-available-p lang)
+        (treesit-install-language-grammar lang)))))
+
 (provide 'xz-package)
 ;;; xz-package.el ends here

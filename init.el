@@ -20,6 +20,7 @@
 (load "cc")
 (load "astro")
 (load "ts")
+(load "python")
 
 ;;; init.el ends here
 
