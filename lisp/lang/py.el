@@ -1,4 +1,4 @@
-;;; python.el --- Python support -*- lexical-binding: t; -*-
+;;; py.el --- Python support -*- lexical-binding: t; -*-
 
 (require 'eglot)
 (require 'treesit)
@@ -16,5 +16,5 @@
   (add-to-list 'eglot-server-programs
                '(python-ts-mode . ("pyright-langserver" "--stdio"))))
 
-(provide 'python)
-;;; python.el ends here
+(provide 'py)
+;;; py.el ends here
