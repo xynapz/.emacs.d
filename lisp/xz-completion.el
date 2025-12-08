@@ -131,8 +131,9 @@
   ((c-mode . flycheck-mode)
    (c++-mode . flycheck-mode)
    (astro-mode . flycheck-mode)
-   (typescript-mode . flycheck-mode)
-   (js-mode . flycheck-mode))
+   (typescript-ts-mode . flycheck-mode)
+   (tsx-ts-mode . flycheck-mode)
+   (js-ts-mode . flycheck-mode))
   :config
   (setq flycheck-indication-mode 'right-fringe
         flycheck-emacs-lisp-load-path 'inherit)
