@@ -1,48 +1,6 @@
 ;;; xz-completion.el --- Completion and search -*- lexical-binding: t; -*-
 ;;; Commentary:
-;; completion framewors for editor and minibuffers.
-
-;; vertico:
-                                        ; Displays a vertical list of completion candidates.
-                                        ; cycling through candidates from top to bottom and vice versa.
-                                        ; allows the minibuffer to grow or shrink dynamically.
-;; orderless:
-                                        ; Instead of matching just prefixes, you can match using space-separated terms.
-                                        ; Typing fu bar could match foobar, barfoo, func-bar, etc.
-                                        ; Completion-category-overrides lets us use partial-completion for files, which improves file path matching.
-;; marginilia:
-                                        ; Enhances completion candidates with metadata.
-                                        ; Makes it easier to distinguish similar-looking candidates.
-;; consult:
-                                        ; Replaces and extends built-in basic commands.
-                                        ; consult-line: Search within the current buffer.
-                                        ; consult-buffer: Switch between buffers with completion.
-                                        ; consult-yank-pop: Browse and insert from kill ring.
-
-;; Embark
-                                        ; Provides contextual actions on the item at point.
-                                        ; Allows acting on completion candidates from the minibuffer.
-                                        ; Offers action menus, previews, and batch operations.
-
-;; Embark-Consult
-                                        ; Integrates Embark actions with Consult search/results.
-                                        ; Adds live previews and narrowing in Embark menus.
-                                        ; Enables exporting results to Consult buffers for further filtering.
-
-;; Corfu
-                                        ; Popup-style minimal completion UI using standard CAPF.
-                                        ; Non-intrusive inline suggestions with optional documentation popups.
-                                        ; Compatible with any completion-at-point backend.
-
-;; Cape
-                                        ; Provides extra CAPF backends (keywords, files, symbols, etc.).
-                                        ; Allows combining and modifying CAPFs (e.g., cape-super-capf).
-                                        ; Makes completion pipelines modular and highly configurable.
-
-;; Flycheck
-                                        ; Asynchronous on-the-fly syntax checking.
-                                        ; Supports many languages with inline error indicators.
-                                        ; Uses external linters for real-time code feedback.
+;; Completion frameworks and search optimization
 
 ;;; Code:
 

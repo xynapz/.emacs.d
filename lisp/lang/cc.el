@@ -21,20 +21,19 @@
 ;; Eglot LSP Configuration
 (use-package eglot
   :ensure nil
-  :hook ((c-mode c++-mode) . my/eglot-ensure)
+  :hook ((c-mode c++-mode) . xz/eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c r" . eglot-rename)
               ("C-c a" . eglot-code-actions)
               ("C-c f" . eglot-format-buffer))
   :preface
   :preface
-  (defun my/eglot-ensure ()
+  (defun xz/eglot-ensure ()
     "Start eglot unless we are in an org export buffer."
     (when (and (buffer-file-name)
                (not (bound-and-true-p org-export-current-backend)))
       (eglot-ensure)))
   :config
-  ;; Configure clangd with C++20 and clang-tidy
   (setq-default eglot-workspace-configuration
                 '(:clangd (:fallbackFlags ["-std=c++20"])))
 
@@ -48,15 +47,13 @@
                     "--pch-storage=memory"
                     "--background-index"))))
 
-;; Clang-Format Integration (Google Style)
 (use-package clang-format
   :ensure t
   :config
   (setq clang-format-style "google"
         clang-format-fallback-style "google"))
 
-;; Auto-format on save
-(defun my/c++-format-on-save ()
+(defun xz/c++-format-on-save ()
   "Format C++ buffer with clang-format on save."
   (when (and (derived-mode-p 'c++-mode 'c-mode)
              (executable-find "clang-format"))
@@ -64,11 +61,11 @@
 
 (add-hook 'c++-mode-hook
           (lambda ()
-            (add-hook 'before-save-hook #'my/c++-format-on-save nil 'local)))
+            (add-hook 'before-save-hook #'xz/c++-format-on-save nil 'local)))
 
 (add-hook 'c-mode-hook
           (lambda ()
-            (add-hook 'before-save-hook #'my/c++-format-on-save nil 'local)))
+            (add-hook 'before-save-hook #'xz/c++-format-on-save nil 'local)))
 
 (use-package cmake-mode
   :ensure t
@@ -79,7 +76,7 @@
   :ensure t
   :hook (c++-mode . modern-c++-font-lock-mode))
 
-(defun my/cmake-clean ()
+(defun xz/cmake-clean ()
   "Delete the build directory from project root."
   (interactive)
   (let* ((project-root (or (and (fboundp 'projectile-project-root)
@@ -93,7 +90,7 @@
             (message "Deleted build directory"))
         (message "Cancelled")))))
 
-(defun my/cmake-configure ()
+(defun xz/cmake-configure ()
   "Run cmake .. from build directory and create symlink for compile_commands.json."
   (interactive)
   (let* ((project-root (or (and (fboundp 'projectile-project-root)
@@ -115,7 +112,7 @@
                         (make-symbolic-link compile-commands-src compile-commands-dest t)
                         (message "Created symlink: compile_commands.json -> build/"))))))
 
-(defun my/cmake-build ()
+(defun xz/cmake-build ()
   "Compile the project using make in build directory."
   (interactive)
   (let* ((project-root (or (and (fboundp 'projectile-project-root)
@@ -125,7 +122,7 @@
          (default-directory build-dir))
     (compile "make")))
 
-(defun my/cmake-run ()
+(defun xz/cmake-run ()
   "Run the compiled executable in an interactive comint buffer."
   (interactive)
   (let* ((project-root (or (and (fboundp 'projectile-project-root)
@@ -147,11 +144,11 @@
       (pop-to-buffer buf))))
 
 ;; Key Bindings
-(global-set-key (kbd "<f4>") 'my/cmake-clean)      ; delete build folder
-(global-set-key (kbd "<f5>") 'my/cmake-configure)  ; cmake .. + symlink
-(global-set-key (kbd "<f6>") 'my/cmake-build)      ; make
-(global-set-key (kbd "<f7>") 'my/cmake-run)        ; run executable (interactive)
-(global-set-key (kbd "<f8>") 'recompile)           ; recompile on error
+(global-set-key (kbd "<f4>") 'xz/cmake-clean)
+(global-set-key (kbd "<f5>") 'xz/cmake-configure)
+(global-set-key (kbd "<f6>") 'xz/cmake-build)
+(global-set-key (kbd "<f7>") 'xz/cmake-run)
+(global-set-key (kbd "<f8>") 'recompile)
 
 ;; C++ mode local keybindings
 (with-eval-after-load 'cc-mode

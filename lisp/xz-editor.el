@@ -3,20 +3,16 @@
 ;; editor settings.
 
 ;;; Code:
-;; Simple cursor
 (setq-default cursor-type 'box)
 (setq visible-bell nil
       ring-bell-function 'ignore)
 
-;; Disable GUI elements
 (use-package scroll-bar :ensure nil :config (scroll-bar-mode -1))
 (use-package tool-bar   :ensure nil :config (tool-bar-mode -1))
 (use-package menu-bar   :ensure nil :config (menu-bar-mode -1))
 
-;; Visual line mode
 (global-visual-line-mode 1)
 
-;; Highlight current line
 (use-package hl-line
   :ensure nil
   :config
@@ -24,7 +20,6 @@
   (dolist (hook '(comint-mode-hook eshell-mode-hook term-mode-hook))
     (add-hook hook (lambda () (setq-local global-hl-line-mode nil)))))
 
-;; Line numbers
 (use-package display-line-numbers
   :ensure nil
   :init
@@ -37,7 +32,7 @@
                   shell-mode-hook treemacs-mode-hook org-mode-hook))
     (add-hook hook (lambda () (display-line-numbers-mode 0)))))
 
-;; Core Keybindings
+;; Keybindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
@@ -50,7 +45,6 @@
 (global-set-key (kbd "C-c /") 'comment-line)
 (global-set-key (kbd "C-c M-/") 'comment-or-uncomment-region)
 
-;; Window Management
 (use-package winner
   :ensure nil
   :bind (("C-c <left>" . winner-undo)
@@ -117,7 +111,7 @@
         highlight-indent-guides-responsive 'top
         highlight-indent-guides-delay 0))
 
-;; Electric Pairs (Built-in implementation of smartparens)
+;; Electric Pairs
 (electric-pair-mode 1)
 
 ;; Whitespace
@@ -153,7 +147,7 @@
                           (ansi-color-apply-on-region
                            compilation-filter-start (point)))))
 
-;; Vundo - Visual Undo (Lightweight replacement for Undo Tree)
+;; Vundo - Visual Undo
 (use-package vundo
   :ensure t
   :bind ("C-x u" . vundo))
