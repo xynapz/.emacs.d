@@ -175,7 +175,9 @@
   :config
   (setq org-html-with-latex 'mathjax)
   (setq org-latex-pdf-process
-        '("latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
+        '("xelatex -interaction=nonstopmode -output-directory=%o %f"
+          "xelatex -interaction=nonstopmode -output-directory=%o %f"
+          "xelatex -interaction=nonstopmode -output-directory=%o %f"))
 
   (setq org-latex-compiler "xelatex")
 
@@ -186,7 +188,6 @@
   (setq org-latex-packages-alist
         '(("margin=1in" "geometry" nil)
           ("" "fontspec" t)      ; Modern font support (requires XeLaTeX/LuaLaTeX)
-          ("" "xunicode" t)      ; Unicode support for XeLaTeX
           ("" "ulem" nil)        ; Underlining package
           ("" "listings" nil)    ; Code listings
           ("" "color" nil)))     ; Color support
@@ -226,7 +227,11 @@
 ;; Dired subtree - expand/collapse directories in place
 (use-package dired-subtree
   :ensure t
-  :after dired)
+  :after dired
+  :bind (:map dired-mode-map
+              ("<tab>" . dired-subtree-toggle)
+              ("<backtab>" . dired-subtree-cycle)
+              ("i" . dired-subtree-toggle)))
 
 ;; Dired icons
 (use-package nerd-icons-dired
@@ -252,16 +257,18 @@
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-master nil
-        TeX-command-default "LatexMk"
+        TeX-command-default "XeLaTeX-Build"
         TeX-clean-confirm nil
         TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t)
-  (setq-default TeX-output-dir "build-el")
+  (setq-default TeX-output-dir ".build")
   (add-to-list 'TeX-command-list
-               '("LatexMk" "latexmk -pdf -%latex -interaction=nonstopmode -output-directory=build-el %f" TeX-run-TeX nil t :help "Run LatexMk"))
+               '("XeLaTeX-Build" "xelatex -interaction=nonstopmode -output-directory=.build %f" TeX-run-TeX nil t :help "Run XeLaTeX in build dir"))
+
+
   (add-hook 'LaTeX-mode-hook
             (lambda ()
-              (let ((output-dir (expand-file-name "build-el" default-directory)))
+              (let ((output-dir (expand-file-name ".build" default-directory)))
                 (unless (file-exists-p output-dir)
                   (make-directory output-dir t)))))
 
