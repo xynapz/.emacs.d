@@ -81,7 +81,9 @@
   (global-corfu-mode)
   (corfu-history-mode)
   (corfu-echo-mode)
-  (corfu-popupinfo-mode))
+  (corfu-popupinfo-mode)
+  :custom-face
+  (corfu-current ((t (:inherit (highlight bold) :background "#3e4451" :foreground "white")))))
 
 ;; Add icons to completion
 (use-package nerd-icons-corfu
