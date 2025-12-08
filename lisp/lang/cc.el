@@ -70,10 +70,6 @@
           (lambda ()
             (add-hook 'before-save-hook #'my/c++-format-on-save nil 'local)))
 
-;; Flycheck configuration (including C/C++ specific settings) is in xz-completion.el
-;; global-flycheck-mode is enabled there, which covers c-mode and c++-mode
-
-;; CMake Support
 (use-package cmake-mode
   :ensure t
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
@@ -83,7 +79,6 @@
   :ensure t
   :hook (c++-mode . modern-c++-font-lock-mode))
 
-;; CMake Build Functions
 (defun my/cmake-clean ()
   "Delete the build directory from project root."
   (interactive)

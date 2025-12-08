@@ -176,7 +176,7 @@
     ;; configured it with --clang-tidy in cc.el
     ))
 
-;; keybinds are in xz-keybindings.el
+
 (use-package consult-projectile
   :ensure t
   :after (consult projectile))

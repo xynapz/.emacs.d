@@ -137,20 +137,7 @@
   (setq org-confirm-babel-evaluate nil))
 
 ;; Org modern for better aesthetics
-;; (use-package org-modern
-;;   :hook (org-mode . org-modern-mode)
-;;   :config
-;;   (setq org-modern-star '("●" "○" "✸" "✿" "◆" "◇")
-;;         org-modern-table-vertical 1
-;;         org-modern-table-horizontal 0.2
-;;         org-modern-list '((43 . "➤") (45 . "–") (42 . "•"))
-;;         org-modern-block-fringe nil
-;;         org-modern-progress nil
-;;         org-modern-priority nil
-;;         org-modern-horizontal-rule (make-string 36 ?─)
-;;         org-modern-keyword nil
-;;         org-modern-timestamp t
-;;         org-modern-todo t))
+
 
 ;; Org appear - Show emphasis markers on demand
 (use-package org-appear
@@ -224,7 +211,6 @@
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t)
   :config
-  (require 'dired-x)
   (put 'dired-find-alternate-file 'disabled nil)
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
   (define-key dired-mode-map (kbd "^")
@@ -272,7 +258,6 @@
   (setq-default TeX-output-dir ".build")
   (add-to-list 'TeX-command-list
                '("XeLaTeX-Build" "xelatex -interaction=nonstopmode -output-directory=.build %f" TeX-run-TeX nil t :help "Run XeLaTeX in build dir"))
-
 
   (add-hook 'LaTeX-mode-hook
             (lambda ()

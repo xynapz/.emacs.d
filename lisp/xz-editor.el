@@ -37,7 +37,7 @@
                   shell-mode-hook treemacs-mode-hook org-mode-hook))
     (add-hook hook (lambda () (display-line-numbers-mode 0)))))
 
-;; Core Keybindings (moved from xz-keybindings.el)
+;; Core Keybindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
@@ -164,7 +164,7 @@
   :config
   (yas-global-mode 1)
   (setq yas-snippet-dirs
-        '("~/.emacs.d/snippets")))
+        (list (expand-file-name "snippets" user-emacs-directory))))
 
 (use-package yasnippet-snippets
   :ensure t
