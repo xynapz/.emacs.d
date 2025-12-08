@@ -76,12 +76,20 @@
          ("C-x b" . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
          ("C-x 5 b" . consult-buffer-other-frame)
-         ("M-y" . consult-yank-pop)))
+         ("M-y" . consult-yank-pop)
+         ("M-g g" . consult-goto-line)
+         ("M-g i" . consult-imenu)
+         ("M-g o" . consult-outline)
+         ("C-x r b" . consult-bookmark)
+         ("M-s d" . consult-find)
+         ("M-s g" . consult-grep)
+         ("M-s r" . consult-ripgrep)))
 
 ;; embark
 (use-package embark
   :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim))
+         ("C-;" . embark-dwim)
+         ("C-h B" . embark-bindings))
   :config
   (setq prefix-help-command #'embark-prefix-help-command))
 
@@ -124,6 +132,16 @@
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
+;; Eglot (Keybindings)
+(use-package eglot
+  :ensure nil
+  :bind (:map eglot-mode-map
+              ("C-c e r" . eglot-rename)
+              ("C-c e a" . eglot-code-actions)
+              ("C-c e f" . eglot-format)
+              ("C-c e o" . eglot-code-action-organize-imports)
+              ("C-h ." . eldoc-doc-buffer)))
+
 ;; flycheck for syntax checking
 (use-package flycheck
   :ensure t
@@ -134,6 +152,11 @@
    (typescript-ts-mode . flycheck-mode)
    (tsx-ts-mode . flycheck-mode)
    (js-ts-mode . flycheck-mode))
+  :bind (:map flycheck-mode-map
+              ("C-c ! l" . flycheck-list-errors)
+              ("C-c ! n" . flycheck-next-error)
+              ("C-c ! p" . flycheck-previous-error)
+              ("C-c ! v" . flycheck-verify-setup))
   :config
   (setq flycheck-indication-mode 'right-fringe
         flycheck-emacs-lisp-load-path 'inherit)

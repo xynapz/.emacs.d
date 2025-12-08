@@ -35,6 +35,8 @@
 
 (use-package magit
   :commands (magit-status magit-dispatch magit-file-dispatch)
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch))
   :config
   ;; Performance
   (setq magit-refresh-status-buffer nil
@@ -43,6 +45,7 @@
 ;; Projectile - Project management
 (use-package projectile
   :diminish
+  :bind ("C-c p" . projectile-command-map)
   :init
   (setq projectile-project-search-path '("~/xynapz/")
         projectile-completion-system 'default
@@ -61,6 +64,10 @@
   :mode ("\\.org\\'" . org-mode)
   :hook ((org-mode . visual-line-mode)
          (org-mode . org-indent-mode))
+  :bind (("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+         ("C-c l" . org-store-link)
+         ("C-c E" . xz/export-all-site-content))
   :custom
   ;; Org directories
   (org-directory "~/org/")

@@ -14,7 +14,7 @@
 (load "xz-package")
 (load "xz-editor")
 (load "xz-completion")
-(load "xz-keybindings")
+
 
 ;; Languages
 (load "cc")
@@ -28,7 +28,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-show-quick-access t nil nil "Customized with use-package company")
  '(custom-safe-themes
    '("b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
      "21d2bf8d4d1df4859ff94422b5e41f6f2eeff14dd12f01428fa3cb4cb50ea0fb"

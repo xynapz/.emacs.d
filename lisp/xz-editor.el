@@ -3,8 +3,7 @@
 ;; editor settings.
 
 ;;; Code:
-(use-package dashboard :ensure t)
-
+;; Simple cursor
 (setq-default cursor-type 'box)
 (setq visible-bell nil
       ring-bell-function 'ignore)
@@ -25,36 +24,6 @@
   (dolist (hook '(comint-mode-hook eshell-mode-hook term-mode-hook))
     (add-hook hook (lambda () (setq-local global-hl-line-mode nil)))))
 
-;; Install and setup dashboard
-(use-package dashboard
-  :ensure t
-  :init
-  (setq dashboard-banner-logo-title "Welcome to Emacs, Angel 🧠")
-  (setq dashboard-startup-banner "~/.emacs.d/banner.png")
-  (setq dashboard-center-content t)
-  (setq dashboard-show-shortcuts nil)
-
-  ;; Items to show
-  (setq dashboard-items '((agenda  . 10)
-                          (projects . 5)
-                          (recents . 3)))
-
-  ;; Footer messages
-  (setq dashboard-footer-messages
-        '("C-x C-f to open file | C-x b to switch buffer | C-x C-c to quit"
-          "Let Emacs do the heavy lifting."))
-
-  ;; Ensure dashboard is initial buffer
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  :config
-  (dashboard-setup-startup-hook))
-
-;; Refresh dashboard on client startup
-(add-hook 'server-after-make-frame-hook
-          (lambda ()
-            (when (equal (buffer-name) "*dashboard*")
-              (dashboard-refresh-buffer))))
-
 ;; Line numbers
 (use-package display-line-numbers
   :ensure nil
@@ -68,8 +37,31 @@
                   shell-mode-hook treemacs-mode-hook org-mode-hook))
     (add-hook hook (lambda () (display-line-numbers-mode 0)))))
 
+;; Core Keybindings (moved from xz-keybindings.el)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-c s") 'save-buffer)
+(global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
+(global-set-key (kbd "C-c r") 'revert-buffer)
+(global-set-key (kbd "C-c =") 'text-scale-increase)
+(global-set-key (kbd "C-c -") 'text-scale-decrease)
+(global-set-key (kbd "C-c 0") 'text-scale-adjust)
+(global-set-key (kbd "C-c /") 'comment-line)
+(global-set-key (kbd "C-c M-/") 'comment-or-uncomment-region)
+
+;; Window Management
+(use-package winner
+  :ensure nil
+  :bind (("C-c <left>" . winner-undo)
+         ("C-c <right>" . winner-redo))
+  :config (winner-mode 1))
+
+(windmove-default-keybindings)
+
 ;; Doom-like modeline
 (use-package doom-modeline
+  :ensure t
   :init
   (setq doom-modeline-height 30
         doom-modeline-bar-width 3
@@ -125,12 +117,8 @@
         highlight-indent-guides-responsive 'top
         highlight-indent-guides-delay 0))
 
-;; Smartparens
-(use-package smartparens
-  :diminish
-  :hook ((prog-mode text-mode markdown-mode) . smartparens-mode)
-  :config
-  (require 'smartparens-config))
+;; Electric Pairs (Built-in implementation of smartparens)
+(electric-pair-mode 1)
 
 ;; Whitespace
 (use-package whitespace
@@ -148,14 +136,10 @@
             (setq fill-column 80)
             (auto-fill-mode 1)))
 
-
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown")
-  :bind (:map markdown-mode-map
-              ;; ("C-c C-e" . markdown-do)
-              ))
+  :init (setq markdown-command "multimarkdown"))
 
 ;; Compile settings
 (use-package compile
@@ -169,27 +153,10 @@
                           (ansi-color-apply-on-region
                            compilation-filter-start (point)))))
 
-;; Better undo
-(use-package undo-tree
-  :diminish
-  :config
-  (setq undo-tree-auto-save-history nil
-        undo-tree-history-directory-alist
-        `(("." . ,(expand-file-name "undo-tree-hist/" user-emacs-directory))))
-  (global-undo-tree-mode))
-
-;; Move text
-(use-package drag-stuff
-  :diminish
-  :config
-  (drag-stuff-global-mode 1))
-
-;; Better search/replace
-(use-package anzu
-  :diminish
-  :config
-  (global-anzu-mode +1)
-  (setq anzu-cons-mode-line-p nil))
+;; Vundo - Visual Undo (Lightweight replacement for Undo Tree)
+(use-package vundo
+  :ensure t
+  :bind ("C-x u" . vundo))
 
 ;; Snippets
 (use-package yasnippet
@@ -205,6 +172,9 @@
 
 ;; Avy for jumping
 (use-package avy
+  :bind (("M-g c" . avy-goto-char)
+         ("M-g w" . avy-goto-word-1)
+         ("M-g l" . avy-goto-line))
   :config
   (setq avy-timeout-seconds 0.3
         avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
@@ -220,11 +190,16 @@
 
 ;; Semantic Selection (expand-region)
 (use-package expand-region
-  :ensure t)
+  :ensure t
+  :bind ("C-=" . er/expand-region))
 
 ;; Multiple Cursors
 (use-package multiple-cursors
   :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this))
   :config
   (setq mc/always-run-for-all t))
 
