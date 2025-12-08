@@ -257,6 +257,7 @@
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-master nil
+        TeX-engine 'xetex
         TeX-command-default "XeLaTeX-Build"
         TeX-clean-confirm nil
         TeX-view-program-selection '((output-pdf "PDF Tools"))
