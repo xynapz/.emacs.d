@@ -16,5 +16,11 @@
   (add-to-list 'eglot-server-programs
                '(python-ts-mode . ("pyright-langserver" "--stdio"))))
 
+;; loads the project's venv env
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1))
+
 (provide 'py)
 ;;; py.el ends here
