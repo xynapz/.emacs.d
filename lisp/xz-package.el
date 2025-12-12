@@ -53,6 +53,8 @@
         projectile-indexing-method 'alien
         projectile-known-projects-file
         (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
+  :bind
+  (("C-`" . projectile-find-file))
   :config
   (projectile-mode +1)
   :custom
@@ -155,7 +157,7 @@
 ;; Visual fill for better org reading
 (use-package visual-fill-column
   :hook (org-mode . (lambda ()
-                      (setq visual-fill-column-width 100
+                      (setq visual-fill-column-width 120
                             visual-fill-column-center-text t)
                       (visual-fill-column-mode 1))))
 

@@ -20,7 +20,15 @@
 (use-package pyvenv
   :ensure t
   :config
-  (pyvenv-mode 1))
+  (pyvenv-mode 1)
+
+  ;; Auto-activate venv when switching projects
+  (defun my/auto-activate-venv ()
+    (let ((venv-path (concat (projectile-project-root) "venv")))
+      (when (file-directory-p venv-path)
+        (pyvenv-activate venv-path))))
+
+  (add-hook 'projectile-after-switch-project-hook 'my/auto-activate-venv))
 
 (provide 'py)
 ;;; py.el ends here
