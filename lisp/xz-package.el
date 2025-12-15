@@ -310,5 +310,20 @@
       (unless (treesit-language-available-p lang)
         (treesit-install-language-grammar lang)))))
 
+(defun xz/init-setup ()
+  "Run one-time manual setup steps: Icons, Grammars, and PDF Tools."
+  (interactive)
+  ;; Install Icons
+  (when (y-or-n-p "Install Nerd Icons? ")
+    (nerd-icons-install-fonts t))
+
+  ;; Install Grammars
+  (when (y-or-n-p "Install Tree-sitter Grammars? ")
+    (xz/install-treesit-grammars))
+
+  ;; Install PDF Tools
+  (when (y-or-n-p "Install PDF Tools? ")
+    (pdf-tools-install)))
+
 (provide 'xz-package)
 ;;; xz-package.el ends here

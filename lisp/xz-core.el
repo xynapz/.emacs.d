@@ -10,8 +10,13 @@
 
 ;; Startup behavior
 ;; (setopt initial-scratch-message nil
-;;         inhibit-startup-screen t
+(setq inhibit-startup-screen nil)
 ;;         initial-major-mode 'fundamental-mode)
+
+(add-hook 'server-after-make-frame-hook
+          (lambda ()
+            (when (string= (buffer-name) "*scratch*")
+              (display-startup-screen))))
 
 ;; Reduce clutter
 (setq make-backup-files nil
