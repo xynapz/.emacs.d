@@ -16,7 +16,10 @@
 (add-hook 'server-after-make-frame-hook
           (lambda ()
             (when (string= (buffer-name) "*scratch*")
-              (display-startup-screen))))
+              (if (and (display-graphic-p)
+                       (fboundp 'fancy-startup-screen))
+                  (fancy-startup-screen)
+                (display-startup-screen)))))
 
 ;; Reduce clutter
 (setq make-backup-files nil
