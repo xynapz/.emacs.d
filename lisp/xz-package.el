@@ -101,6 +101,16 @@
         org-export-with-sub-superscripts '{}
         org-html-table-default-attributes '(:border "0" :cellspacing "0" :cellpadding "0"))
 
+  ;; Cross-file link resolution: use CUSTOM_ID or heading text for anchor IDs
+  ;; This ensures links like [[file:other.org::*Heading]] resolve correctly
+  (setq org-html-prefer-user-labels t)  ; Use CUSTOM_ID when available
+
+  ;; Configure org-id for reliable cross-file linking
+  (require 'org-id)
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
+        org-id-locations-file (expand-file-name ".org-id-locations" user-emacs-directory)
+        org-id-track-globally t)
+
   ;; Suppress hooks during htmlize (export)
   (defun xz/suppress-hooks-during-export (orig-fun &rest args)
     "Suppress major mode hooks during htmlize to prevent heavy modes from starting."
