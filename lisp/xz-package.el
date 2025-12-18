@@ -161,31 +161,33 @@
 Scans the buffer for lines like #+XZHH_FOO: value and injects
 corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
   (when (org-export-derived-backend-p backend 'html)
-    (save-excursion
-      (goto-char (point-min))
-      (let ((meta-tags '()))
-        ;; Collect all XZHH_ keywords
-        (while (re-search-forward "^#\\+XZHH_\\([A-Z_]+\\):[[:space:]]*\\(.+\\)$" nil t)
+    (let ((meta-tags '()))
+      ;; Collect all XZHH_ keywords
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward "^#\\+XZHH_\\([A-Za-z0-9_]+\\):[[:space:]]*\\(.+\\)$" nil t)
           (let* ((key (downcase (match-string 1)))
-                 (value (string-trim (match-string 2)))
-                 (meta-line (format "#+HTML_HEAD: <meta name=\"%s\" content=\"%s\" />" key value)))
-            (push meta-line meta-tags)))
-        ;; Insert collected meta tags after the last #+HTML_HEAD or at start
-        (when meta-tags
+                 (value (string-trim (match-string 2))))
+            (push (format "#+HTML_HEAD: <meta name=\"%s\" content=\"%s\" />" key value) meta-tags))))
+      ;; Insert collected meta tags if any were found
+      (when meta-tags
+        (save-excursion
           (goto-char (point-min))
-          ;; Find the last existing HTML_HEAD line to insert after
-          (let ((insert-pos (point-min)))
+          ;; Find the end of the header block (first blank line or first heading)
+          (let ((insert-pos nil))
+            ;; Look for existing HTML_HEAD lines first
             (while (re-search-forward "^#\\+HTML_HEAD:" nil t)
               (setq insert-pos (line-end-position)))
-            (goto-char insert-pos)
-            (if (= insert-pos (point-min))
-                ;; No HTML_HEAD found, insert after other headers
-                (progn
-                  (when (re-search-forward "^#\\+[A-Z_]+:" nil t)
-                    (end-of-line)))
-              ;; Insert after last HTML_HEAD
-              (end-of-line))
-            (insert "\n" (string-join (reverse meta-tags) "\n"))))))))
+            ;; If no HTML_HEAD found, find last keyword line before content
+            (unless insert-pos
+              (goto-char (point-min))
+              (while (and (re-search-forward "^#\\+[A-Za-z_]+:" nil t)
+                          (not (looking-at-p ".*BEGIN_")))
+                (setq insert-pos (line-end-position))))
+            ;; Insert the meta tags
+            (when insert-pos
+              (goto-char insert-pos)
+              (insert "\n" (string-join (nreverse meta-tags) "\n")))))))))
 
 (add-hook 'org-export-before-processing-hook #'xz/inject-xzhh-meta-tags)
 
