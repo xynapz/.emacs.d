@@ -69,8 +69,7 @@
          (org-mode . org-indent-mode))
   :bind (("C-c a" . org-agenda)
          ("C-c c" . org-capture)
-         ("C-c l" . org-store-link)
-         ("C-c E" . xz/export-all-site-content))
+         ("C-c l" . org-store-link))
   :custom
   ;; Org directories
   (org-directory "~/org/")

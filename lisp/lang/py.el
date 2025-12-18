@@ -24,7 +24,7 @@
 
   ;; Auto-activate venv when switching projects
   (defun my/auto-activate-venv ()
-    (let ((venv-path (concat (projectile-project-root) "venv")))
+    (let ((venv-path (concat (projectile-project-root) ".venv")))
       (when (file-directory-p venv-path)
         (pyvenv-activate venv-path))))
 
