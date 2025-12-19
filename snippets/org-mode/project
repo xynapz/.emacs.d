@@ -10,7 +10,7 @@
 #+HTML_HEAD: <meta name="website" content="${6:https://example.com}" />
 #+HTML_HEAD: <meta name="github" content="${7:https://github.com/xynapz/repo}" />
 #+OPTIONS: ^:{} num:nil toc:5
-#+EXPORT_FILE_NAME: `(let ((src-path (buffer-file-name))) (if (and src-path (string-match "/knowledge_base/\\(.*\\)\\.org" src-path)) (concat "/home/angel/xynapz/angeld.me/src/content/project/" (match-string 1 src-path) ".html") (concat "/home/angel/xynapz/angeld.me/src/content/project/" (file-name-base (or src-path "untitled")) ".html")))`
+#+EXPORT_FILE_NAME: `(let ((src-path (buffer-file-name))) (if (and src-path (string-match "/knowledge_base/\\(.*\\)\\.org" src-path)) (concat "/home/angel/xynapz/angeld/site-content/projects/" (match-string 1 src-path) ".html") (concat "/home/angel/xynapz/angeld/site-content/projects/" (file-name-base (or src-path "untitled")) ".html")))`
 
 * ${1:Project Name}
 ${0}
