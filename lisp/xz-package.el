@@ -1,6 +1,6 @@
 ;;; xz-package.el --- Package configuration -*- lexical-binding:t; -*-
 ;;; Commentary:
-;; initializing the package repositories and some base initial packages
+;; Minimal package setup
 
 ;;; Code:
 
@@ -8,7 +8,6 @@
 
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
         ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
@@ -21,331 +20,121 @@
 (setq use-package-always-ensure t
       use-package-expand-minimally t)
 
-;; Essential packages loaded early
-(use-package diminish)
-
 (use-package which-key
-  :ensure t
   :defer 1
   :config
   (which-key-mode)
-  (setq which-key-idle-delay 0.3)
-  (setq which-key-popup-type 'side-window)
-  (which-key-setup-side-window-bottom))
+  (setq which-key-idle-delay 0.5))
 
 (use-package magit
-  :commands (magit-status magit-dispatch magit-file-dispatch)
-  :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch))
+  :commands (magit-status magit-dispatch)
+  :bind ("C-x g" . magit-status)
   :config
-  ;; Performance
-  (setq magit-refresh-status-buffer nil
-        magit-git-executable "git"))
+  (setq magit-refresh-status-buffer nil))
 
-;; Projectile - Project management
+;; Projectile
 (use-package projectile
-  :diminish
   :bind-keymap ("C-c p" . projectile-command-map)
   :init
   (setq projectile-project-search-path '("~/xynapz/")
         projectile-completion-system 'default
         projectile-enable-caching t
-        projectile-indexing-method 'alien
-        projectile-known-projects-file
-        (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
-  :bind
-  (("C-`" . projectile-find-file))
+        projectile-indexing-method 'alien)
   :config
-  (projectile-mode +1)
-  :custom
-  ;; Save known projects on exit
-  (add-hook 'kill-emacs-hook #'projectile-save-known-projects))
+  (projectile-mode +1))
 
-;; Org mode
+;; Org mode (minimal)
 (use-package org
   :pin elpa
   :mode ("\\.org\\'" . org-mode)
   :hook ((org-mode . visual-line-mode)
          (org-mode . org-indent-mode))
   :bind (("C-c a" . org-agenda)
-         ("C-c c" . org-capture)
-         ("C-c l" . org-store-link))
-  :custom
-  ;; Org directories
-  (org-directory "~/org/")
-  (org-default-notes-file (expand-file-name "notes.org" org-directory))
+         ("C-c c" . org-capture))
   :config
-  (unless (file-exists-p org-directory)
-    (make-directory org-directory t))
-
-  (require 'org-tempo)
-
-  (setq org-image-actual-width '(800))
-  (setq org-startup-folded 'content
+  (setq org-directory "~/org/"
+        org-startup-folded 'content
         org-startup-indented t
         org-hide-emphasis-markers t
-        org-pretty-entities t
         org-ellipsis " ▾"
         org-log-done 'time
-        org-log-into-drawer t
-        org-return-follows-link t
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-edit-src-content-indentation 0
-        org-fontify-quote-and-verse-blocks t
-        org-hide-block-startup nil
-        org-src-preserve-indentation nil
-        org-startup-with-inline-images t
-        org-cycle-separator-lines 2
-        org-export-with-sub-superscripts '{}
-        org-html-table-default-attributes '(:border "0" :cellspacing "0" :cellpadding "0"))
+        org-confirm-babel-evaluate nil)
 
-  ;; Cross-file link resolution: use CUSTOM_ID or heading text for anchor IDs
-  ;; This ensures links like [[file:other.org::*Heading]] resolve correctly
-  (setq org-html-prefer-user-labels t)  ; Use CUSTOM_ID when available
-
-  ;; Configure org-id for reliable cross-file linking
-  (require 'org-id)
-  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
-        org-id-locations-file (expand-file-name ".org-id-locations" user-emacs-directory)
-        org-id-track-globally t)
-
-  ;; Suppress hooks during htmlize (export)
-  (defun xz/suppress-hooks-during-export (orig-fun &rest args)
-    "Suppress major mode hooks during htmlize to prevent heavy modes from starting."
-    (let ((prog-mode-hook nil)
-          (c-mode-common-hook nil)
-          (c-mode-hook nil)
-          (c++-mode-hook nil)
-          (flycheck-mode-hook nil)
-          (eglot-stay-out-of '(c-mode c++-mode))
-          (inhibit-message t))
-      (apply orig-fun args)))
-
-  (advice-add 'org-html-fontify-code :around #'xz/suppress-hooks-during-export)
-
-  ;; Org agenda
-  (setq org-agenda-files (list org-directory)
-        org-deadline-warning-days 7)
-
-  ;; TODO keyword faces
-  (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "#ff6c6b" :weight bold))
-          ("NEXT" . (:foreground "#da8548" :weight bold))
-          ("PROG" . (:foreground "#ECBE7B" :weight bold))
-          ("WAIT" . (:foreground "#51afef" :weight bold))
-          ("DONE" . (:foreground "#98be65" :weight bold))
-          ("CANCELLED" . (:foreground "#5B6268" :weight bold))))
-
-  ;; Org babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
      (shell . t)
-     (C . t)))
+     (C . t))))
 
-  ;; Don't ask for confirmation before evaluating
-  (setq org-confirm-babel-evaluate nil))
-
-;; Org modern for better aesthetics
-
-;; XZHH_ Custom Frontmatter -> HTML Head Meta Tags
-;; XZHH stands for Xynapz's Head Meta Tags
-;; Any keyword starting with XZHH_ gets converted to a <meta> tag.
-;; Example: #+XZHH_ORDER: 5  ->  <meta name="order" content="5" />
-;; Example: #+XZHH_PUB_DATE: 2025-01-01  ->  <meta name="pub_date" content="2025-01-01" />
-
-(defun xz/inject-xzhh-meta-tags (backend)
-  "Convert all XZHH_ keywords to HTML meta tags during export.
-Scans the buffer for lines like #+XZHH_FOO: value and injects
-corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
-  (when (org-export-derived-backend-p backend 'html)
-    (let ((meta-tags '()))
-      ;; Collect all XZHH_ keywords
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward "^#\\+XZHH_\\([A-Za-z0-9_]+\\):[[:space:]]*\\(.+\\)$" nil t)
-          (let* ((key (downcase (match-string 1)))
-                 (value (string-trim (match-string 2))))
-            (push (format "#+HTML_HEAD: <meta name=\"%s\" content=\"%s\" />" key value) meta-tags))))
-      ;; Insert collected meta tags if any were found
-      (when meta-tags
-        (save-excursion
-          (goto-char (point-min))
-          ;; Find the end of the header block (first blank line or first heading)
-          (let ((insert-pos nil))
-            ;; Look for existing HTML_HEAD lines first
-            (while (re-search-forward "^#\\+HTML_HEAD:" nil t)
-              (setq insert-pos (line-end-position)))
-            ;; If no HTML_HEAD found, find last keyword line before content
-            (unless insert-pos
-              (goto-char (point-min))
-              (while (and (re-search-forward "^#\\+[A-Za-z_]+:" nil t)
-                          (not (looking-at-p ".*BEGIN_")))
-                (setq insert-pos (line-end-position))))
-            ;; Insert the meta tags
-            (when insert-pos
-              (goto-char insert-pos)
-              (insert "\n" (string-join (nreverse meta-tags) "\n")))))))))
-
-(add-hook 'org-export-before-processing-hook #'xz/inject-xzhh-meta-tags)
-
-;; Org appear - Show emphasis markers on demand
-(use-package org-appear
-  :hook (org-mode . org-appear-mode)
-  :config
-  (setq org-appear-autoemphasis t
-        org-appear-autosubmarkers t
-        org-appear-autolinks nil))
-
-
-
-;; Ensure htmlize is installed for org-mode HTML export
-(use-package htmlize
-  :ensure t)
-
-;; Org to PDF export configuration
-(use-package ox-latex
-  :ensure nil  ; built-in
-  :after org
-  :config
-  (setq org-html-with-latex 'mathjax)
-  (setq org-latex-pdf-process
-        '("xelatex -interaction=nonstopmode -output-directory=%o %f"
-          "xelatex -interaction=nonstopmode -output-directory=%o %f"
-          "xelatex -interaction=nonstopmode -output-directory=%o %f"))
-
-  (setq org-latex-compiler "xelatex")
-
-  (setq org-latex-remove-logfiles t)
-  (setq org-latex-logfiles-extensions
-        '("aux" "bcf" "blg" "fdb_latexmk" "fls" "fig" "idx" "log" "out" "run.xml" "toc" "vrb" "xdv" "snm" "nav"))
-
-  (setq org-latex-packages-alist
-        '(("margin=1in" "geometry" nil)
-          ("" "fontspec" t)      ; Modern font support (requires XeLaTeX/LuaLaTeX)
-          ("" "ulem" nil)        ; Underlining package
-          ("" "listings" nil)    ; Code listings
-          ("" "color" nil)))     ; Color support
-
-  (setq org-latex-src-block-backend 'listings)
-  (setq org-latex-default-class "article")
-  (add-to-list 'org-latex-classes
-               '("article"
-                 "\\documentclass[11pt]{article}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+;; htmlize for org export
+(use-package htmlize :ensure t)
 
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
 
-
+;; Dired
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
-  :bind (("C-x C-j" . dired-jump))
+  :bind ("C-x C-j" . dired-jump)
   :custom
-  (dired-listing-switches "-alhgo --group-directories-first")
-  (dired-clean-up-buffers-too t)
+  (dired-listing-switches "-alh --group-directories-first")
   (dired-dwim-target t)
-  (dired-kill-when-opening-new-dired-buffer t)
-  :config
-  (put 'dired-find-alternate-file 'disabled nil)
-  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-  (define-key dired-mode-map (kbd "^")
-              (lambda () (interactive) (find-alternate-file ".."))))
+  (dired-kill-when-opening-new-dired-buffer t))
 
-
-;; Dired icons
 (use-package nerd-icons-dired
   :after dired
   :hook (dired-mode . nerd-icons-dired-mode))
 
-;; Hide details in dired by default, but keep permissions visible
 (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
-;; Customize what dired-hide-details-mode hides
-(setq dired-hide-details-hide-symlink-targets nil
-      dired-hide-details-hide-information-lines nil)
-
-;; LaTeX Configuration
-;; AUCTeX - Advanced LaTeX editing
+;; LaTeX
 (use-package tex
   :ensure auctex
   :hook ((LaTeX-mode . turn-on-reftex)
-         (LaTeX-mode . visual-line-mode)
-         (LaTeX-mode . LaTeX-math-mode))
+         (LaTeX-mode . visual-line-mode))
   :config
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-master nil
         TeX-engine 'xetex
-        TeX-command-default "XeLaTeX-Build"
-        TeX-clean-confirm nil
-        TeX-view-program-selection '((output-pdf "PDF Tools"))
-        TeX-source-correlate-start-server t)
-  (setq-default TeX-output-dir ".build")
-  (add-to-list 'TeX-command-list
-               '("XeLaTeX-Build" "xelatex -interaction=nonstopmode -output-directory=.build %f" TeX-run-TeX nil t :help "Run XeLaTeX in build dir"))
+        TeX-view-program-selection '((output-pdf "PDF Tools"))))
 
-  (add-hook 'LaTeX-mode-hook
-            (lambda ()
-              (let ((output-dir (expand-file-name ".build" default-directory)))
-                (unless (file-exists-p output-dir)
-                  (make-directory output-dir t)))))
-
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer))
-
-;; PDF Tools - Better PDF viewer
+;; PDF Tools
 (use-package pdf-tools
-  :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
-  ;; Install without prompting if possible, otherwise user must run M-x pdf-tools-install
   (pdf-tools-install :no-query)
-  (setq pdf-view-use-scaling t
-        pdf-view-use-imagemagick nil)
   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
 
+;; Tree-sitter (minimal - just Python and JS)
 (use-package treesit
   :ensure nil
-  :mode (("\\.tsx\\'" . tsx-ts-mode)
-         ("\\.ts\\'" . typescript-ts-mode)
-         ("\\.js\\'" . js-ts-mode)
-         ("\\.py\\'" . python-ts-mode))
+  :mode (("\\.py\\'" . python-ts-mode)
+         ("\\.js\\'" . js-ts-mode))
   :config
-  ;; Define grammar sources for all languages
   (setq treesit-language-source-alist
-        '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-          (python "https://github.com/tree-sitter/tree-sitter-python" "master" "src")))
+        '((python "https://github.com/tree-sitter/tree-sitter-python")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript")))
 
-  ;; Generic installer for all grammars
   (defun xz/install-treesit-grammars ()
-    "Install tree-sitter grammars if they are missing."
+    "Install tree-sitter grammars if missing."
     (interactive)
     (dolist (lang (mapcar #'car treesit-language-source-alist))
       (unless (treesit-language-available-p lang)
         (treesit-install-language-grammar lang)))))
 
 (defun xz/init-setup ()
-  "Run one-time manual setup steps: Icons, Grammars, and PDF Tools."
+  "Run one-time setup: Icons, Grammars, PDF Tools."
   (interactive)
-  ;; Install Icons
   (when (y-or-n-p "Install Nerd Icons? ")
     (nerd-icons-install-fonts t))
-
-  ;; Install Grammars
   (when (y-or-n-p "Install Tree-sitter Grammars? ")
     (xz/install-treesit-grammars))
-
-  ;; Install PDF Tools
   (when (y-or-n-p "Install PDF Tools? ")
     (pdf-tools-install)))
 
