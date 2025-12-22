@@ -43,18 +43,6 @@
          ("M-s g" . consult-grep)
          ("M-s r" . consult-ripgrep)))
 
-;; embark
-(use-package embark
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim)
-         ("C-h B" . embark-bindings))
-  :config
-  (setq prefix-help-command #'embark-prefix-help-command))
-
-;; embark-consult
-(use-package embark-consult
-  :after (embark consult))
-
 ;; Corfu for in-buffer completion
 (use-package corfu
   :ensure t

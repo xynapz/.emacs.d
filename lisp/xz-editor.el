@@ -99,18 +99,6 @@
         show-paren-when-point-in-periphery t)
   (show-paren-mode 1))
 
-;; Indent guides
-(use-package highlight-indent-guides
-  :hook (prog-mode . (lambda ()
-                       (when (and (buffer-file-name)
-                                  (not (bound-and-true-p org-export-current-backend)))
-                         (highlight-indent-guides-mode))))
-
-  :config
-  (setq highlight-indent-guides-method 'character
-        highlight-indent-guides-responsive 'top
-        highlight-indent-guides-delay 0))
-
 ;; Electric Pairs
 (electric-pair-mode 1)
 
@@ -159,10 +147,6 @@
   (yas-global-mode 1)
   (setq yas-snippet-dirs
         (list (expand-file-name "snippets" user-emacs-directory))))
-
-(use-package yasnippet-snippets
-  :ensure t
-  :after yasnippet)
 
 ;; Avy for jumping
 (use-package avy

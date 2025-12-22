@@ -59,8 +59,9 @@
 ;; Yes/No prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Recent files
-(recentf-mode 1)
+;; Recent files (defer loading)
+(add-hook 'emacs-startup-hook
+          (lambda () (recentf-mode 1)))
 
 (provide 'xz-core)
 ;;; xz-core.el ends here

@@ -72,10 +72,6 @@
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'" . cmake-mode)))
 
-(use-package modern-cpp-font-lock
-  :ensure t
-  :hook (c++-mode . modern-c++-font-lock-mode))
-
 (defun xz/cmake-clean ()
   "Delete the build directory from project root."
   (interactive)

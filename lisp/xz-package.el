@@ -26,11 +26,11 @@
 
 (use-package which-key
   :ensure t
-  :init
-  (which-key-mode)
+  :defer 1
   :config
-  (setq which-key-idle-delay 0.3) ;; adjust delay time (in seconds)
-  (setq which-key-popup-type 'side-window) ;; or 'minibuffer or 'frame
+  (which-key-mode)
+  (setq which-key-idle-delay 0.3)
+  (setq which-key-popup-type 'side-window)
   (which-key-setup-side-window-bottom))
 
 (use-package magit
@@ -199,16 +199,7 @@ corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
         org-appear-autosubmarkers t
         org-appear-autolinks nil))
 
-;; Org present - Presentations
-(use-package org-present
-  :after org)
 
-;; Visual fill for better org reading
-(use-package visual-fill-column
-  :hook (org-mode . (lambda ()
-                      (setq visual-fill-column-width 120
-                            visual-fill-column-center-text t)
-                      (visual-fill-column-mode 1))))
 
 ;; Ensure htmlize is installed for org-mode HTML export
 (use-package htmlize
@@ -269,15 +260,6 @@ corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
               (lambda () (interactive) (find-alternate-file ".."))))
 
 
-;; Dired subtree - expand/collapse directories in place
-(use-package dired-subtree
-  :ensure t
-  :after dired
-  :bind (:map dired-mode-map
-              ("<tab>" . dired-subtree-toggle)
-              ("<backtab>" . dired-subtree-cycle)
-              ("i" . dired-subtree-toggle)))
-
 ;; Dired icons
 (use-package nerd-icons-dired
   :after dired
@@ -296,7 +278,6 @@ corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
   :ensure auctex
   :hook ((LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . visual-line-mode)
-         (LaTeX-mode . flyspell-mode)
          (LaTeX-mode . LaTeX-math-mode))
   :config
   (setq TeX-auto-save t
@@ -319,12 +300,6 @@ corresponding #+HTML_HEAD: <meta name=\"foo\" content=\"value\" /> lines."
 
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer))
-
-;; CDLaTeX - Fast math insertion
-(use-package cdlatex
-  :ensure t
-  :hook ((LaTeX-mode . turn-on-cdlatex)
-         (org-mode . turn-on-org-cdlatex)))
 
 ;; PDF Tools - Better PDF viewer
 (use-package pdf-tools
