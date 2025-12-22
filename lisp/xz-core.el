@@ -37,9 +37,8 @@
 (set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font" :height 194)
 (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font" :height 194)
 
-;; Performance
-(setq gc-cons-threshold 100000000) ; 100MB
-(setq read-process-output-max (* 1024 1024)) ; 1MB
+;; Performance (GC handled in early-init.el)
+(setq read-process-output-max (* 1024 1024))
 
 (setq-default bidi-display-reordering nil
               bidi-paragraph-direction 'left-to-right)
