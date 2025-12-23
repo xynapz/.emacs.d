@@ -28,7 +28,7 @@
   :config
   (dolist (hook '(prog-mode-hook conf-mode-hook text-mode-hook))
     (add-hook hook #'display-line-numbers-mode))
-  (dolist (hook '(eshell-mode-hook term-mode-hook shell-mode-hook org-mode-hook))
+  (dolist (hook '(eshell-mode-hook term-mode-hook shell-mode-hook))
     (add-hook hook (lambda () (display-line-numbers-mode 0)))))
 
 ;; Keybindings
@@ -98,6 +98,13 @@
   (compilation-filter . (lambda ()
                           (ansi-color-apply-on-region
                            compilation-filter-start (point)))))
+;; Snippets
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs
+        (list (expand-file-name "snippets" user-emacs-directory)))
+  (yas-global-mode 1))
 
 ;; Multiple Cursors
 (use-package multiple-cursors

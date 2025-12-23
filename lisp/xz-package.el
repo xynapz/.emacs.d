@@ -50,7 +50,8 @@
   :hook ((org-mode . visual-line-mode)
          (org-mode . org-indent-mode))
   :bind (("C-c a" . org-agenda)
-         ("C-c c" . org-capture))
+         ("C-c c" . org-capture)
+         ("C-c l" . org-store-link))
   :config
   (setq org-directory "~/org/"
         org-startup-folded 'content
@@ -58,6 +59,7 @@
         org-hide-emphasis-markers t
         org-ellipsis " ▾"
         org-log-done 'time
+        org-return-follows-link t
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-edit-src-content-indentation 0
