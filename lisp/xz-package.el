@@ -70,6 +70,8 @@
         (lambda (_)
           "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}"))
   (setq org-babel-latex-pdf-svg-process "dvisvgm --pdf %f -o %O")
+  (setq org-format-latex-header
+        "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
 
   (org-babel-do-load-languages
    'org-babel-load-languages
