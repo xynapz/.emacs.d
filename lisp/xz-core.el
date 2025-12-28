@@ -28,14 +28,14 @@
       auto-save-list-file-prefix nil)
 
 ;; Frame basics
-(add-to-list 'default-frame-alist '(alpha-background . 100))
-(add-to-list 'default-frame-alist '(undecorated . t))
+;; (add-to-list 'default-frame-alist '(alpha-background . 100))
+;; (add-to-list 'default-frame-alist '(undecorated . nil))
 (setopt frame-title-format "%b")
 
 ;; Fonts
-(set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 194)
-(set-face-attribute 'fixed-pitch nil :family "Iosevka Nerd Font" :height 194)
-(set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font" :height 194)
+(set-face-attribute 'default nil :family "Iosevka" :height 194)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 194)
+(set-face-attribute 'variable-pitch nil :family "Iosevka" :height 194)
 
 ;; Performance (GC handled in early-init.el)
 (setq read-process-output-max (* 1024 1024))

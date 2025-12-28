@@ -64,11 +64,13 @@
         org-src-tab-acts-natively t
         org-edit-src-content-indentation 0
         org-confirm-babel-evaluate nil)
+  (setq org-latex-create-formula-image-program 'dvisvgm)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
+     (latex . t)
      (shell . t)
      (C . t))))
 
