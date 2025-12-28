@@ -62,5 +62,7 @@
 (add-hook 'emacs-startup-hook
           (lambda () (recentf-mode 1)))
 
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
 (provide 'xz-core)
 ;;; xz-core.el ends here

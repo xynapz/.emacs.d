@@ -139,6 +139,9 @@
       (unless (treesit-language-available-p lang)
         (treesit-install-language-grammar lang)))))
 
+(use-package restart-emacs
+  :ensure t)
+
 (defun xz/init-setup ()
   "Run one-time setup: Icons, Grammars, PDF Tools."
   (interactive)

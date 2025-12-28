@@ -50,30 +50,51 @@
 
 (windmove-default-keybindings)
 
-;; Modeline
 (use-package doom-modeline
   :ensure t
   :init
-  (setq doom-modeline-height 25
-        doom-modeline-bar-width 3
-        doom-modeline-buffer-file-name-style 'truncate-upto-project
-        doom-modeline-icon t
-        doom-modeline-minor-modes nil
-        doom-modeline-buffer-encoding nil
-        doom-modeline-indent-info nil
-        doom-modeline-vcs-max-length 12
-        doom-modeline-project-detection 'projectile)
+  (setq
+   ;; Size / appearance
+   doom-modeline-height 26
+   doom-modeline-bar-width 4
+   ;; File & buffer info
+   doom-modeline-buffer-file-name-style 'truncate-upto-project
+   doom-modeline-buffer-state-icon t     ;; modified / read-only
+   doom-modeline-buffer-modification-icon t
+   doom-modeline-file-size t              ;; useful for large files
+   ;; Icons
+   doom-modeline-icon t
+   doom-modeline-major-mode-icon t
+   doom-modeline-major-mode-color-icon t
+   ;; Position info
+   doom-modeline-position-line-format '("%l")
+   doom-modeline-position-column-format '("%c")
+   doom-modeline-percent-position nil
+   ;; Git
+   doom-modeline-vcs-max-length 18
+   ;; LSP
+   doom-modeline-lsp t
+   ;; Encoding (only show when not UTF-8)
+   doom-modeline-buffer-encoding t
+   doom-modeline-buffer-encoding-conditional t
+   ;; Indentation (tabs vs spaces)
+   doom-modeline-indent-info t
+   ;; Project
+   doom-modeline-project-detection 'projectile
+   ;; Minor modes (noise → off)
+   doom-modeline-minor-modes nil
+   ;; Workspace / window number
+   doom-modeline-workspace-name t
+   doom-modeline-window-width-limit 80)
+
   :config
   (doom-modeline-mode 1))
 
-;; Theme
-(use-package doom-themes
+
+(use-package nord-theme
   :ensure t
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (load-theme 'doom-Iosvkem t)
-  (doom-themes-org-config))
+  (load-theme 'xz-nord t))
 
 ;; Show matching parentheses
 (use-package paren
