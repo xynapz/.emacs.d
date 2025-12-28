@@ -65,6 +65,9 @@
         org-edit-src-content-indentation 0
         org-confirm-babel-evaluate nil)
   (setq org-latex-create-formula-image-program 'dvisvgm)
+  (add-to-list 'org-latex-packages-alist '("" "tikz" t))
+  (setq org-babel-latex-htlatex ""
+        org-babel-latex-pdf-svg-process "dvisvgm --pdf %f -o %O")
 
   (org-babel-do-load-languages
    'org-babel-load-languages
