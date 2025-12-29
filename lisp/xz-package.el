@@ -127,12 +127,20 @@
       '((python "https://github.com/tree-sitter/tree-sitter-python")
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript")))
 
-(defun xz/install-treesit-grammars ()
-  "Install tree-sitter grammars if missing."
-  (interactive)
+(defun xz/install-treesit-grammars (&optional force)
+  "Install tree-sitter grammars.
+If FORCE is non-nil, reinstall even if already available."
+  (interactive "P")
   (dolist (lang (mapcar #'car treesit-language-source-alist))
-    (unless (treesit-language-available-p lang)
-      (treesit-install-language-grammar lang))))
+    (if (and (not force) (treesit-language-available-p lang))
+        (message "Tree-sitter grammar for %s already installed." lang)
+      (message "Installing tree-sitter grammar for %s..." lang)
+      (condition-case err
+          (progn
+            (treesit-install-language-grammar lang)
+            (message "Successfully installed tree-sitter grammar for %s" lang))
+        (error
+         (message "Failed to install %s: %s" lang (error-message-string err)))))))
 
 (use-package treesit
   :ensure nil

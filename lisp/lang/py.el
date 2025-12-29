@@ -21,6 +21,16 @@
   (add-to-list 'eglot-server-programs
                '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio"))))
 
+(defun xz/verify-python-deps ()
+  "Check if python dependencies (node, pyright) are met."
+  (unless (executable-find "node")
+    (display-warning 'xz-python "Node.js not found! Pyright requires 'node' in PATH." :warning))
+  (unless (executable-find "pyright-langserver")
+    (display-warning 'xz-python "pyright-langserver not found! Install it with npm/pip." :warning)))
+
+(add-hook 'python-mode-hook #'xz/verify-python-deps)
+(add-hook 'python-ts-mode-hook #'xz/verify-python-deps)
+
 ;; Pyvenv for virtualenvs
 (use-package pyvenv
   :ensure t
