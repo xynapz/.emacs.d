@@ -4,8 +4,13 @@
 
 ;;; Code:
 
+;; Require eglot (built-in since Emacs 29)
+(require 'eglot)
+
 ;; Python mode (use tree-sitter if available)
-(when (treesit-available-p)
+(when (and (fboundp 'treesit-available-p)
+           (treesit-available-p)
+           (treesit-language-available-p 'python))
   (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode)))
 
 ;; Eglot with pyright

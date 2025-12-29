@@ -123,21 +123,21 @@
   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
 
 ;; Tree-sitter (minimal - just Python and JS)
+(setq treesit-language-source-alist
+      '((python "https://github.com/tree-sitter/tree-sitter-python")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")))
+
+(defun xz/install-treesit-grammars ()
+  "Install tree-sitter grammars if missing."
+  (interactive)
+  (dolist (lang (mapcar #'car treesit-language-source-alist))
+    (unless (treesit-language-available-p lang)
+      (treesit-install-language-grammar lang))))
+
 (use-package treesit
   :ensure nil
   :mode (("\\.py\\'" . python-ts-mode)
-         ("\\.js\\'" . js-ts-mode))
-  :config
-  (setq treesit-language-source-alist
-        '((python "https://github.com/tree-sitter/tree-sitter-python")
-          (javascript "https://github.com/tree-sitter/tree-sitter-javascript")))
-
-  (defun xz/install-treesit-grammars ()
-    "Install tree-sitter grammars if missing."
-    (interactive)
-    (dolist (lang (mapcar #'car treesit-language-source-alist))
-      (unless (treesit-language-available-p lang)
-        (treesit-install-language-grammar lang)))))
+         ("\\.js\\'" . js-ts-mode)))
 
 (use-package restart-emacs
   :ensure t)
@@ -146,6 +146,7 @@
   "Run one-time setup: Icons, Grammars, PDF Tools."
   (interactive)
   (when (y-or-n-p "Install Nerd Icons? ")
+    (require 'nerd-icons)
     (nerd-icons-install-fonts t))
   (when (y-or-n-p "Install Tree-sitter Grammars? ")
     (xz/install-treesit-grammars))
