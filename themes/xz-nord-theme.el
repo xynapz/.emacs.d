@@ -15,7 +15,7 @@
   ;; Polar Night - DARKENED
   (nord0 "#1b1d1e")  ; was #2E3440 - main bg (from doom-Iosvkem)
   (nord1 "#262829")  ; was #3B4252 - hl-line
-  (nord2 "#303030")  ; was #434C5E
+  (nord2 "#434C5E")  ; was #303030 - restore original for better visibility
   (nord3 "#4C566A")  ; unchanged - comments base
   ;; Snow Storm - unchanged
   (nord4 "#D8DEE9")
