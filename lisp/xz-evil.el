@@ -19,5 +19,10 @@
   :config
   (evil-collection-init))
 
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
 (provide 'xz-evil)
 ;;; xz-evil.el ends here
