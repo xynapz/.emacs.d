@@ -41,7 +41,40 @@
       (when (file-directory-p venv)
         (pyvenv-activate venv))))
 
-  (add-hook 'projectile-after-switch-project-hook #'xz/auto-activate-venv))
+  ;; Also activate when opening a Python file directly
+  (defun xz/maybe-activate-venv ()
+    "Activate venv if in a project with .venv."
+    (when (and (buffer-file-name)
+               (derived-mode-p 'python-mode 'python-ts-mode))
+      (let* ((root (or (projectile-project-root)
+                       (locate-dominating-file default-directory ".venv")))
+             (venv (when root (expand-file-name ".venv" root))))
+        (when (and venv (file-directory-p venv))
+          (unless (and pyvenv-virtual-env
+                       (string= (file-truename pyvenv-virtual-env)
+                                (file-truename venv)))
+            (pyvenv-activate venv))))))
+
+  (add-hook 'python-mode-hook #'xz/maybe-activate-venv)
+  (add-hook 'python-ts-mode-hook #'xz/maybe-activate-venv)
+  (add-hook 'projectile-after-switch-project-hook #'xz/auto-activate-venv)
+
+  ;; Restart Eglot when venv changes so pyright uses correct Python
+  (add-hook 'pyvenv-post-activate-hooks
+            (lambda ()
+              (when (and (derived-mode-p 'python-mode 'python-ts-mode)
+                         (eglot-managed-p))
+                (message "Restarting Eglot for venv: %s" pyvenv-virtual-env)
+                (eglot-shutdown (eglot-current-server))
+                (eglot-ensure))))
+
+  ;; Also restart on deactivate
+  (add-hook 'pyvenv-post-deactivate-hooks
+            (lambda ()
+              (when (and (derived-mode-p 'python-mode 'python-ts-mode)
+                         (eglot-managed-p))
+                (eglot-shutdown (eglot-current-server))
+                (eglot-ensure)))))
 
 ;; Format on save (requires black or autopep8)
 (add-hook 'python-mode-hook
