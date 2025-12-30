@@ -4,34 +4,40 @@
 
 ;;; Code:
 
-;; HTML - use built-in mhtml-mode
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . mhtml-mode))
-
-;; CSS - use built-in css-mode
-(add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
-
-;; JavaScript - use js-mode (built-in, or js-ts-mode if grammar available)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
-
-;; JS settings
-(setq js-indent-level 2)
-
-;; Jinja2 templates
-(use-package jinja2-mode
+;; Web Mode (HTML + Jinja2 + mixed content)
+(use-package web-mode
   :ensure t
-  :mode (("\\.jinja2?\\'" . jinja2-mode)
-         ("\\.j2\\'" . jinja2-mode)))
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.jinja2?\\'" . web-mode)
+         ("\\.j2\\'" . web-mode))
+  :config
+  (setq web-mode-enable-auto-pairing t
+        web-mode-enable-css-colorization t
+        web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        ;; Auto-detect jinja
+        web-mode-engines-alist '(("jinja" . "\\.html?\\'"))))
 
-;; Eglot for JS (typescript-language-server handles JS too)
-(add-hook 'js-mode-hook
-          (lambda ()
-            (when (and (buffer-file-name)
-                       (executable-find "typescript-language-server"))
-              (eglot-ensure))))
+;; Tree-sitter for pure CSS/JS
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(js-mode . ("typescript-language-server" "--stdio"))))
+;; Eglot hooks
+(defun xz/eglot-ensure-web ()
+  "Start eglot for web modes."
+  (when (buffer-file-name)
+    (eglot-ensure)))
+
+(add-hook 'web-mode-hook #'xz/eglot-ensure-web)
+(add-hook 'css-mode-hook #'xz/eglot-ensure-web)
+(add-hook 'css-ts-mode-hook #'xz/eglot-ensure-web)
+(add-hook 'js-mode-hook #'xz/eglot-ensure-web)
+(add-hook 'js-ts-mode-hook #'xz/eglot-ensure-web)
+(add-hook 'typescript-ts-mode-hook #'xz/eglot-ensure-web)
 
 (provide 'web)
 ;;; web.el ends here

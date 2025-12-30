@@ -17,9 +17,7 @@
 (add-hook 'python-mode-hook #'eglot-ensure)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio"))))
+
 
 (defun xz/verify-python-deps ()
   "Check if python dependencies (node, pyright) are met."

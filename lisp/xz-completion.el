@@ -51,7 +51,25 @@
               ("C-c e f" . eglot-format))
   :config
   (setq eglot-events-buffer-size 0
-        eglot-autoshutdown t))
+        eglot-autoshutdown t)
+
+  ;; Consolidated LSP server configuration
+  (with-eval-after-load 'eglot
+    ;; C/C++ (clangd)
+    (add-to-list 'eglot-server-programs
+                 '((c-mode c++-mode c-ts-mode c++-ts-mode) . ("clangd" "--clang-tidy")))
+    ;; Python (pyright)
+    (add-to-list 'eglot-server-programs
+                 '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+    ;; JS/TS (typescript-language-server)
+    (add-to-list 'eglot-server-programs
+                 '((js-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
+    ;; Web/HTML (vscode-html-languageserver)
+    (add-to-list 'eglot-server-programs
+                 '((web-mode mhtml-mode) . ("vscode-html-languageserver" "--stdio")))
+    ;; CSS (vscode-css-languageserver)
+    (add-to-list 'eglot-server-programs
+                 '((css-mode css-ts-mode) . ("vscode-css-languageserver" "--stdio")))))
 
 ;; Helpful
 (use-package helpful

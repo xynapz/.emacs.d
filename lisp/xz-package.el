@@ -125,7 +125,14 @@
 ;; Tree-sitter (minimal - just Python and JS)
 (setq treesit-language-source-alist
       '((python "https://github.com/tree-sitter/tree-sitter-python")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")))
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+        (html "https://github.com/tree-sitter/tree-sitter-html")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (c "https://github.com/tree-sitter/tree-sitter-c")
+        (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+        (json "https://github.com/tree-sitter/tree-sitter-json")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
 
 (defun xz/install-treesit-grammars (&optional force)
   "Install tree-sitter grammars.
@@ -145,7 +152,11 @@ If FORCE is non-nil, reinstall even if already available."
 (use-package treesit
   :ensure nil
   :mode (("\\.py\\'" . python-ts-mode)
-         ("\\.js\\'" . js-ts-mode)))
+         ("\\.js\\'" . js-ts-mode)
+         ("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode)
+         ("\\.css\\'" . css-ts-mode)
+         ("\\.json\\'" . json-ts-mode)))
 
 (use-package restart-emacs
   :ensure t)

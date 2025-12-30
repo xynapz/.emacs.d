@@ -4,8 +4,14 @@
 
 ;;; Code:
 
-;; Treat .h as C (change to c++-mode if you prefer C++)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c-mode))
+;; Treat .h as C++
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+;; Use Tree-sitter if available
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode)))
 
 ;; Style
 (add-hook 'c-mode-common-hook
@@ -24,10 +30,8 @@
 
 (add-hook 'c-mode-hook #'xz/eglot-ensure-c)
 (add-hook 'c++-mode-hook #'xz/eglot-ensure-c)
-
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((c-mode c++-mode) . ("clangd" "--clang-tidy"))))
+(add-hook 'c-ts-mode-hook #'xz/eglot-ensure-c)
+(add-hook 'c++-ts-mode-hook #'xz/eglot-ensure-c)
 
 ;; Format on save with clang-format
 (use-package clang-format
