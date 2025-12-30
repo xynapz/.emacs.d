@@ -15,6 +15,7 @@
 (load "xz-editor")
 (load "xz-completion")
 (load "xz-evil")
+(load "xz-org")
 
 ;; Languages
 (load "cc")

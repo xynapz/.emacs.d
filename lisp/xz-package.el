@@ -43,46 +43,7 @@
   :config
   (projectile-mode +1))
 
-;; Org mode (minimal)
-(use-package org
-  :pin elpa
-  :mode ("\\.org\\'" . org-mode)
-  :hook ((org-mode . visual-line-mode)
-         (org-mode . org-indent-mode))
-  :bind (("C-c a" . org-agenda)
-         ("C-c c" . org-capture)
-         ("C-c l" . org-store-link))
-  :config
-  (setq org-directory "~/org/"
-        org-startup-folded 'content
-        org-startup-indented t
-        org-hide-emphasis-markers t
-        org-ellipsis " ▾"
-        org-log-done 'time
-        org-return-follows-link t
-        org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        org-edit-src-content-indentation 0
-        org-confirm-babel-evaluate nil)
-  (setq org-latex-create-formula-image-program 'dvisvgm)
-  (add-to-list 'org-latex-packages-alist '("" "tikz" t))
-  (setq org-babel-latex-preamble
-        (lambda (_)
-          "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}"))
-  (setq org-babel-latex-pdf-svg-process "dvisvgm --pdf %f -o %O")
-  (setq org-format-latex-header
-        "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
-
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (python . t)
-     (latex . t)
-     (shell . t)
-     (C . t))))
-
-;; htmlize for org export
-(use-package htmlize :ensure t)
+;; Org mode config moved to xz-org.el
 
 ;; Nerd icons
 (use-package nerd-icons :ensure t)
