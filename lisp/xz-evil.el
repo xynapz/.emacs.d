@@ -17,6 +17,8 @@
   :after evil
   :ensure t
   :config
+  ;; Disable evil in magit (restore standard magit bindings)
+  (setq evil-collection-mode-list (remove 'magit evil-collection-mode-list))
   (evil-collection-init))
 
 (use-package evil-surround

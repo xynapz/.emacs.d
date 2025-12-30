@@ -64,12 +64,12 @@
     ;; JS/TS (typescript-language-server)
     (add-to-list 'eglot-server-programs
                  '((js-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
-    ;; Web/HTML (vscode-html-languageserver)
+    ;; Web/HTML (vscode-html-language-server)
     (add-to-list 'eglot-server-programs
-                 '((web-mode mhtml-mode) . ("vscode-html-languageserver" "--stdio")))
-    ;; CSS (vscode-css-languageserver)
+                 '((web-mode mhtml-mode) . ("vscode-html-language-server" "--stdio")))
+    ;; CSS (vscode-css-language-server)
     (add-to-list 'eglot-server-programs
-                 '((css-mode css-ts-mode) . ("vscode-css-languageserver" "--stdio")))))
+                 '((css-mode css-ts-mode) . ("vscode-css-language-server" "--stdio")))))
 
 ;; Helpful
 (use-package helpful
