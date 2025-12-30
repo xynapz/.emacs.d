@@ -13,6 +13,15 @@
 
 (global-visual-line-mode 1)
 
+;; Session persistence (restore windows/buffers)
+(use-package desktop
+  :ensure nil
+  :config
+  (setq desktop-save t
+        desktop-load-locked-desktop t
+        desktop-restore-eager 5)
+  (desktop-save-mode 1))
+
 (use-package hl-line
   :ensure nil
   :config
@@ -23,13 +32,19 @@
 (use-package display-line-numbers
   :ensure nil
   :init
-  (setq display-line-numbers-type 't
+  (setq display-line-numbers-type 'relative
         display-line-numbers-width-start t)
   :config
-  (dolist (hook '(prog-mode-hook conf-mode-hook text-mode-hook))
-    (add-hook hook #'display-line-numbers-mode))
-  (dolist (hook '(eshell-mode-hook term-mode-hook shell-mode-hook))
-    (add-hook hook (lambda () (display-line-numbers-mode 0)))))
+  (global-display-line-numbers-mode 1)
+  
+  ;; Disable in specific modes where it's clutter
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook
+                  treemacs-mode-hook
+                  pdf-view-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
 ;; Keybindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)

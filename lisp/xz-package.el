@@ -161,6 +161,27 @@ If FORCE is non-nil, reinstall even if already available."
 (use-package restart-emacs
   :ensure t)
 
+(defun xz/clean-restart ()
+  "Clear caches and restart Emacs (like VS Code 'Reload Window')."
+  (interactive)
+  (when (y-or-n-p "Clear caches and restart? ")
+    ;; Clear Projectile cache
+    (when (fboundp 'projectile-invalidate-cache)
+      (projectile-invalidate-cache nil))
+    
+    ;; Save desktop (session) before killing
+    (when (bound-and-true-p desktop-save-mode)
+      (desktop-save-in-desktop-dir))
+      
+    ;; Clear file-based caches if necessary (careful with this)
+    (let ((cache-dir (expand-file-name ".cache" user-emacs-directory)))
+      (when (file-exists-p cache-dir)
+        (delete-directory cache-dir t)))
+        
+    (restart-emacs)))
+
+(global-set-key (kbd "C-c r r") #'xz/clean-restart)
+
 (defun xz/init-setup ()
   "Run one-time setup: Icons, Grammars, PDF Tools."
   (interactive)
