@@ -72,27 +72,62 @@
   (setq org-agenda-files (list xz/org-directory))
 
   (setq org-agenda-custom-commands
-        '(("d" "Dashboard"
+        '(;; === Timeframe Views ===
+          ("1" "Today"
+           ((agenda "" ((org-agenda-span 1)
+                        (org-agenda-start-day "today")
+                        (org-deadline-warning-days 0)
+                        (org-agenda-overriding-header "📅 Today")))
+            (todo "NEXT" ((org-agenda-overriding-header "⚡ Next Actions")))))
+
+          ("2" "Next 2 Days"
+           ((agenda "" ((org-agenda-span 2)
+                        (org-agenda-start-day "today")
+                        (org-deadline-warning-days 2)
+                        (org-agenda-overriding-header "📅 Next 2 Days")))
+            (todo "NEXT" ((org-agenda-overriding-header "⚡ Next Actions")))))
+
+          ("7" "This Week"
+           ((agenda "" ((org-agenda-span 7)
+                        (org-agenda-start-on-weekday nil)
+                        (org-deadline-warning-days 7)
+                        (org-agenda-overriding-header "📅 This Week")))
+            (todo "NEXT" ((org-agenda-overriding-header "⚡ Next Actions")))
+            (todo "WAIT" ((org-agenda-overriding-header "⏳ Waiting On")))))
+
+          ("m" "This Month"
+           ((agenda "" ((org-agenda-span 'month)
+                        (org-agenda-start-day "today")
+                        (org-deadline-warning-days 30)
+                        (org-agenda-overriding-header
+                         (format "📅 %s %s"
+                                 (format-time-string "%B")
+                                 (format-time-string "%Y")))))
+            (todo "NEXT" ((org-agenda-overriding-header "⚡ Next Actions")))
+            (stuck "" ((org-agenda-overriding-header "🚧 Stuck Projects")))))
+
+          ;; === Dashboard & Categories ===
+          ("d" "Dashboard"
            ((agenda "" ((org-agenda-span 'day)
                         (org-deadline-warning-days 7)))
-            (todo "NEXT" ((org-agenda-overriding-header "Next Actions")))
-            (todo "WAIT" ((org-agenda-overriding-header "Waiting On")))
-            (tags-todo "inbox" ((org-agenda-overriding-header "Inbox - To Refile")))))
+            (todo "NEXT" ((org-agenda-overriding-header "⚡ Next Actions")))
+            (todo "WAIT" ((org-agenda-overriding-header "⏳ Waiting On")))
+            (tags-todo "inbox" ((org-agenda-overriding-header "📥 Inbox - To Refile")))))
 
           ("p" "Projects"
            ((tags-todo "+project"
-                       ((org-agenda-overriding-header "Active Projects")))))
+                       ((org-agenda-overriding-header "🚀 Active Projects")))))
 
           ("l" "Learning"
            ((tags-todo "+learning"
-                       ((org-agenda-overriding-header "Learning Tasks")))
+                       ((org-agenda-overriding-header "📚 Learning Tasks")))
             (tags-todo "+reading"
-                       ((org-agenda-overriding-header "Reading List")))))
+                       ((org-agenda-overriding-header "📖 Reading List")))))
 
           ("w" "Weekly Review"
            ((agenda "" ((org-agenda-span 'week)))
-            (todo "DONE" ((org-agenda-overriding-header "Completed This Week")))
-            (stuck "" ((org-agenda-overriding-header "Stuck Projects")))))))
+            (todo "DONE" ((org-agenda-overriding-header "✅ Completed This Week")))
+            (stuck "" ((org-agenda-overriding-header "🚧 Stuck Projects")))))))
 
   (setq org-agenda-window-setup 'current-window
         org-agenda-start-with-log-mode t
