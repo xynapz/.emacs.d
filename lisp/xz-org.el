@@ -142,6 +142,14 @@
            "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i"
            :empty-lines 1)
 
+          ("T" "Task with Dates" entry (file ,xz/org-inbox-file)
+           "* TODO %?\nSCHEDULED: %^t\nDEADLINE: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i"
+           :empty-lines 1)
+
+          ("c" "Code Task" entry (file ,xz/org-inbox-file)
+           "* TODO %?\nSCHEDULED: %^t\nDEADLINE: %^t\n:PROPERTIES:\n:CREATED: %U\n:SOURCE: %a\n:END:\n\n%i"
+           :empty-lines 1)
+
           ("p" "Project" entry (file ,xz/org-projects-file)
            "* TODO %? :project:\n:PROPERTIES:\n:CREATED: %U\n:END:\n** Goals\n** Tasks\n*** TODO \n** Notes\n"
            :empty-lines 1)

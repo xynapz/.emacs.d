@@ -1,0 +1,183 @@
+#+TITLE: Org Mode for Engineers
+#+AUTHOR: Angel
+#+STARTUP: overview
+#+OPTIONS: toc:2
+
+* Quick Reference Card
+
+| Key         | Action                    |
+|-------------+---------------------------|
+| =C-c a=     | Open Agenda               |
+| =C-c c=     | Capture                   |
+| =C-c C-s=   | Schedule                  |
+| =C-c C-d=   | Deadline                  |
+| =C-c C-w=   | Refile                    |
+| =C-c l=     | Store link (at point)     |
+| =C-c C-t=   | Toggle TODO state         |
+| =TAB=       | Fold/unfold heading       |
+| =S-TAB=     | Cycle all headings        |
+| =M-RET=     | New heading               |
+| =M-S-RET=   | New TODO heading          |
+
+* Org Basics
+** Headings
+
+#+begin_src org
+,* Level 1
+,** Level 2
+,*** Level 3
+#+end_src
+
+** TODO States
+
+#+begin_src org
+,* TODO Not started
+,* NEXT Working on it
+,* WAIT Blocked on something
+,* DONE Completed
+,* CANCELLED Not doing
+#+end_src
+
+Toggle with =C-c C-t= or =S-left/right=.
+
+** Links
+
+#+begin_src org
+[[https://example.com][Description]]
+[[file:~/code/app.py][Local file]]
+[[file:~/code/app.py::42][File at line 42]]
+#+end_src
+
+* Capture Templates
+
+Press =C-c c= then:
+
+| Key | Template         | Use Case                        |
+|-----+------------------+---------------------------------|
+| =t= | Task             | Quick TODO to inbox             |
+| =T= | Task with Dates  | TODO + schedule + deadline      |
+| =c= | Code Task        | TODO linked to current file/line |
+| =p= | Project          | New project with structure      |
+| =l= | Learning         | Study material                  |
+| =r= | Reading          | Add book/article to read        |
+| =j= | Journal          | Daily log entry                 |
+| =n= | Note             | Quick note                      |
+
+** Workflow: Code Task
+
+1. Navigate to code you need to work on later
+2. =C-c l= - Store link to current position
+3. =C-c c c= - Capture "Code Task"
+4. Enter description, schedule, deadline
+5. =C-c C-c= - Save
+
+Later, click the link in the task to jump back!
+
+* Agenda Views
+
+Press =C-c a= then:
+
+| Key | View             | Shows                           |
+|-----+------------------+---------------------------------|
+| =1= | Today            | Tasks for today                 |
+| =2= | Next 2 Days      | Today + tomorrow                |
+| =7= | This Week        | Next 7 days                     |
+| =m= | This Month       | Current month (dynamic)         |
+| =d= | Dashboard        | Daily overview + inbox          |
+| =p= | Projects         | Items tagged =:project:=        |
+| =l= | Learning         | Items tagged =:learning:=       |
+| =w= | Weekly Review    | Week + completed items          |
+
+** Making Tasks Appear in Agenda
+
+Tasks *only show in timeline views* if they have dates:
+
+#+begin_src org
+,* TODO Without dates - won't show in C-c a 1/2/7/m
+,* TODO With schedule
+SCHEDULED: <2024-12-30 Mon>
+,* TODO With deadline
+DEADLINE: <2024-12-31 Tue>
+#+end_src
+
+Tasks *always show* in category views (=d=, =p=, =l=) based on:
+- TODO state (=NEXT=, =WAIT=)
+- Tags (=:project:=, =:learning:=)
+
+* Date Picker Shortcuts
+
+When scheduling (=C-c C-s=) or setting deadline (=C-c C-d=):
+
+| Key       | Action             |
+|-----------+--------------------|
+| =.=       | Today              |
+| =+1=      | Tomorrow           |
+| =+7=      | Next week          |
+| =+1m=     | Next month         |
+| =S-right= | Next day           |
+| =S-left=  | Previous day       |
+| =S-down=  | Next week          |
+| =S-up=    | Previous week      |
+| =RET=     | Confirm            |
+
+* Tags
+
+Add tags at end of heading:
+
+#+begin_src org
+,* TODO Learn Rust :learning:programming:
+,* TODO Deploy v2.0 :project:urgent:
+#+end_src
+
+Common tags:
+- =:project:= - Active project
+- =:learning:= - Study/learning
+- =:reading:= - Reading list
+- =:urgent:= - High priority
+- =:@work:= - Work context
+- =:@home:= - Home context
+
+* Properties
+
+Store metadata in property drawers:
+
+#+begin_src org
+,* TODO Review PR
+:PROPERTIES:
+:CREATED: [2024-12-30 Mon 19:00]
+:SOURCE: [[file:~/code/app.py::42][app.py:42]]
+:EFFORT: 30min
+:END:
+#+end_src
+
+* Refile
+
+Move items to different files/headings:
+
+1. =C-c C-w= on a heading
+2. Select destination (fuzzy search)
+3. Item moves there
+
+* Archive
+
+When done with old items:
+
+- =C-c C-x C-a= - Archive subtree to =archive.org=
+
+* File Structure
+
+#+begin_example
+~/org/
+├── inbox.org      # Capture landing zone
+├── projects.org   # Active projects
+├── learning.org   # Study materials
+├── journal.org    # Daily entries
+└── archive.org    # Completed/old items
+#+end_example
+
+* Daily Workflow
+
+1. *Morning*: =C-c a d= - Check dashboard
+2. *During work*: =C-c c t/c= - Capture tasks
+3. *End of day*: =C-c a 1= - Review today
+4. *Weekly*: =C-c a w= - Weekly review, refile inbox
