@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: Writing Post
+# name: Writing/Knowledge Base Post
 # key: writing
 # --
 #+TITLE: ${1:Title}
@@ -10,7 +10,11 @@
 #+OPTIONS: ^:{} num:nil toc:5 html-postamble:nil
 #+HTML_HEAD: <meta name="pub_date" content="`(format-time-string "%Y-%m-%d")`" />
 #+HTML_HEAD: <meta name="updated_date" content="`(format-time-string "%Y-%m-%d")`" />
-#+EXPORT_FILE_NAME: `(let ((src-path (buffer-file-name))) (if (and src-path (string-match "/knowledge_base/\\(.*\\)\\.org" src-path)) (concat "/home/angel/xynapz/angeld/site-content/knowledge_base/" (match-string 1 src-path) ".html") (concat "/home/angel/xynapz/angeld/site-content/knowledge_base/" (file-name-base (or src-path "untitled")) ".html")))`
+#+EXPORT_FILE_NAME: `(let* ((src-path (buffer-file-name)) (poneglyphs-dir "/home/angel/xynapz/angeld/poneglyphs/") (output-dir "/home/angel/xynapz/angeld/poneglyphs-output/")) (if (and src-path (string-prefix-p poneglyphs-dir src-path)) (concat output-dir (file-name-sans-extension (substring src-path (length poneglyphs-dir))) ".html") (concat output-dir (file-name-base (or src-path "untitled")) ".html")))`
+#+XZHH_PUB_DATE: `(format-time-string "%Y-%m-%d")`
+#+XZHH_UPDATED_DATE: `(format-time-string "%Y-%m-%d")`
+#+XZHH_ORDER: ${3:1}
+#+XZHH_CATEGORY: ${4:computer-science}
 
 * ${1:Title}
 $0

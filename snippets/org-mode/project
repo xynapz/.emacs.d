@@ -1,16 +1,37 @@
+# -*- mode: snippet -*-
+# name: Project Documentation
+# key: project
+# --
 #+TITLE: ${1:Project Name}
 #+AUTHOR: Angel Dhakal
 #+DATE: `(format-time-string "%Y-%m-%d")`
 #+DESCRIPTION: ${2:Project description}
-#+KEYWORDS: ${3:tech, stack, tags}
+#+KEYWORDS: ${3:project, tech, stack}
+#+OPTIONS: ^:{} num:nil toc:5 html-postamble:nil
 #+HTML_HEAD: <meta name="pub_date" content="`(format-time-string "%Y-%m-%d")`" />
 #+HTML_HEAD: <meta name="updated_date" content="`(format-time-string "%Y-%m-%d")`" />
-#+HTML_HEAD: <meta name="stack" content="${4:Go, TypeScript, Astro}" />
-#+HTML_HEAD: <meta name="platform" content="${5:Web}" />
-#+HTML_HEAD: <meta name="website" content="${6:https://example.com}" />
-#+HTML_HEAD: <meta name="github" content="${7:https://github.com/xynapz/repo}" />
-#+OPTIONS: ^:{} num:nil toc:5
-#+EXPORT_FILE_NAME: `(let ((src-path (buffer-file-name))) (if (and src-path (string-match "/knowledge_base/\\(.*\\)\\.org" src-path)) (concat "/home/angel/xynapz/angeld/site-content/projects/" (match-string 1 src-path) ".html") (concat "/home/angel/xynapz/angeld/site-content/projects/" (file-name-base (or src-path "untitled")) ".html")))`
+#+EXPORT_FILE_NAME: `(let* ((src-path (buffer-file-name)) (poneglyphs-dir "/home/angel/xynapz/angeld/poneglyphs/") (output-dir "/home/angel/xynapz/angeld/poneglyphs-output/")) (if (and src-path (string-prefix-p poneglyphs-dir src-path)) (concat output-dir (file-name-sans-extension (substring src-path (length poneglyphs-dir))) ".html") (concat output-dir "projects/" (file-name-base (or src-path "untitled")) ".html")))`
+#+XZHH_PUB_DATE: `(format-time-string "%Y-%m-%d")`
+#+XZHH_UPDATED_DATE: `(format-time-string "%Y-%m-%d")`
+#+XZHH_ORDER: ${4:1}
+#+XZHH_STACK: ${5:Go, TypeScript}
+#+XZHH_PLATFORM: ${6:Web}
+#+XZHH_WEBSITE: ${7:https://example.com}
+#+XZHH_GITHUB: ${8:https://github.com/xynapz/repo}
+#+XZHH_STATUS: ${9:Active}
 
 * ${1:Project Name}
-${0}
+${10:Brief project overview.}
+
+** Goals
+- $0
+
+** Tech Stack
+| Component | Technology |
+|-----------+------------|
+| Frontend  |            |
+| Backend   |            |
+
+** Links
+- [[${7:https://example.com}][Live Site]]
+- [[${8:https://github.com/xynapz/repo}][GitHub]]
