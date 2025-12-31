@@ -5,9 +5,7 @@
 
 ;;; Code:
 
-;; ---------------------------------------------------------------------------
 ;; Directory Structure
-;; ---------------------------------------------------------------------------
 (defvar xz/org-directory "~/org/"
   "Base directory for all Org files.")
 
@@ -26,9 +24,7 @@
 (defvar xz/org-archive-file (expand-file-name "archive.org" xz/org-directory)
   "File for archived items.")
 
-;; ---------------------------------------------------------------------------
 ;; Org Mode Configuration
-;; ---------------------------------------------------------------------------
 (use-package org
   :pin elpa
   :mode ("\\.org\\'" . org-mode)
@@ -53,9 +49,7 @@
         org-edit-src-content-indentation 0
         org-confirm-babel-evaluate nil)
 
-  ;; ---------------------------------------------------------------------------
   ;; TODO Keywords
-  ;; ---------------------------------------------------------------------------
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)")))
 
@@ -66,9 +60,7 @@
           ("DONE" . (:foreground "#A3BE8C" :weight bold))
           ("CANCELLED" . (:foreground "#4C566A" :weight bold))))
 
-  ;; ---------------------------------------------------------------------------
   ;; Agenda
-  ;; ---------------------------------------------------------------------------
   (setq org-agenda-files (list xz/org-directory))
 
   (setq org-agenda-custom-commands
@@ -134,9 +126,7 @@
         org-agenda-skip-deadline-if-done t
         org-agenda-skip-scheduled-if-done t)
 
-  ;; ---------------------------------------------------------------------------
   ;; Capture Templates
-  ;; ---------------------------------------------------------------------------
   (setq org-capture-templates
         `(("t" "Task" entry (file ,xz/org-inbox-file)
            "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i"
@@ -170,9 +160,7 @@
            "* %? :note:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i"
            :empty-lines 1)))
 
-  ;; ---------------------------------------------------------------------------
   ;; Refile
-  ;; ---------------------------------------------------------------------------
   (setq org-refile-targets
         '((nil :maxlevel . 3)
           (org-agenda-files :maxlevel . 2)))
@@ -181,22 +169,18 @@
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm)
 
-  ;; ---------------------------------------------------------------------------
   ;; Archive
-  ;; ---------------------------------------------------------------------------
   (setq org-archive-location (concat xz/org-archive-file "::* From %s"))
 
-  ;; ---------------------------------------------------------------------------
   ;; Babel (Code Execution)
-  ;; ---------------------------------------------------------------------------
-  (setq org-latex-create-formula-image-program 'dvisvgm)
-  (add-to-list 'org-latex-packages-alist '("" "tikz" t))
-  (setq org-babel-latex-preamble
-        (lambda (_)
-          "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}"))
-  (setq org-babel-latex-pdf-svg-process "dvisvgm --pdf %f -o %O")
-  (setq org-format-latex-header
-        "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
+(setq org-latex-create-formula-image-program 'dvisvgm)
+(add-to-list 'org-latex-packages-alist '("" "tikz" t))
+(setq org-babel-latex-preamble
+      (lambda (_)
+        "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}\n\\usetikzlibrary{backgrounds}\n\\tikzset{every picture/.style={show background rectangle, background rectangle/.style={fill=white}}}"))
+(setq org-babel-latex-pdf-svg-process "pdftocairo -svg %f %O")
+(setq org-format-latex-header
+      "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
 
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -206,9 +190,7 @@
      (shell . t)
      (C . t))))
 
-;; ---------------------------------------------------------------------------
 ;; htmlize for org export
-;; ---------------------------------------------------------------------------
 (use-package htmlize :ensure t)
 
 (provide 'xz-org)
