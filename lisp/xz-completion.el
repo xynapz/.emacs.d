@@ -50,7 +50,8 @@
               ("C-c e a" . eglot-code-actions)
               ("C-c e f" . eglot-format))
   :config
-  (setq eglot-autoshutdown t)
+  (setq eglot-autoshutdown t
+        eglot-events-buffer-size 2000000)
 
   ;; Consolidated LSP server configuration
   (with-eval-after-load 'eglot
@@ -67,19 +68,14 @@
               (modes (cdr server)))        ; affected modes
           
           (if (executable-find cmd)
-              (add-to-list 'eglot-server-programs `(,modes . ,full-cmd))
-            (message "[XZ-Config] Warning: %s not found. LSP for %s will not work." cmd modes))))))
-
-  ;; Ensure Eglot can actually start automatically
-  (dolist (mode '(python-ts-mode-hook
-                  js-ts-mode-hook
-                  typescript-ts-mode-hook
-                  tsx-ts-mode-hook
-                  c-ts-mode-hook
-                  c++-ts-mode-hook
-                  web-mode-hook
-                  css-ts-mode-hook))
-    (add-hook mode #'eglot-ensure)))
+              (progn
+                ;; 1. Register server
+                (add-to-list 'eglot-server-programs `(,modes . ,full-cmd))
+                ;; 2. Add eglot-ensure hook ONLY for supported modes
+                (dolist (m modes)
+                  (let ((hook-name (intern (concat (symbol-name m) "-hook"))))
+                    (add-hook hook-name #'eglot-ensure))))
+            (message "[XZ-Config] Warning: %s not found. Skipping LSP setup for %s" cmd modes)))))))
 
 ;; Helpful
 (use-package helpful
