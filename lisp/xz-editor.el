@@ -68,7 +68,8 @@
   :after evil
   :ensure t
   :config
-  (evil-collection-init))
+  (evil-collection-init
+   '(dired ibuffer magit org term vterm corfu consult vertico help helpful compile)))
 
 (use-package evil-surround
   :after evil
