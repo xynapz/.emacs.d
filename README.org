@@ -1,0 +1,75 @@
+#+TITLE: emacs.d
+#+AUTHOR: Angel Dhakal
+#+OPTIONS: toc:nil num:nil
+
+Minimal Emacs config with Evil mode, LSP, and Org workflow.
+
+* Setup
+
+#+begin_src sh
+git clone https://github.com/xynapz/.emacs.d ~/.emacs.d
+#+end_src
+
+First launch:
+#+begin_src elisp
+M-x xz/init-setup
+#+end_src
+
+Installs nerd-icons, tree-sitter grammars, PDF tools.
+
+* Structure
+
+| Path          | Purpose            |
+|---------------+--------------------|
+| =init.el=     | Entry point        |
+| =lisp/=       | Modules            |
+| =lisp/lang/=  | Language configs   |
+| =themes/=     | xz-nord theme      |
+| =snippets/=   | Yasnippet snippets |
+| =docs/=       | Documentation      |
+
+* Modules
+
+| File             | Purpose              |
+|------------------+----------------------|
+| =xz-core.el=     | UTF-8, fonts, basics |
+| =xz-package.el=  | Magit, projectile    |
+| =xz-editor.el=   | UI, modeline, theme  |
+| =xz-completion.el= | Vertico, corfu, LSP |
+| =xz-evil.el=     | Vim bindings         |
+| =xz-org.el=      | Org mode, agenda     |
+| =xz-export.el=   | Blog export          |
+
+* Features
+
+- *Evil Mode*: Full vim emulation with jk escape
+- *LSP*: Eglot with pyright, clangd, typescript-language-server
+- *Completion*: Vertico + Orderless + Corfu
+- *Theme*: xz-nord (darker Nord variant)
+- *Org*: Capture templates, agenda views
+
+* Docs
+
+| File                          | Topic               |
+|-------------------------------+---------------------|
+| [[file:docs/getting-started.org][getting-started.org]]           | Setup, dependencies |
+| [[file:docs/keybindings.org][keybindings.org]]               | All keybindings     |
+| [[file:docs/modules.org][modules.org]]                   | Module reference    |
+| [[file:docs/evil.org][evil.org]]                      | Evil mode usage     |
+| [[file:docs/code-navigation.org][code-navigation.org]]           | Movement, LSP       |
+| [[file:docs/org-guide.org][org-guide.org]]                 | Org mode workflow   |
+| [[file:docs/theme.org][theme.org]]                     | xz-nord theme       |
+
+* Requirements
+
+| Package                       | For       |
+|-------------------------------+-----------|
+| ripgrep                       | Search    |
+| fd                            | Projectile |
+| clangd                        | C/C++ LSP |
+| pyright                       | Python LSP |
+| typescript-language-server    | JS/TS LSP |
+
+* License
+
+MIT for original code. GPL portions from packages retain original licenses.

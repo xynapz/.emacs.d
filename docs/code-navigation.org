@@ -98,6 +98,18 @@ You have Vim bindings. Forget =C-n= / =C-p=.
 | =``=  | Last jump position         |
 | ='.=  | Last edit position         |
 
+** Folding
+
+| Key | Action           |
+|-----+------------------|
+| =za=  | Toggle fold      |
+| =zc=  | Close fold       |
+| =zo=  | Open fold        |
+| =zM=  | Close all folds  |
+| =zR=  | Open all folds   |
+| =zj=  | Next fold        |
+| =zk=  | Previous fold    |
+
 * Search
 ** In-Buffer
 
@@ -161,6 +173,8 @@ Vim operators combine with motions: =d + motion= = delete.
 | =y=   | Yank (copy) | =yy=      | Copy line     |
 | =>=   | Indent      | =>>=      | Indent line   |
 | =<=   | Unindent    | =<<=      | Unindent line |
+| =gc=  | Comment     | =gcc=     | Comment line  |
+| =gq=  | Format      | =gqap=    | Format para   |
 
 ** Common Combos
 

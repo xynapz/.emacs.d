@@ -1,0 +1,103 @@
+#+TITLE: xz-nord Theme
+#+AUTHOR: Angel Dhakal
+#+STARTUP: overview
+#+OPTIONS: toc:2
+
+* Overview
+
+Custom variant of the [[https://www.nordtheme.com/][Nord theme]] with darker backgrounds.
+
+Based on Nord by Sven Greb (MIT License).
+
+* Changes from Default Nord
+
+** Background Colors
+
+Polar Night palette darkened using colors from doom-Iosvkem:
+
+| Color | Original | xz-nord   | Usage     |
+|-------+----------+-----------+-----------|
+| nord0 | =#2E3440= | =#1b1d1e= | Main bg   |
+| nord1 | =#3B4252= | =#262829= | hl-line   |
+| nord2 | =#434C5E= | =#434C5E= | Selection |
+| nord3 | =#4C566A= | =#4C566A= | Comments  |
+
+** Comment Color
+
+Brighter comments for visibility:
+
+| Face    | Value     |
+|---------+-----------|
+| Comment | =#616e88= |
+
+Default nord3 (=#4C566A=) was too dim.
+
+* Color Palette
+
+** Polar Night (Backgrounds)
+
+| Name  | Hex       | Usage                |
+|-------+-----------+----------------------|
+| nord0 | =#1b1d1e= | Main background      |
+| nord1 | =#262829= | Highlight line       |
+| nord2 | =#434C5E= | Selection, region    |
+| nord3 | =#4C566A= | Comments, line nums  |
+
+** Snow Storm (Foregrounds)
+
+| Name  | Hex       | Usage         |
+|-------+-----------+---------------|
+| nord4 | =#D8DEE9= | Default text  |
+| nord5 | =#E5E9F0= | Brighter text |
+| nord6 | =#ECEFF4= | Brightest     |
+
+** Frost (Blues)
+
+| Name   | Hex       | Usage           |
+|--------+-----------+-----------------|
+| nord7  | =#8FBCBB= | Types, level-1  |
+| nord8  | =#88C0D0= | Functions, cyan |
+| nord9  | =#81A1C1= | Keywords        |
+| nord10 | =#5E81AC= | Preprocessor    |
+
+** Aurora (Accents)
+
+| Name   | Hex       | Usage    |
+|--------+-----------+----------|
+| nord11 | =#BF616A= | Error    |
+| nord12 | =#D08770= | Warning  |
+| nord13 | =#EBCB8B= | TODO     |
+| nord14 | =#A3BE8C= | Strings  |
+| nord15 | =#B48EAD= | Numbers  |
+
+* Styled Faces
+
+| Category   | Faces                                   |
+|------------+-----------------------------------------|
+| Core       | default, cursor, fringe, hl-line        |
+| Syntax     | keywords, strings, comments, functions  |
+| Org        | levels 1-8, blocks, code, TODO/DONE     |
+| Magit      | sections, branches, diffs               |
+| Completion | company-tooltip, selection              |
+| Errors     | flycheck underlines                     |
+| Git        | git-gutter, diff faces                  |
+
+* Installation
+
+Theme lives in =themes/xz-nord-theme.el=.
+
+Loaded via xz-editor.el:
+#+begin_src elisp
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(load-theme 'xz-nord t)
+#+end_src
+
+* Customizing
+
+To modify colors, edit =themes/xz-nord-theme.el=.
+
+Key sections:
+- Line 16-36: Color definitions
+- Line 41-97: Core/UI faces
+- Line 99-121: Org mode faces
+- Line 129-137: Magit faces

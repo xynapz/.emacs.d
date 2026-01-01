@@ -1,0 +1,81 @@
+#+TITLE: Getting Started
+#+AUTHOR: Angel Dhakal
+#+STARTUP: overview
+#+OPTIONS: toc:2
+
+* First Time Setup
+
+After cloning, run:
+
+#+begin_src elisp
+M-x xz/init-setup
+#+end_src
+
+This installs:
+- Nerd Icons (for modeline/dired)
+- Tree-sitter grammars (syntax highlighting)
+- PDF Tools
+
+* Structure
+
+#+begin_example
+~/.emacs.d/
+├── init.el         # Entry point
+├── early-init.el   # GC, native-comp
+├── lisp/
+│   ├── xz-core.el       # UTF-8, fonts, basics
+│   ├── xz-package.el    # Packages, magit, projectile
+│   ├── xz-editor.el     # UI, theme, modeline
+│   ├── xz-completion.el # Vertico, corfu, eglot
+│   ├── xz-evil.el       # Vim bindings
+│   ├── xz-org.el        # Org mode, capture, agenda
+│   ├── xz-export.el     # Blog export
+│   └── lang/
+│       ├── py.el        # Python
+│       ├── cc.el        # C/C++
+│       └── web.el       # HTML/CSS/JS
+├── snippets/        # Yasnippet templates
+└── themes/          # xz-nord theme
+#+end_example
+
+* Required System Packages
+
+| Package                       | For                 |
+|-------------------------------+---------------------|
+| =ripgrep=                     | consult-ripgrep     |
+| =fd=                          | projectile          |
+| =clangd=                      | C/C++ LSP           |
+| =pyright=                     | Python LSP          |
+| =typescript-language-server=  | JS/TS LSP           |
+| =vscode-langservers-extracted= | HTML/CSS LSP       |
+| =texlive=                     | LaTeX/TikZ          |
+| =poppler-utils=               | PDF Tools           |
+
+Fedora:
+#+begin_src sh
+sudo dnf install ripgrep fd-find clang-tools-extra poppler-utils texlive
+npm install -g pyright typescript-language-server \
+    vscode-langservers-extracted
+#+end_src
+
+* Quick Commands
+
+| Key         | Action                |
+|-------------+-----------------------|
+| =C-c r r=   | Clean restart Emacs   |
+| =C-x g=     | Magit status          |
+| =C-c p p=   | Switch project        |
+| =C-c p f=   | Find file in project  |
+| =C-s=       | Search in buffer      |
+| =M-s r=     | Search in project     |
+| =C-c a=     | Org agenda            |
+| =C-c c=     | Org capture           |
+
+* Docs
+
+| File                 | Topic               |
+|----------------------+---------------------|
+| [[file:code-navigation.org][code-navigation.org]] | Evil + LSP movement |
+| [[file:org-guide.org][org-guide.org]]        | Org mode workflow   |
+| [[file:keybindings.org][keybindings.org]]      | All keybindings     |
+| [[file:modules.org][modules.org]]          | Module reference    |
