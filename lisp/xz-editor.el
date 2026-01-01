@@ -70,12 +70,15 @@
 (use-package evil-collection
   :after evil
   :ensure t
-  :custom
-  (evil-collection-setup-minibuffer t)
-  (evil-collection-calendar-want-org-bindings t)
+  :init
+  ;; Must be set BEFORE loading evil-collection
+  (setq evil-collection-setup-minibuffer t
+        evil-collection-calendar-want-org-bindings t)
   :config
-  ;; Initialize ALL modes (standard way)
-  (evil-collection-init))
+  (evil-collection-init)
+  ;; Force dired init if it missed the boat
+  (with-eval-after-load 'dired
+    (evil-collection-init 'dired)))
 
 (use-package evil-surround
   :after evil
