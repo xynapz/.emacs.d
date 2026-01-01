@@ -71,7 +71,6 @@
   (evil-collection-setup-minibuffer t)
   (evil-collection-calendar-want-org-bindings t))
 
-
 (use-package evil-surround
   :after evil
   :ensure t
