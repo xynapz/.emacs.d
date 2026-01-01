@@ -64,6 +64,9 @@
           (insert "j")
           (when evt (push evt unread-command-events)))))))
 
+;; Folding (required for evil-fold-action)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
 (use-package evil-collection
   :after evil
   :ensure t
@@ -71,6 +74,7 @@
   (evil-collection-setup-minibuffer t)
   (evil-collection-calendar-want-org-bindings t)
   :config
+  ;; Initialize ALL modes (standard way)
   (evil-collection-init))
 
 (use-package evil-surround

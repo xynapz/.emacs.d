@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+;; Evil setup - Must be set before evil disables it
+(setq evil-want-keybinding nil)
+
 ;; Add lisp directory to load-path
 (defvar xz/config-root
   (file-name-directory (or load-file-name buffer-file-name user-init-file))
