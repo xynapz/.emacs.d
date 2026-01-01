@@ -41,12 +41,14 @@
 ;; Evil Mode
 (use-package evil
   :ensure t
-  :preface
-  (customize-set-variable 'evil-want-integration t)
-  (customize-set-variable 'evil-want-keybinding nil)
-  (customize-set-variable 'evil-undo-system 'undo-redo)
-  (customize-set-variable 'evil-want-C-u-scroll t)
-  (customize-set-variable 'evil-want-C-u-delete t)
+  :init
+  (setq evil-want-integration t
+        evil-want-C-u-scroll t
+        evil-want-C-d-scroll t
+        evil-want-C-u-delete t
+        evil-undo-system 'undo-redo
+        evil-split-window-below t
+        evil-vsplit-window-right t)
   :config
   (evil-mode 1)
 
