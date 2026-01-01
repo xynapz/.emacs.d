@@ -26,7 +26,7 @@ This installs:
 │   ├── xz-core.el       # UTF-8, fonts, basics
 │   ├── xz-package.el    # Packages, magit, projectile
 │   ├── xz-editor.el     # UI, theme, modeline
-│   ├── xz-completion.el # Vertico, corfu, eglot
+│   ├── xz-completion.el # Vertico, corfu, lsp-mode
 │   ├── xz-evil.el       # Vim bindings
 │   ├── xz-org.el        # Org mode, capture, agenda
 │   ├── xz-export.el     # Blog export

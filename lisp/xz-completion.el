@@ -42,40 +42,34 @@
   (global-corfu-mode)
   (corfu-popupinfo-mode))
 
-;; Eglot LSP
-(use-package eglot
-  :ensure nil
-  :bind (:map eglot-mode-map
-              ("C-c e r" . eglot-rename)
-              ("C-c e a" . eglot-code-actions)
-              ("C-c e f" . eglot-format))
-  :config
-  (setq eglot-autoshutdown t
-        eglot-events-buffer-size 2000000)
+;; LSP Mode
+(use-package lsp-mode
+  :custom
+  (lsp-completion-provider :none) ;; We use Corfu!
+  (lsp-headerline-breadcrumb-enable nil) ;; Keep it clean
+  :init
+  (defun xz/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless for lsp-capf
+  :hook
+  (lsp-completion-mode . xz/lsp-mode-setup-completion)
+  ((c-mode c++-mode c-ts-mode c++-ts-mode
+    python-mode python-ts-mode
+    js-mode js-ts-mode typescript-ts-mode tsx-ts-mode
+    web-mode css-mode css-ts-mode) . lsp-deferred)
+  :commands (lsp lsp-deferred))
 
-  ;; Consolidated LSP server configuration
-  (with-eval-after-load 'eglot
-    (let ((servers
-           '((("clangd" "--clang-tidy") . (c-mode c++-mode c-ts-mode c++-ts-mode))
-             (("pyright-langserver" "--stdio") . (python-mode python-ts-mode))
-             (("typescript-language-server" "--stdio") . (js-mode js-ts-mode typescript-ts-mode tsx-ts-mode))
-             (("vscode-html-language-server" "--stdio") . (web-mode mhtml-mode))
-             (("vscode-css-language-server" "--stdio") . (css-mode css-ts-mode)))))
-      
-      (dolist (server servers)
-        (let ((cmd (car (car server)))     ; executable name
-              (full-cmd (car server))      ; full command list
-              (modes (cdr server)))        ; affected modes
-          
-          (if (executable-find cmd)
-              (progn
-                ;; 1. Register server
-                (add-to-list 'eglot-server-programs `(,modes . ,full-cmd))
-                ;; 2. Add eglot-ensure hook ONLY for supported modes
-                (dolist (m modes)
-                  (let ((hook-name (intern (concat (symbol-name m) "-hook"))))
-                    (add-hook hook-name #'eglot-ensure))))
-            (message "[XZ-Config] Warning: %s not found. Skipping LSP setup for %s" cmd modes)))))))
+;; LSP UI
+(use-package lsp-ui
+  :after lsp-mode
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-position 'at-point)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-code-actions t))
 
 ;; Helpful
 (use-package helpful

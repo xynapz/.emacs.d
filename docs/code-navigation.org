@@ -133,45 +133,41 @@ Type =/pattern= then =RET= to search.
 | =M-g i= | =consult-imenu= (symbols)     |
 #+TBLFM: $2=consult-line= (fuzzy)
 
-* LSP / Eglot (Code Intelligence)
+* LSP Mode (Code Intelligence)
 
-Your config uses Eglot for LSP.
+We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
 
 ** Navigation
 
 | Key | Action            | Binding               |
 |-----+-------------------+-----------------------|
-| =gd=  | Go to definition  | =xref-find-definitions= |
-| =gr=  | Find references   | =xref-find-references=  |
-| =K=   | Hover (show docs) | =eldoc=                 |
+| =gd=  | Go to definition  | =lsp-find-definition=   |
+| =gr=  | Find references   | =lsp-find-references=   |
+| =K=   | Hover (show docs) | =lsp-ui-doc-glance=     |
 | =C-o= | Jump back         | =xref-go-back=          |
 
-** Actions
+** Actions and Refactoring
 
-| Key     | Action        |
-|---------+---------------|
-| =C-c e r= | Rename symbol |
-| =C-c e a= | Code actions  |
-| =C-c e f= | Format buffer |
+| Key       | Action           |
+|-----------+------------------|
+| =C-c l r=   | Rename symbol    |
+| =C-c l a=   | Code actions     |
+| =C-c l ==   | Format buffer    |
+| =C-c l h h= | Toggle Highlights|
 
-** Errors / Diagnostics
+** UI Features (lsp-ui)
 
-| Key     | Action         |
-|---------+----------------|
-| =M-g M-n= | Next error     |
-| =M-g M-n= | Next error     |
-| =M-g M-p= | Previous error |
+- **Sideline**: Shows diagnostics and info on the right side of the code.
+- **Doc**: Shows documentation in a popup when hovering (or using =K=).
 
 ** Troubleshooting
 
 | Command | Purpose |
 |---------+---------|
-| =M-x eglot-events-buffer= | View JSON-RPC logs (server communication) |
-| =M-x eglot-stderr-buffer= | View server error logs |
-| =M-x eglot-shutdown= | Stop the current server |
-| =M-x eglot= | Start/Restart server manualy |
+| =M-x lsp-describe-session= | View current server status |
+| =M-x lsp-log-io= | Enable IO logging if things break |
+| =M-x lsp-workspace-restart= | Restart the server |
 
-Look for "Eglot: <ServerName>" in the mode line to confirm status.
 
 * Editing (Normal Mode)
 ** Operators
