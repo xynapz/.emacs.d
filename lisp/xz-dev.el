@@ -4,15 +4,15 @@
 
 (use-package projectile
   :ensure t
+  :bind-keymap ("C-c p" . projectile-command-map)
   :init
-  (projectile-mode +1)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map))
-  :config
   (setq projectile-project-search-path '("~/xynapz/")
         projectile-completion-system 'default
         projectile-enable-caching t
-        projectile-indexing-method 'alien))
+        projectile-indexing-method 'alien)
+  :config
+(projectile-mode +1)
+  )
 
 (use-package magit
   :ensure t
