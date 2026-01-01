@@ -55,21 +55,21 @@
 
   ;; Consolidated LSP server configuration
   (with-eval-after-load 'eglot
-    ;; C/C++ (clangd)
-    (add-to-list 'eglot-server-programs
-                 '((c-mode c++-mode c-ts-mode c++-ts-mode) . ("clangd" "--clang-tidy")))
-    ;; Python (pyright)
-    (add-to-list 'eglot-server-programs
-                 '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-    ;; JS/TS (typescript-language-server)
-    (add-to-list 'eglot-server-programs
-                 '((js-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . ("typescript-language-server" "--stdio")))
-    ;; Web/HTML (vscode-html-language-server)
-    (add-to-list 'eglot-server-programs
-                 '((web-mode mhtml-mode) . ("vscode-html-language-server" "--stdio")))
-    ;; CSS (vscode-css-language-server)
-    (add-to-list 'eglot-server-programs
-                 '((css-mode css-ts-mode) . ("vscode-css-language-server" "--stdio"))))
+    (let ((servers
+           '((("clangd" "--clang-tidy") . (c-mode c++-mode c-ts-mode c++-ts-mode))
+             (("pyright-langserver" "--stdio") . (python-mode python-ts-mode))
+             (("typescript-language-server" "--stdio") . (js-mode js-ts-mode typescript-ts-mode tsx-ts-mode))
+             (("vscode-html-language-server" "--stdio") . (web-mode mhtml-mode))
+             (("vscode-css-language-server" "--stdio") . (css-mode css-ts-mode)))))
+      
+      (dolist (server servers)
+        (let ((cmd (car (car server)))     ; executable name
+              (full-cmd (car server))      ; full command list
+              (modes (cdr server)))        ; affected modes
+          
+          (if (executable-find cmd)
+              (add-to-list 'eglot-server-programs `(,modes . ,full-cmd))
+            (message "[XZ-Config] Warning: %s not found. LSP for %s will not work." cmd modes))))))
 
   ;; Ensure Eglot can actually start automatically
   (dolist (mode '(python-ts-mode-hook
