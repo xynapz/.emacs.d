@@ -44,20 +44,25 @@
 
 ;; LSP Mode
 (use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c-mode c++-mode c-ts-mode c++-ts-mode
+          js-mode js-ts-mode typescript-ts-mode tsx-ts-mode
+          web-mode css-mode css-ts-mode) . lsp-deferred)
+  :commands (lsp lsp-deferred)
   :custom
   (lsp-completion-provider :none) ;; We use Corfu!
-  (lsp-headerline-breadcrumb-enable nil) ;; Keep it clean
-  :init
-  (defun xz/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless))) ;; Configure orderless for lsp-capf
-  :hook
-  (lsp-completion-mode . xz/lsp-mode-setup-completion)
-  ((c-mode c++-mode c-ts-mode c++-ts-mode
-    python-mode python-ts-mode
-    js-mode js-ts-mode typescript-ts-mode tsx-ts-mode
-    web-mode css-mode css-ts-mode) . lsp-deferred)
-  :commands (lsp lsp-deferred))
+  (lsp-headerline-breadcrumb-enable nil))
+
+;; Python (Pyright)
+;; We need this package to properly register pyright as the preferred client
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp-deferred))))
 
 ;; LSP UI
 (use-package lsp-ui

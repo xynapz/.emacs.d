@@ -17,9 +17,6 @@
 (use-package desktop
   :ensure nil
   :config
-  (setq desktop-save t
-        desktop-load-locked-desktop t
-        desktop-restore-eager 5)
   (desktop-save-mode 1))
 
 (use-package hl-line
