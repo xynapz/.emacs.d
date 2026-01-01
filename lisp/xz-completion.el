@@ -50,8 +50,7 @@
               ("C-c e a" . eglot-code-actions)
               ("C-c e f" . eglot-format))
   :config
-  (setq eglot-events-buffer-size 0
-        eglot-autoshutdown t)
+  (setq eglot-autoshutdown t)
 
   ;; Consolidated LSP server configuration
   (with-eval-after-load 'eglot
