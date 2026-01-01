@@ -26,6 +26,7 @@
 
 ;; 4. Evil & Editing
 (require 'xz-editor)
+(require 'xz-evil)
 
 ;; 5. Completion (Vertico/Corfu)
 (require 'xz-completion)
