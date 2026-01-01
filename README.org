@@ -2,7 +2,7 @@
 #+AUTHOR: Angel Dhakal
 #+OPTIONS: toc:nil num:nil
 
-Minimal Emacs config with Evil mode, LSP, and Org workflow.
+Robust, modular Emacs configuration with Evil mode, LSP, and Org workflow.
 
 * Setup
 
@@ -11,65 +11,57 @@ git clone https://github.com/xynapz/.emacs.d ~/.emacs.d
 #+end_src
 
 First launch:
-#+begin_src elisp
-M-x xz/init-setup
-#+end_src
+1. Emacs will automatically bootstrap packages.
+2. If prompted for VTerm compilation, answer *y* (requires =cmake=).
+3. Install fonts and grammars:
 
-Installs nerd-icons, tree-sitter grammars, PDF tools.
+#+begin_src elisp
+M-x nerd-icons-install-fonts
+M-x xz/install-treesit-grammars
+#+end_src
 
 * Structure
 
-| Path          | Purpose            |
-|---------------+--------------------|
-| =init.el=     | Entry point        |
-| =lisp/=       | Modules            |
-| =lisp/lang/=  | Language configs   |
-| =themes/=     | xz-nord theme      |
-| =snippets/=   | Yasnippet snippets |
-| =docs/=       | Documentation      |
+| Path             | Purpose            |
+|------------------+--------------------|
+| =init.el=        | Entry point        |
+| =early-init.el=  | Startup optims     |
+| =lisp/=          | Core Modules       |
+| =themes/=        | xz-nord theme      |
+| =snippets/=      | Yasnippet snippets |
+| =docs/=          | Documentation      |
 
-* Modules
+* Modules (lisp/)
 
-| File             | Purpose              |
-|------------------+----------------------|
-| =xz-core.el=     | UTF-8, fonts, basics |
-| =xz-package.el=  | Magit, projectile    |
-| =xz-editor.el=   | UI, modeline, theme  |
-| =xz-completion.el= | Vertico, corfu, LSP |
-| =xz-evil.el=     | Vim bindings         |
-| =xz-org.el=      | Org mode, agenda     |
-| =xz-export.el=   | Blog export          |
+| File               | Purpose                         |
+|--------------------+---------------------------------|
+| =xz-core.el=       | Settings (UTF-8, Desktop Fix)   |
+| =xz-pkg.el=        | Package setup (ELPA/MELPA)      |
+| =xz-ui.el=         | UI, Nord Theme, Doom Modeline   |
+| =xz-editor.el=     | Evil, editing, windows          |
+| =xz-completion.el= | Vertico, Consult, Corfu         |
+| =xz-dev.el=        | LSP, Treesit, Magit, Projectile |
+| =xz-org.el=        | Org mode, agenda, capture       |
+| =xz-export.el=     | Blog export (ox-html)           |
 
 * Features
 
-- *Evil Mode*: Full vim emulation with jk escape
-- *LSP*: Eglot with pyright, clangd, typescript-language-server
-- *Completion*: Vertico + Orderless + Corfu
+- *Evil Mode*: Full vim emulation + evil-collection
+- *LSP*: Robust lsp-mode with performance tuning
+- *Completion*: Modern stack (Vertico + Consult + Corfu)
 - *Theme*: xz-nord (darker Nord variant)
-- *Org*: Capture templates, agenda views
-
-* Docs
-
-| File                          | Topic               |
-|-------------------------------+---------------------|
-| [[file:docs/getting-started.org][getting-started.org]]           | Setup, dependencies |
-| [[file:docs/keybindings.org][keybindings.org]]               | All keybindings     |
-| [[file:docs/modules.org][modules.org]]                   | Module reference    |
-| [[file:docs/evil.org][evil.org]]                      | Evil mode usage     |
-| [[file:docs/code-navigation.org][code-navigation.org]]           | Movement, LSP       |
-| [[file:docs/org-guide.org][org-guide.org]]                 | Org mode workflow   |
-| [[file:docs/theme.org][theme.org]]                     | xz-nord theme       |
+- *Org*: Pro capture templates and productivity system
 
 * Requirements
 
-| Package                       | For       |
-|-------------------------------+-----------|
-| ripgrep                       | Search    |
-| fd                            | Projectile |
-| clangd                        | C/C++ LSP |
-| pyright                       | Python LSP |
-| typescript-language-server    | JS/TS LSP |
+| Package    | For       |
+|------------+-----------|
+| cmake      | vterm compilation |
+| ripgrep    | Consult grep |
+| fd         | Projectile |
+| pyright    | Python LSP |
+| clangd     | C/C++ LSP |
 
 * License
 
-MIT for original code. GPL portions from packages retain original licenses.
+MIT

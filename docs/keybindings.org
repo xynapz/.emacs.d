@@ -10,18 +10,13 @@
 | =C-x C-b=     | Ibuffer                   | xz-editor      |
 | =C-x b=       | consult-buffer            | xz-completion  |
 | =C-x k=       | Kill this buffer          | xz-editor      |
-| =C-x C-j=     | Dired jump                | xz-package     |
-| =C-x g=       | Magit status              | xz-package     |
+| =C-x g=       | Magit status              | xz-dev         |
+| =C-c t=       | Toggle VTerm              | xz-dev         |
+| =C-c r r=     | Clean restart             | xz-pkg         |
 | =M-o=         | Other window              | xz-editor      |
 | =C-c s=       | Save buffer               | xz-editor      |
 | =C-c w=       | Delete trailing whitespace | xz-editor     |
 | =C-c r=       | Revert buffer             | xz-editor      |
-| =C-c r r=     | Clean restart             | xz-package     |
-| =C-c ==       | Zoom in                   | xz-editor      |
-| =C-c -=       | Zoom out                  | xz-editor      |
-| =C-c /=       | Comment line              | xz-editor      |
-| =C-c <left>=  | Winner undo               | xz-editor      |
-| =C-c <right>= | Winner redo               | xz-editor      |
 
 * Search / Navigation
 
@@ -33,35 +28,26 @@
 | =M-g i= | consult-imenu     | xz-completion |
 | =M-y=   | consult-yank-pop  | xz-completion |
 
-* Projectile
+* Projectile (Projects)
 
-| Key       | Action                   |
-|-----------+--------------------------|
-| =C-c p p= | Switch project           |
-| =C-c p f= | Find file in project     |
-| =C-c p s r= | Ripgrep in project     |
-| =C-c p b= | Switch buffer in project |
-| =C-c p k= | Kill project buffers     |
+| Key         | Action                   |
+|-------------+--------------------------|
+| =C-c p p=   | Switch project           |
+| =C-c p f=   | Find file in project     |
+| =C-c p s r= | Ripgrep in project       |
+| =C-c p b=   | Switch buffer in project |
+| =C-c p k=   | Kill project buffers     |
 
-* Eglot (LSP)
+* LSP (Code Intelligence)
 
 | Key       | Action       |
 |-----------+--------------|
-| =C-c e r= | Rename       |
-| =C-c e a= | Code actions |
-| =C-c e f= | Format       |
+| =C-c l r= | Rename       |
+| =C-c l a= | Code actions |
+| =C-c l == | Format       |
 | =gd=      | Definition   |
 | =gr=      | References   |
 | =K=       | Hover docs   |
-
-* Multiple Cursors
-
-| Key           | Action                |
-|---------------+-----------------------|
-| =C-S-c C-S-c= | Edit lines            |
-| =C->=         | Mark next like this   |
-| =C-<=         | Mark previous         |
-| =C-c C-<=     | Mark all like this    |
 
 * Org Mode
 
@@ -75,9 +61,6 @@
 | =C-c C-t= | Toggle TODO         |
 | =C-c C-w= | Refile              |
 | =TAB=     | Fold/unfold         |
-| =S-TAB=   | Cycle all           |
-| =M-RET=   | New heading         |
-| =M-S-RET= | New TODO heading    |
 
 * Evil Mode
 
@@ -86,17 +69,8 @@ See [[file:code-navigation.org][code-navigation.org]] for full reference.
 | Key   | Action                 |
 |-------+------------------------|
 | =ESC= | Normal mode            |
-| =i=   | Insert mode            |
-| =v=   | Visual mode            |
-| =:=   | Command mode           |
 | =jk=  | Escape (insert → normal) |
 | =gc=  | Comment (evil-commentary) |
-
-* Evil Surround
-
-| Keys    | Action                   |
-|---------+--------------------------|
-| =cs"'=  | Change surrounding " to ' |
-| =ds(=   | Delete surrounding ()    |
-| =ysiw]= | Surround word with []    |
-| =S"=    | Surround selection       |
+| =cs=  | Change surround        |
+| =ds=  | Delete surround        |
+| =ys=  | Add surround           |

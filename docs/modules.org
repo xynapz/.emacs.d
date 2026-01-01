@@ -5,82 +5,68 @@
 
 * Load Order
 
+Managed in =init.el=:
+
 #+begin_src elisp
-(load "xz-core")       ; Basics
-(load "xz-package")    ; Packages
-(load "xz-editor")     ; UI
-(load "xz-completion") ; Completion
-(load "xz-evil")       ; Vim
-(load "xz-org")        ; Org mode
-(load "xz-export")     ; Blog export
-(load "cc")            ; C/C++
-(load "web")           ; HTML/CSS/JS
-(load "py")            ; Python
+(require 'xz-pkg)        ; Packages
+(require 'xz-core)       ; Basics
+(require 'xz-ui)         ; UI & Theme
+(require 'xz-editor)     ; Customizations
+(require 'xz-completion) ; Completion
+(require 'xz-dev)        ; Dev Tools
+(require 'xz-org)        ; Org
+(require 'xz-export)     ; Export
 #+end_src
 
 * xz-core.el
 
-Basics that need to load first.
+Foundational settings.
 
 | Setting           | Value               |
 |-------------------+---------------------|
-| Encoding          | UTF-8 everywhere    |
-| Font              | Iosevka 194pt       |
-| Tab width         | 4 spaces            |
-| Fill column       | 80                  |
+| Encoding          | UTF-8               |
 | Backups           | Disabled            |
-| Lockfiles         | Disabled            |
-| Scroll margin     | 3 lines             |
-| y-or-n            | Enabled             |
+| Auto Revert       | Enabled (Global)    |
+| Desktop           | Saved (filtered)    |
+| Recentf           | Enabled (200 items) |
 
-* xz-package.el
+* xz-pkg.el
 
-Package management and common tools.
+Package management infrastructure.
 
-| Package    | Purpose                |
-|------------+------------------------|
-| use-package | Package config        |
-| which-key  | Keybinding hints       |
-| magit      | Git                    |
-| projectile | Project management     |
-| nerd-icons | Icons for modeline     |
-| auctex     | LaTeX                  |
-| pdf-tools  | PDF viewing            |
-| treesit    | Tree-sitter modes      |
-| restart-emacs | Clean restart       |
+| Package             | Purpose           |
+|---------------------+-------------------|
+| use-package         | Config macro      |
+| auto-package-update | Auto updates      |
+| restart-emacs       | Safe restarting   |
 
-Custom functions:
-- =xz/init-setup= - First-time install
-- =xz/clean-restart= - Clear cache & restart
-- =xz/install-treesit-grammars= - Install grammars
+* xz-ui.el
+
+Visual appearance.
+
+| Feature         | Implementation       |
+|-----------------+----------------------|
+| Theme           | xz-nord (Nord fork)  |
+| Modeline        | doom-modeline        |
+| Fonts           | Iosevka              |
+| Icons           | nerd-icons           |
 
 * xz-editor.el
 
-UI and editing behavior.
-
-| Feature           | State    |
-|-------------------+----------|
-| Menu bar          | Off      |
-| Tool bar          | Off      |
-| Scroll bar        | Off      |
-| Line numbers      | Relative |
-| Highlight line    | On       |
-| Visual line mode  | On       |
-| Electric pairs    | On       |
-| Show paren        | On       |
-| Desktop save      | On       |
+Editing behavior and Evil integration.
 
 | Package          | Purpose            |
 |------------------+--------------------|
-| doom-modeline    | Status bar         |
-| xz-nord theme    | Color scheme       |
-| yasnippet        | Snippets           |
-| multiple-cursors | Multi-cursor       |
-| winner           | Window history     |
+| evil             | Vim emulation      |
+| evil-collection  | Omni-bindings      |
+| evil-surround    | Surround ops       |
+| evil-commentary  | Commenting         |
+| display-line-numbers | Relative lines |
+| elect-pair       | Auto brackets      |
 
 * xz-completion.el
 
-Completion and LSP.
+Modern completion stack.
 
 | Package    | Purpose              |
 |------------+----------------------|
@@ -89,79 +75,29 @@ Completion and LSP.
 | marginalia | Rich annotations     |
 | consult    | Search commands      |
 | corfu      | In-buffer completion |
-| eglot      | LSP client           |
-| helpful    | Better help          |
 
-LSP servers configured:
-| Language | Server                     |
-|----------+----------------------------|
-| C/C++    | clangd                     |
-| Python   | pyright                    |
-| JS/TS    | typescript-language-server |
-| HTML     | vscode-html-language-server |
-| CSS      | vscode-css-language-server |
+* xz-dev.el
 
-* xz-evil.el
+Developer tools and languages.
 
-Vim bindings.
+| Package     | Purpose                  |
+|-------------+--------------------------|
+| lsp-mode    | Language Server Protocol |
+| treesit     | Syntax Highlighting      |
+| projectile  | Project management       |
+| magit       | Git client               |
+| vterm       | Terminal                 |
 
-| Package          | Purpose         |
-|------------------+-----------------|
-| evil             | Vim emulation   |
-| evil-collection  | Mode bindings   |
-| evil-surround    | Surround ops    |
-| evil-commentary  | gc to comment   |
-
-Settings:
-- C-u/C-d scroll
-- Y yanks to EOL
-- jk escapes insert mode
-- Cursor colors per state
+** Languages Configured
+- Python (pyright + treesit)
+- JavaScript/TypeScript (ts-ls + treesit)
+- C/C++ (clangd + treesit)
+- Web (HTML/CSS LSPs)
 
 * xz-org.el
 
 Org mode setup. See [[file:org-guide.org][org-guide.org]].
 
-| Feature         | Details              |
-|-----------------+----------------------|
-| Agenda files    | ~/org/               |
-| Capture targets | inbox, projects, etc |
-| TODO states     | TODO → NEXT → DONE   |
-| Babel langs     | Python, Shell, Elisp |
-
 * xz-export.el
 
 Blog export for angeld site.
-
-| Function           | Purpose              |
-|--------------------+----------------------|
-| =xzhh/batch-export= | Export all org files |
-| =xzhh/test-export=  | Test export config   |
-
-* Language Modules
-
-** py.el
-
-| Feature    | Details           |
-|------------+-------------------|
-| Mode       | python-ts-mode    |
-| LSP        | pyright           |
-| Formatter  | black             |
-| Pyenv      | Auto-activate     |
-
-** cc.el
-
-| Feature | Details          |
-|---------+------------------|
-| Mode    | c-ts-mode        |
-| LSP     | clangd           |
-| Style   | linux (2 spaces) |
-
-** web.el
-
-| Feature | Details                |
-|---------+------------------------|
-| Mode    | web-mode               |
-| Engines | Jinja2 for .html       |
-| LSP     | HTML/CSS servers       |
-| Indent  | 2 spaces               |

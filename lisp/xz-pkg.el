@@ -29,5 +29,10 @@
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t))
 
+;; Restart Emacs
+(use-package restart-emacs
+  :ensure t
+  :bind ("C-c r r" . restart-emacs))
+
 (provide 'xz-pkg)
 ;;; xz-pkg.el ends here

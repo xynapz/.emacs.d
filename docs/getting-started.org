@@ -1,103 +1,40 @@
 #+TITLE: Getting Started
-#+AUTHOR: Angel Dhakal
-#+STARTUP: overview
-#+OPTIONS: toc:2
+#+OPTIONS: toc:nil
 
-* First Time Setup
+* Installation
 
-After cloning, run:
+1. Clone the repository:
+   #+begin_src sh
+   git clone https://github.com/xynapz/.emacs.d ~/.emacs.d
+   #+end_src
 
-#+begin_src elisp
-M-x xz/init-setup
-#+end_src
+2. Start Emacs. It will automatically download dependencies.
 
-This installs:
-- Nerd Icons (for modeline/dired)
-- Tree-sitter grammars (syntax highlighting)
-- PDF Tools
+3. *Important*: If prompted to compile =vterm-module=, say *yes*. You will need =cmake= and =libtool= installed on your system.
+   - Debian/Ubuntu: =sudo apt install cmake libtool-bin libvterm-dev=
+   - Fedora: =sudo dnf install cmake libtool libvterm-devel=
 
-* Structure
+4. Run post-install setup commands inside Emacs:
+   - =M-x nerd-icons-install-fonts= (Installing fonts)
+   - =M-x xz/install-treesit-grammars= (Installing tree-sitter languages)
 
-#+begin_example
-~/.emacs.d/
-├── init.el         # Entry point
-├── early-init.el   # GC, native-comp
-├── lisp/
-│   ├── xz-core.el       # UTF-8, fonts, basics
-│   ├── xz-package.el    # Packages, magit, projectile
-│   ├── xz-editor.el     # UI, theme, modeline
-│   ├── xz-completion.el # Vertico, corfu, lsp-mode
-│   ├── xz-evil.el       # Vim bindings
-│   ├── xz-org.el        # Org mode, capture, agenda
-│   ├── xz-export.el     # Blog export
-│   └── lang/
-│       ├── py.el        # Python
-│       ├── cc.el        # C/C++
-│       └── web.el       # HTML/CSS/JS
-├── snippets/        # Yasnippet templates
-└── themes/          # xz-nord theme
-#+end_example
+* Verification
 
-* Required System Packages
+To verify everything is working:
+1. Open a Python file (=test.py=).
+2. Check if LSP starts (check mode line or =M-x lsp-describe-session=).
+3. Try completion (start typing, see Corfu popup).
+4. Try fuzzy finding files (=C-c p f= or =SPC f f= if mapped).
 
-| Package                       | For                 |
-|-------------------------------+---------------------|
-| =ripgrep=                     | consult-ripgrep     |
-| =fd=                          | projectile          |
-| =clangd=                      | C/C++ LSP           |
-| =pyright=                     | Python LSP          |
-| =typescript-language-server=  | JS/TS LSP           |
-| =vscode-langservers-extracted= | HTML/CSS LSP       |
-| =texlive=                     | LaTeX/TikZ          |
-| =poppler-utils=               | PDF Tools           |
+* Troubleshooting
 
-Fedora:
-#+begin_src sh
-# System Tools (C++, PDF, Search)
-sudo dnf install ripgrep fd-find \
-    clang-tools-extra \
-    poppler-utils \
-    texlive-scheme-full
+** Icons are boxes
+Run =M-x nerd-icons-install-fonts= and restart Emacs.
 
-# Node.js (Required for most LSPs)
-sudo dnf install nodejs npm
-#+end_src
+** VTerm error
+Ensure you have CMake installed. Run =M-x vterm-module-compile=.
 
-LSP Servers & Formatters (Global Install):
-#+begin_src sh
-# Python (LSP)
-sudo npm install -g pyright
-
-# Python (Formatters - Install via pip)
-sudo pip install black
-
-# JavaScript / TypeScript (LSP)
-sudo npm install -g typescript-language-server typescript
-
-# HTML / CSS / JSON (LSP)
-sudo npm install -g vscode-langservers-extracted
-
-# C/C++ formatter (clang-format) is part of clang-tools-extra above.
-#+end_src
-
-* Quick Commands
-
-| Key         | Action                |
-|-------------+-----------------------|
-| =C-c r r=   | Clean restart (Safe, keeps session) |
-| =C-x g=     | Magit status          |
-| =C-c p p=   | Switch project        |
-| =C-c p f=   | Find file in project  |
-| =C-s=       | Search in buffer      |
-| =M-s r=     | Search in project     |
-| =C-c a=     | Org agenda            |
-| =C-c c=     | Org capture           |
-
-* Docs
-
-| File                 | Topic               |
-|----------------------+---------------------|
-| [[file:code-navigation.org][code-navigation.org]] | Evil + LSP movement |
-| [[file:org-guide.org][org-guide.org]]        | Org mode workflow   |
-| [[file:keybindings.org][keybindings.org]]      | All keybindings     |
-| [[file:modules.org][modules.org]]          | Module reference    |
+** LSP not Starting
+Most likely the language server is missing.
+- Python: =npm i -g pyright=
+- JS/TS: =npm i -g typescript-language-server=
