@@ -1,68 +1,88 @@
-;;; xz-core.el --- Core settings -*-lexical-binding: t; -*-
+;;; xz-core.el --- Core Emacs settings -*- lexical-binding: t; -*-
+
 ;;; Commentary:
-;; code config.
+;; Basic Emacs defaults, session management, and file handling.
 
 ;;; Code:
-;; UTF-8 everywhere
-(setq-default buffer-file-coding-system 'utf-8-unix)
+
+;; General
+(setq-default
+ fill-column 80
+ tab-width 4
+ indent-tabs-mode nil
+ sentence-end-double-space nil)
+
+;; UTF-8
+(set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
-(prefer-coding-system 'utf-8)
 
-;; Startup behavior
-;; (setopt initial-scratch-message nil
-(setq inhibit-startup-screen nil)
-;;         initial-major-mode 'fundamental-mode)
-
-(add-hook 'server-after-make-frame-hook
-          (lambda ()
-            (when (string= (buffer-name) "*scratch*")
-              (if (and (display-graphic-p)
-                       (fboundp 'fancy-startup-screen))
-                  (fancy-startup-screen)
-                (display-startup-screen)))))
-
-;; Reduce clutter
+;; No backup/lock files
 (setq make-backup-files nil
       auto-save-default nil
-      create-lockfiles nil
-      auto-save-list-file-prefix nil)
+      create-lockfiles nil)
 
-;; Frame basics
-;; (add-to-list 'default-frame-alist '(alpha-background . 100))
-;; (add-to-list 'default-frame-alist '(undecorated . nil))
-(setopt frame-title-format "%b")
+;; Quiet
+(setq visible-bell nil
+      ring-bell-function 'ignore)
 
-;; Fonts
-(set-face-attribute 'default nil :family "Iosevka" :height 194)
-(set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 194)
-(set-face-attribute 'variable-pitch nil :family "Iosevka" :height 194)
+;; Auto-revert buffers when file changes
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 
-;; Performance (GC handled in early-init.el)
-(setq read-process-output-max (* 1024 1024))
+;; Recent files
+(use-package recentf
+  :ensure nil
+  :config
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 200))
 
-(setq-default bidi-display-reordering nil
-              bidi-paragraph-direction 'left-to-right)
+;; Save history (minibuffer)
+(use-package savehist
+  :ensure nil
+  :config
+  (savehist-mode 1))
 
-;; Better defaults
-(setq-default fill-column 80
-              sentence-end-double-space nil
-              tab-width 4
-              indent-tabs-mode nil)
+;; Save place in files
+(use-package saveplace
+  :ensure nil
+  :config
+  (save-place-mode 1))
 
-;; Scrolling
-(setq scroll-margin 3
-      scroll-conservatively 101
-      scroll-preserve-screen-position t
-      auto-window-vscroll nil)
+;; Desktop Session (Fix for stale sessions)
+(use-package desktop
+  :ensure nil
+  :config
+  (setq desktop-save t
+        desktop-load-locked-desktop t
+        desktop-auto-save-timeout 300)
 
-;; Yes/No prompts
-(defalias 'yes-or-no-p 'y-or-n-p)
+  ;; Don't save these buffers
+  (setq desktop-buffers-not-to-save
+        (concat "\\("
+                "^nn\\.a[0-9]+\\.d"
+                "\\|\\.log\\|.log\\'"
+                "\\|^\\*scratch\\*$"
+                "\\|^\\*Messages\\*$"
+                "\\|^\\*Warnings\\*$"
+                "\\|^\\*Help\\*$"
+                "\\|^\\*info\\*$"
+                "\\|^\\*Compile-Log\\*$"
+                "\\|^\\*Backtrace\\*$"
+                "\\|^\\*Magit"
+                "\\|^\\*Async-native-compile-log\\*"
+                "\\)"))
 
-;; Recent files (defer loading)
-(add-hook 'emacs-startup-hook
-          (lambda () (recentf-mode 1)))
+  ;; Don't save these global variables
+  (setq desktop-globals-to-save
+        (delq 'register-alist desktop-globals-to-save))
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+  (desktop-save-mode 1))
+
+;; Window Management
+(use-package winner
+  :ensure nil
+  :config
+  (winner-mode 1))
 
 (provide 'xz-core)
 ;;; xz-core.el ends here

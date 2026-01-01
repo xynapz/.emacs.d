@@ -1,27 +1,38 @@
-;;; init.el --- entry point -*- lexical-binding: t; -*-
+;;; init.el --- Emacs Configuration Entry Point -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Minimal Emacs config
+;; Modular Emacs configuration refactored for stability and performance.
 
 ;;; Code:
 
-;; Add Lisp directories
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lisp/lang" user-emacs-directory))
+;; Add lisp directory to load-path
+(defvar xz/config-root
+  (file-name-directory (or load-file-name buffer-file-name user-init-file))
+  "The root of the configuration.")
 
-;; Load modules
-(load "xz-core")
-(load "xz-package")
-(load "xz-editor")
-(load "xz-completion")
-(load "xz-evil")
-(load "xz-org")
-(load "xz-export")
+(add-to-list 'load-path (expand-file-name "lisp" xz/config-root))
 
-;; Languages
-(load "cc")
-(load "web")
-(load "py")
+;; 1. Package Management
+(require 'xz-pkg)
+
+;; 2. Core Settings (Editor defaults, Desktop session, etc.)
+(require 'xz-core)
+
+;; 3. UI & Theme
+(require 'xz-ui)
+
+;; 4. Evil & Editing
+(require 'xz-editor)
+
+;; 5. Completion (Vertico/Corfu)
+(require 'xz-completion)
+
+;; 6. Development (LSP, Treesit, Languages)
+(require 'xz-dev)
+
+;; 7. Org Mode & Export (Preserved modules)
+(require 'xz-org)
+(require 'xz-export)
 
 ;;; init.el ends here
 (custom-set-variables
@@ -29,9 +40,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("646f492c314c2621ac2dd98a81679aa73a0a38a4e16cc16d9f048594705ba27c"
-     "5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb" default))
  '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

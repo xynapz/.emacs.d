@@ -1,37 +1,93 @@
-;;; xz-completion.el --- Completion -*- lexical-binding: t; -*-
-;;; Commentary:
-;; Minimal completion setup
+;;; xz-completion.el --- Completion stack -*- lexical-binding: t; -*-
 
 ;;; Code:
 
-;; Vertico
+;; Minibuffer Completion (Vertico)
 (use-package vertico
-  :init (vertico-mode)
+  :ensure t
+  :init
+  (vertico-mode)
   :custom
   (vertico-cycle t)
-  (vertico-count 10))
+  (vertico-count 12))
 
-;; Orderless
-(use-package orderless
-  :config
-  (setq completion-styles '(orderless basic)
-        completion-category-overrides '((file (styles partial-completion)))))
+;; Save history of minibuffer
+(use-package savehist
+  :init
+  (savehist-mode))
 
-;; Marginalia
+;; Rich annotations
 (use-package marginalia
-  :init (marginalia-mode))
+  :ensure t
+  :init
+  (marginalia-mode))
 
-;; Consult
+;; Fuzzy matching
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+;; Handy commands
 (use-package consult
-  :bind (("C-s" . consult-line)
+  :ensure t
+  :bind (;; C-c bindings (mode-specific-map)
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)
          ("C-x b" . consult-buffer)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ("C-x r b" . consult-bookmark)
+         ("C-x p b" . consult-project-buffer)
+         ;; Custom M-# bindings for fast navigation
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
          ("M-y" . consult-yank-pop)
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)
          ("M-g g" . consult-goto-line)
+         ("M-g M-g" . consult-goto-line)
+         ("M-g o" . consult-outline)
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
-         ("M-s r" . consult-ripgrep)))
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)
+         ("M-s e" . consult-isearch-history)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi))
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref))
 
-;; Corfu (in-buffer completion)
+;; In-Buffer Completion (Corfu)
 (use-package corfu
+  :ensure t
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -42,46 +98,12 @@
   (global-corfu-mode)
   (corfu-popupinfo-mode))
 
-;; LSP Mode
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (c-mode c++-mode c-ts-mode c++-ts-mode
-          js-mode js-ts-mode typescript-ts-mode tsx-ts-mode
-          web-mode css-mode css-ts-mode) . lsp-deferred)
-  :commands (lsp lsp-deferred)
-  :custom
-  (lsp-completion-provider :none) ;; We use Corfu!
-  (lsp-headerline-breadcrumb-enable nil))
-
-;; Python (Pyright)
-;; We need this package to properly register pyright as the preferred client
-(use-package lsp-pyright
+;; Icons in completion
+(use-package nerd-icons-corfu
   :ensure t
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp-deferred))))
-
-;; LSP UI
-(use-package lsp-ui
-  :after lsp-mode
-  :commands lsp-ui-mode
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-position 'at-point)
-  (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-sideline-show-diagnostics t)
-  (lsp-ui-sideline-show-code-actions t))
-
-;; Helpful
-(use-package helpful
-  :bind
-  ([remap describe-function] . helpful-callable)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key] . helpful-key))
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (provide 'xz-completion)
 ;;; xz-completion.el ends here

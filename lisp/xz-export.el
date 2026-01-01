@@ -10,11 +10,7 @@
 
 ;;; Code:
 
-;; ============================================================================
-;; DEPENDENCIES (for batch mode)
-;; ============================================================================
-
-;; When running in batch mode, we need to bootstrap packages
+;; Dependencies (for batch mode)
 (when noninteractive
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -36,9 +32,7 @@
 (require 'org)
 (require 'ox-html)
 
-;; ============================================================================
-;; CONFIGURATION
-;; ============================================================================
+;; Configuration
 
 (defvar xzhh/log-file nil
   "Path to export log file. Set by caller or defaults to ./export.log")
@@ -54,9 +48,7 @@
       org-html-postamble nil
       org-html-preamble nil)
 
-;; ============================================================================
 ;; XZHH META TAG INJECTION
-;; ============================================================================
 
 (defun xzhh/inject-meta-tags (backend)
   "Convert XZHH_ keywords to HTML meta tags during export.
@@ -87,9 +79,7 @@
 ;; Register the hook (runs for both interactive and batch exports)
 (add-hook 'org-export-before-processing-hook #'xzhh/inject-meta-tags)
 
-;; ============================================================================
-;; LOGGING
-;; ============================================================================
+;; Logging
 
 (defun xzhh/log (level msg &rest args)
   "Log MSG with LEVEL. ARGS are format arguments."
@@ -138,9 +128,7 @@
     (when xzhh/log-file
       (write-region footer nil xzhh/log-file 'append 'silent))))
 
-;; ============================================================================
-;; EXPORT FUNCTIONS
-;; ============================================================================
+;; Export functions
 
 (defun xzhh/export-file (org-file output-file)
   "Export ORG-FILE to OUTPUT-FILE as HTML."
@@ -186,9 +174,7 @@ Optionally write logs to LOG-FILE."
       (xzhh/log-footer count errors elapsed)
       (format "Exported %d files (%.1fs) | Errors: %d" count elapsed errors))))
 
-;; ============================================================================
 ;; BATCH COMMANDS
-;; ============================================================================
 
 (defun xzhh/batch-export ()
   "Batch export for command-line.

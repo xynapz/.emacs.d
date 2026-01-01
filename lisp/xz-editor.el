@@ -1,31 +1,24 @@
-;;; xz-editor.el --- Editing behavior -*- lexical-binding: t; -*-
-;;; Commentary:
-;; Minimal editor settings.
+;;; xz-editor.el --- Editing and Evil configuration -*- lexical-binding: t; -*-
 
 ;;; Code:
-(setq-default cursor-type 'box)
-(setq visible-bell nil
-      ring-bell-function 'ignore)
 
-(use-package scroll-bar :ensure nil :config (scroll-bar-mode -1))
-(use-package tool-bar   :ensure nil :config (tool-bar-mode -1))
-(use-package menu-bar   :ensure nil :config (menu-bar-mode -1))
+;; General Editing
+(use-package elect-pair
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode))
 
-(global-visual-line-mode 1)
-
-;; Session persistence (restore windows/buffers)
-(use-package desktop
+(use-package paren
   :ensure nil
   :config
-  (desktop-save-mode 1))
+  (setq show-paren-delay 0)
+  (show-paren-mode 1))
 
 (use-package hl-line
   :ensure nil
   :config
-  (global-hl-line-mode 1)
-  (dolist (hook '(comint-mode-hook eshell-mode-hook term-mode-hook))
-    (add-hook hook (lambda () (setq-local global-hl-line-mode nil)))))
+  (global-hl-line-mode 1))
 
+;; Line Numbers (Relative)
 (use-package display-line-numbers
   :ensure nil
   :init
@@ -34,118 +27,63 @@
   :config
   (global-display-line-numbers-mode 1)
   
-  ;; Disable in specific modes where it's clutter
+  ;; Disable in some modes
   (dolist (mode '(org-mode-hook
                   term-mode-hook
                   shell-mode-hook
                   eshell-mode-hook
+                  pdf-view-mode-hook
                   treemacs-mode-hook
-                  pdf-view-mode-hook))
+                  dired-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
-;; Keybindings
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-c s") 'save-buffer)
-(global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
-(global-set-key (kbd "C-c r") 'revert-buffer)
-(global-set-key (kbd "C-c =") 'text-scale-increase)
-(global-set-key (kbd "C-c -") 'text-scale-decrease)
-(global-set-key (kbd "C-c /") 'comment-line)
-
-(use-package winner
-  :ensure nil
-  :bind (("C-c <left>" . winner-undo)
-         ("C-c <right>" . winner-redo))
-  :config (winner-mode 1))
-
-(windmove-default-keybindings)
-
-(use-package doom-modeline
-  :ensure t
-  :init
-  (setq
-   ;; Size / appearance
-   doom-modeline-height 26
-   doom-modeline-bar-width 4
-   ;; File & buffer info
-   doom-modeline-buffer-file-name-style 'truncate-upto-project
-   doom-modeline-buffer-state-icon t     ;; modified / read-only
-   doom-modeline-buffer-modification-icon t
-   doom-modeline-file-size t              ;; useful for large files
-   ;; Icons
-   doom-modeline-icon t
-   doom-modeline-major-mode-icon t
-   doom-modeline-major-mode-color-icon t
-   ;; Position info
-   doom-modeline-position-line-format '("%l")
-   doom-modeline-position-column-format '("%c")
-   doom-modeline-percent-position nil
-   ;; Git
-   doom-modeline-vcs-max-length 18
-   ;; LSP
-   doom-modeline-lsp t
-   ;; Encoding (only show when not UTF-8)
-   doom-modeline-buffer-encoding t
-   doom-modeline-buffer-encoding-conditional t
-   ;; Indentation (tabs vs spaces)
-   doom-modeline-indent-info t
-   ;; Project
-   doom-modeline-project-detection 'projectile
-   ;; Minor modes (noise → off)
-   doom-modeline-minor-modes nil
-   ;; Workspace / window number
-   doom-modeline-workspace-name t
-   doom-modeline-window-width-limit 80)
-
-  :config
-  (doom-modeline-mode 1))
-
-
-(use-package nord-theme
-  :ensure t
-  :config
-  (load-theme 'xz-nord t))
-
-;; Show matching parentheses
-(use-package paren
-  :ensure nil
-  :config
-  (setq show-paren-delay 0)
-  (show-paren-mode 1))
-
-;; Electric Pairs
-(electric-pair-mode 1)
-
-;; Whitespace cleanup on save
+;; Whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Compile settings
-(use-package compile
-  :ensure nil
-  :custom
-  (compilation-scroll-output t)
-  (compilation-ask-about-save nil)
-  :hook
-  (compilation-filter . (lambda ()
-                          (ansi-color-apply-on-region
-                           compilation-filter-start (point)))))
-;; Snippets
-(use-package yasnippet
+;; Evil Mode
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t
+        evil-want-keybinding nil      ; Handled by evil-collection
+        evil-want-C-u-scroll t
+        evil-want-C-d-scroll t
+        evil-want-Y-yank-to-eol t
+        evil-undo-system 'undo-redo
+        evil-split-window-below t
+        evil-vsplit-window-right t)
+  :config
+  (evil-mode 1)
+  
+  ;; C-g to exit insert state
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  
+  ;; jk to escape
+  (define-key evil-insert-state-map (kbd "j")
+    (lambda () (interactive)
+      (let ((evt (read-event nil nil 0.15)))
+        (if (and evt (eq evt ?k))
+            (evil-normal-state)
+          (insert "j")
+          (when evt (push evt unread-command-events)))))))
+
+(use-package evil-collection
+  :after evil
   :ensure t
   :config
-  (setq yas-snippet-dirs
-        (list (expand-file-name "snippets" user-emacs-directory)))
-  (yas-global-mode 1))
+  (evil-collection-init))
 
-;; Multiple Cursors
-(use-package multiple-cursors
+(use-package evil-surround
+  :after evil
   :ensure t
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :after evil
+  :ensure t
+  :config
+  (evil-commentary-mode 1))
 
 (provide 'xz-editor)
 ;;; xz-editor.el ends here
