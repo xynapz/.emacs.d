@@ -65,11 +65,11 @@
 (use-package evil-collection
   :after evil
   :ensure t
-  :init
-  (evil-collection-init)
   :custom
   (evil-collection-setup-minibuffer t)
-  (evil-collection-calendar-want-org-bindings t))
+  (evil-collection-calendar-want-org-bindings t)
+  :config
+  (evil-collection-init))
 
 (use-package evil-surround
   :after evil
