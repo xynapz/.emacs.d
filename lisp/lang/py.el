@@ -4,19 +4,13 @@
 
 ;;; Code:
 
-;; Require eglot (built-in since Emacs 29)
-(require 'eglot)
+
 
 ;; Python mode (use tree-sitter if available)
 (when (and (fboundp 'treesit-available-p)
            (treesit-available-p)
            (treesit-language-available-p 'python))
   (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode)))
-
-;; Eglot with pyright
-(add-hook 'python-mode-hook #'eglot-ensure)
-(add-hook 'python-ts-mode-hook #'eglot-ensure)
-
 
 
 (defun xz/verify-python-deps ()
@@ -59,28 +53,22 @@
   (add-hook 'python-ts-mode-hook #'xz/maybe-activate-venv)
   (add-hook 'projectile-after-switch-project-hook #'xz/auto-activate-venv)
 
-  ;; Restart Eglot when venv changes so pyright uses correct Python
+;; Restart LSP when venv changes
   (add-hook 'pyvenv-post-activate-hooks
             (lambda ()
-              (when (and (derived-mode-p 'python-mode 'python-ts-mode)
-                         (eglot-managed-p))
-                (message "Restarting Eglot for venv: %s" pyvenv-virtual-env)
-                (eglot-shutdown (eglot-current-server))
-                (eglot-ensure))))
+              (when (bound-and-true-p lsp-mode)
+                (lsp-workspace-restart))))
 
-  ;; Also restart on deactivate
   (add-hook 'pyvenv-post-deactivate-hooks
             (lambda ()
-              (when (and (derived-mode-p 'python-mode 'python-ts-mode)
-                         (eglot-managed-p))
-                (eglot-shutdown (eglot-current-server))
-                (eglot-ensure)))))
+              (when (bound-and-true-p lsp-mode)
+                (lsp-workspace-restart)))))
 
-;; Format on save (requires black or autopep8)
+;; Format on save
 (add-hook 'python-mode-hook
-          (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+          (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
 (add-hook 'python-ts-mode-hook
-          (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+          (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
 
 (provide 'py)
 ;;; py.el ends here

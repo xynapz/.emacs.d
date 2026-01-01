@@ -53,9 +53,31 @@ This installs:
 
 Fedora:
 #+begin_src sh
-sudo dnf install ripgrep fd-find clang-tools-extra poppler-utils texlive
-npm install -g pyright typescript-language-server \
-    vscode-langservers-extracted
+# System Tools (C++, PDF, Search)
+sudo dnf install ripgrep fd-find \
+    clang-tools-extra \
+    poppler-utils \
+    texlive-scheme-full
+
+# Node.js (Required for most LSPs)
+sudo dnf install nodejs npm
+#+end_src
+
+LSP Servers & Formatters (Global Install):
+#+begin_src sh
+# Python (LSP)
+sudo npm install -g pyright
+
+# Python (Formatters - Install via pip)
+sudo pip install black
+
+# JavaScript / TypeScript (LSP)
+sudo npm install -g typescript-language-server typescript
+
+# HTML / CSS / JSON (LSP)
+sudo npm install -g vscode-langservers-extracted
+
+# C/C++ formatter (clang-format) is part of clang-tools-extra above.
 #+end_src
 
 * Quick Commands

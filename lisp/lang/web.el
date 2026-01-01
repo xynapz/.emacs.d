@@ -26,18 +26,6 @@
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
-;; Eglot hooks
-(defun xz/eglot-ensure-web ()
-  "Start eglot for web modes."
-  (when (buffer-file-name)
-    (eglot-ensure)))
-
-(add-hook 'web-mode-hook #'xz/eglot-ensure-web)
-(add-hook 'css-mode-hook #'xz/eglot-ensure-web)
-(add-hook 'css-ts-mode-hook #'xz/eglot-ensure-web)
-(add-hook 'js-mode-hook #'xz/eglot-ensure-web)
-(add-hook 'js-ts-mode-hook #'xz/eglot-ensure-web)
-(add-hook 'typescript-ts-mode-hook #'xz/eglot-ensure-web)
 
 (provide 'web)
 ;;; web.el ends here
