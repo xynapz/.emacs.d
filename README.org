@@ -65,3 +65,9 @@ M-x xz/install-treesit-grammars
 * License
 
 MIT
+
+* Comments
+
+my emacs config doesnt reads, the .venv in project, instead the global python dependencies.
+
+how to make it so that it reads from my project's .venv.

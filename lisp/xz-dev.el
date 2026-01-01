@@ -80,10 +80,23 @@
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-show-code-actions t))
 
+;; Python Environment
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1))
+
+(defun xz/auto-activate-python-env ()
+  "Automatically activate .venv if it exists in the project root."
+  (let ((venv-path (expand-file-name ".venv" (projectile-project-root))))
+    (when (file-exists-p venv-path)
+      (pyvenv-activate venv-path))))
+
 (use-package lsp-pyright
   :ensure t
   :hook (python-ts-mode . (lambda ()
                           (require 'lsp-pyright)
+                          (xz/auto-activate-python-env) ; Activate venv before LSP
                           (lsp))))
 
 (use-package vterm

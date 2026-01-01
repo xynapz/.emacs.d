@@ -1,0 +1,114 @@
+#+TITLE: Magit Workflow Guide
+#+AUTHOR: Angel Dhakal
+#+STARTUP: overview
+#+OPTIONS: toc:2
+
+* The Philosophy
+
+Git is not just about saving code; it's about managing complexity. Magit is the only Git interface that is faster and safer than the CLI.
+
+* 1. The Daily Loop (Status, Stage, Commit)
+
+** Status (=C-x g=)
+This is your command center. You shouldn't just look at it; you operate from it.
+
+- *Untracked files*: New files. Press =s= to stage them.
+- *Unstaged changes*: Modified files.
+  - *Tab*: Expand the file to see the diff.
+  - *s*: Stage the whole file.
+  - *Visual Selection*: Select lines inside the diff and press =s= to stage *just those lines* (Hunk staging). This is how you commit clean, atomic changes even if you edited the whole file.
+
+** Commit (=c c=)
+Once staged, press =c=.
+- Press =c= again to commit.
+- Type your message.
+- =C-c C-c= to finalize and save.
+- =C-c C-k= to cancel.
+
+* 2. Branching & Context Switching
+
+Never work on =master=.
+
+- *Create Branch*: =b c= (Branch -> Checkout). Name it `feat/user-auth` or `fix/login-bug`.
+- *Switch Branch*: =b b=. Fuzzy search your existing branches.
+
+* 3. Syncing (Push & Pull)
+
+- *Push*: =P p=. Pushes to the upstream branch. If there is no upstream, Magit will ask you to set it (just press =p= again).
+- *Pull*: =F p= (Fetch -> Pull). Syncs your local branch with remote.
+
+* 4. Merge Conflicts (The Real World)
+
+This is where CLI users panic and Magit users thrive.
+
+When a merge fails (e.g., after `F p` or merging `master` into your feature branch):
+
+1. Magit shows an "Unmerged" section in the Status buffer.
+2. *Do NOT* open the file directly to fix conflict markers (`<<<<`). That is the amateur way.
+3. *The Ediff Way*:
+   - Put your cursor on the unmerged file.
+   - Press =e=.
+   - Magit opens 3 buffers:
+     - *Buffer A (Local)*: Your version.
+     - *Buffer B (Remote)*: Their version.
+     - *Buffer C (Result)*: What the file will look like.
+   - A small control frame appears (navigate this frame, not the buffers).
+
+** Ediff Controls:
+- =n= / =p=: Next/Previous conflict.
+- =a=: Choose A (Your version).
+- =b=: Choose B (Their version).
+- =+=: Choose both (A then B).
+- =q=: Quit Ediff. Save the result? *Yes*.
+
+4. Once Ediff is done, the file is automatically staged.
+5. =c c= to commit the merge resolution.
+
+* 5. Interactive Rebase (Cleaning History)
+
+Before opening a PR, clean your mess.
+
+1. =l l=: Open log.
+2. Navigate to the commit *before* the ones you want to fix.
+3. =r i=: Rebase interactive.
+4. In the rebase buffer:
+   - =s= (squash): Merge this commit into the previous one.
+   - =r= (reword): Change the commit message.
+   - =d= (drop): Delete this commit.
+5. =C-c C-c= to execute the rebase.
+
+5. =C-c C-c= to execute the rebase.
+
+* 6. Scenarios: "I forgot to branch!"
+
+You started coding on =master= (or the wrong branch) and haven't committed yet.
+
+** Case A: Moving to a NEW branch
+1. Just create the branch: =b c=.
+2. Name it.
+   - Magit/Git will carry your unstaged/staged changes to the new branch automatically.
+   - You are now safe.
+
+** Case B: Moving to an EXISTING branch
+1. Try switching: =b b=.
+2. *If it works*: You're done. Changes carried over.
+3. *If Magit complains* (about conflicting changes):
+   - Stash your changes: =z z= (save everything to a temporary stash).
+   - "working directory is clean".
+   - Switch branch: =b b=.
+   - Pop stash: =z p=. (Restores your changes on top of this branch).
+
+* Cheat Sheet for the Busy Engineer
+
+| Goal | Key Sequence |
+|---|---|
+| *Status* | =C-x g= |
+| *Stage File* | =s= (on file) |
+| *Stage Hunk* | =s= (on selection) |
+| *Commit* | =c c= |
+| *Push* | =P p= |
+| *Pull* | =F p= |
+| *New Branch* | =b c= |
+| *Switch Branch* | =b b= |
+| *Fix Conflict* | =e= (on unmerged file) |
+| *Log* | =l l= |
