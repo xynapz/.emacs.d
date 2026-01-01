@@ -28,13 +28,11 @@
   (global-display-line-numbers-mode 1)
   
   ;; Disable in some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
+  (dolist (mode '(term-mode-hook
                   shell-mode-hook
                   eshell-mode-hook
                   pdf-view-mode-hook
-                  treemacs-mode-hook
-                  dired-mode-hook))
+                  treemacs-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
 ;; Whitespace

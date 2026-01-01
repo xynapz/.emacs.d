@@ -88,12 +88,16 @@
 
 (use-package vterm
   :ensure t
-  :bind ("C-c t" . vterm-toggle)
+  :commands vterm
   :config
   (setq vterm-max-scrollback 10000))
 
 (use-package vterm-toggle
-  :ensure t)
+  :ensure t
+  :bind ("C-c t" . vterm-toggle)
+  :custom
+  (vterm-toggle-fullscreen-p nil)
+  (vterm-toggle-scope 'project))
 
 (provide 'xz-dev)
 ;;; xz-dev.el ends here
