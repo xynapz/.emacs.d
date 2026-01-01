@@ -74,6 +74,16 @@ Special registers:
 * Evil in Buffers
 
 Evil-collection provides vim bindings everywhere.
+We explicitly enable it for:
+- Dired
+- Ibuffer
+- Magit
+- Org
+- Vertico
+- Consult
+- Corfu
+- Help/Helpful
+- Compile/Eshell/Term
 
 ** Dired
 

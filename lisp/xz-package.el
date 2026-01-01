@@ -134,11 +134,6 @@ If FORCE is non-nil, reinstall even if already available."
     (when (bound-and-true-p desktop-save-mode)
       (desktop-save-in-desktop-dir))
       
-    ;; Clear file-based caches if necessary (careful with this)
-    (let ((cache-dir (expand-file-name ".cache" user-emacs-directory)))
-      (when (file-exists-p cache-dir)
-        (delete-directory cache-dir t)))
-        
     (restart-emacs)))
 
 (global-set-key (kbd "C-c r r") #'xz/clean-restart)

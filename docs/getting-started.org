@@ -62,7 +62,7 @@ npm install -g pyright typescript-language-server \
 
 | Key         | Action                |
 |-------------+-----------------------|
-| =C-c r r=   | Clean restart Emacs   |
+| =C-c r r=   | Clean restart (Safe, keeps session) |
 | =C-x g=     | Magit status          |
 | =C-c p p=   | Switch project        |
 | =C-c p f=   | Find file in project  |

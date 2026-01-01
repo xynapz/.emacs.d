@@ -159,7 +159,19 @@ Your config uses Eglot for LSP.
 | Key     | Action         |
 |---------+----------------|
 | =M-g M-n= | Next error     |
+| =M-g M-n= | Next error     |
 | =M-g M-p= | Previous error |
+
+** Troubleshooting
+
+| Command | Purpose |
+|---------+---------|
+| =M-x eglot-events-buffer= | View JSON-RPC logs (server communication) |
+| =M-x eglot-stderr-buffer= | View server error logs |
+| =M-x eglot-shutdown= | Stop the current server |
+| =M-x eglot= | Start/Restart server manualy |
+
+Look for "Eglot: <ServerName>" in the mode line to confirm status.
 
 * Editing (Normal Mode)
 ** Operators

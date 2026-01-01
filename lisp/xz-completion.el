@@ -69,7 +69,18 @@
                  '((web-mode mhtml-mode) . ("vscode-html-language-server" "--stdio")))
     ;; CSS (vscode-css-language-server)
     (add-to-list 'eglot-server-programs
-                 '((css-mode css-ts-mode) . ("vscode-css-language-server" "--stdio")))))
+                 '((css-mode css-ts-mode) . ("vscode-css-language-server" "--stdio"))))
+
+  ;; Ensure Eglot can actually start automatically
+  (dolist (mode '(python-ts-mode-hook
+                  js-ts-mode-hook
+                  typescript-ts-mode-hook
+                  tsx-ts-mode-hook
+                  c-ts-mode-hook
+                  c++-ts-mode-hook
+                  web-mode-hook
+                  css-ts-mode-hook))
+    (add-hook mode #'eglot-ensure)))
 
 ;; Helpful
 (use-package helpful
