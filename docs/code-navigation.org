@@ -40,7 +40,7 @@ You have Vim bindings. Forget =C-n= / =C-p=.
 |-----+------------------|
 | =ESC= | Return to Normal |
 | =C-[= | Same as ESC      |
-| =jk=  | (If configured)  |
+| =jk=  | (configured)     |
 
 * Movement (Normal Mode)
 ** Character / Word
@@ -65,7 +65,7 @@ You have Vim bindings. Forget =C-n= / =C-p=.
 | =^=   | First non-blank       |
 | =$=   | End of line           |
 | =_=   | First non-blank (alt) |
-|     |                       |
+
 
 ** Screen / File
 
@@ -236,7 +236,7 @@ Your config has =evil-surround=.
 |---------+-------------------------|
 | =C-x b=   | =consult-buffer=          |
 | =C-x k=   | Kill buffer             |
-| =SPC p p= | Switch project (if set) |
+| =C-c p p= | Switch project            |
 
 * Projectile (Projects)
 

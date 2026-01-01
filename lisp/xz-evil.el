@@ -54,7 +54,19 @@
   :init
   (setq evil-collection-setup-minibuffer t)  ; Evil in minibuffer
   :config
-  (evil-collection-init))
+  (evil-collection-init
+   '(dired
+     ibuffer
+     magit
+     org
+     vertico
+     consult
+     corfu
+     help
+     helpful
+     compile
+     eshell
+     term)))
 
 (use-package evil-surround
   :after evil
