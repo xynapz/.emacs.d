@@ -32,7 +32,7 @@
                   shell-mode-hook
                   eshell-mode-hook
                   pdf-view-mode-hook
-                  treemacs-mode-hook))
+                  vterm-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
 ;; Whitespace
@@ -43,7 +43,6 @@
   :ensure t
   :init
   (setq evil-want-integration t
-        evil-want-keybinding nil      ; Handled by evil-collection
         evil-want-C-u-scroll t
         evil-want-C-d-scroll t
         evil-want-Y-yank-to-eol t

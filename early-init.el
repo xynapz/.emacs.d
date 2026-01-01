@@ -18,6 +18,9 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
+;; Evil setup must occur before Evil is loaded
+(setq evil-want-keybinding nil)
+
 ;; In Emacs 27+, package initialization occurs before `user-init-file` is
 ;; loaded, but after `early-init-file`. We handle it explicitly.
 
