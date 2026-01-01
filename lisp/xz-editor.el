@@ -26,7 +26,7 @@
         display-line-numbers-width-start t)
   :config
   (global-display-line-numbers-mode 1)
-  
+
   ;; Disable in some modes
   (dolist (mode '(term-mode-hook
                   shell-mode-hook
@@ -41,20 +41,18 @@
 ;; Evil Mode
 (use-package evil
   :ensure t
-  :init
-  (setq evil-want-integration t
-        evil-want-C-u-scroll t
-        evil-want-C-d-scroll t
-        evil-want-Y-yank-to-eol t
-        evil-undo-system 'undo-redo
-        evil-split-window-below t
-        evil-vsplit-window-right t)
+  :preface
+  (customize-set-variable 'evil-want-integration t)
+  (customize-set-variable 'evil-want-keybinding nil)
+  (customize-set-variable 'evil-undo-system 'undo-redo)
+  (customize-set-variable 'evil-want-C-u-scroll t)
+  (customize-set-variable 'evil-want-C-u-delete t)
   :config
   (evil-mode 1)
-  
+
   ;; C-g to exit insert state
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  
+
   ;; jk to escape
   (define-key evil-insert-state-map (kbd "j")
     (lambda () (interactive)
@@ -67,8 +65,12 @@
 (use-package evil-collection
   :after evil
   :ensure t
-  :config
-  (evil-collection-init))
+  :init
+  (evil-collection-init)
+  :custom
+  (evil-collection-setup-minibuffer t)
+  (evil-collection-calendar-want-org-bindings t))
+
 
 (use-package evil-surround
   :after evil

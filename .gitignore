@@ -16,3 +16,5 @@ url/
 .emacs.desktop
 .emacs.desktop.lock
 lisp_bak
+history
+places
