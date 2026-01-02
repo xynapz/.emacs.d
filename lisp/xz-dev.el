@@ -100,13 +100,14 @@
   (lsp-auto-guess-root t)           ; Don't ask to import projects
   (read-process-output-max (* 1024 1024))
   
-  ;; Force the prefix map (C-c l) because the variable sometimes fails
-  (with-eval-after-load 'lsp-mode
-    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-    (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
-    (define-key lsp-command-map (kbd "=") 'xz/format-buffer) ; Auto-fix indent + Format
-    (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
-    (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list))
+  :config
+  (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
+  (define-key lsp-command-map (kbd "=") 'xz/format-buffer)
+  (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
+  (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list)
+  ;; Force standard prefix
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+
 
 (defun xz/format-buffer ()
   "Format directory using standard formatter, automatically fixing indentation syntax errors first."
