@@ -53,16 +53,24 @@ Visual appearance.
 
 * xz-editor.el
 
-Editing behavior and Evil integration.
+General editor settings (whitespace, line numbers, parenting).
+
+| Package              | Purpose            |
+|----------------------+--------------------|
+| display-line-numbers | Relative lines     |
+| elect-pair           | Auto brackets      |
+| hl-line              | Highlight line     |
+
+* xz-evil.el
+
+Dedicated Evil Mode configuration.
 
 | Package          | Purpose            |
 |------------------+--------------------|
-| evil             | Vim emulation      |
+| evil             | Core vim emulation |
 | evil-collection  | Omni-bindings      |
 | evil-surround    | Surround ops       |
 | evil-commentary  | Commenting         |
-| display-line-numbers | Relative lines |
-| elect-pair       | Auto brackets      |
 
 * xz-completion.el
 

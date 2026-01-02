@@ -67,6 +67,7 @@
         lsp-log-io nil
         lsp-completion-provider :none  ; Use Corfu
         lsp-headerline-breadcrumb-enable nil
+        lsp-auto-guess-root t          ; Don't ask to import projects
         read-process-output-max (* 1024 1024)))
 
 (use-package lsp-ui
