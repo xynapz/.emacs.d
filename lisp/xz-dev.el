@@ -11,8 +11,7 @@
         projectile-enable-caching t
         projectile-indexing-method 'alien)
   :config
-(projectile-mode +1)
-  )
+  (projectile-mode +1))
 
 (use-package magit
   :ensure t
@@ -58,21 +57,31 @@
          ("\\.cpp\\'" . c++-ts-mode))
   :config
   (setq treesit-language-source-alist
-      '((python "https://github.com/tree-sitter/tree-sitter-python")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (html "https://github.com/tree-sitter/tree-sitter-html")
-        (css "https://github.com/tree-sitter/tree-sitter-css")
-        (json "https://github.com/tree-sitter/tree-sitter-json")
-        (c "https://github.com/tree-sitter/tree-sitter-c")
-        (cpp "https://github.com/tree-sitter/tree-sitter-cpp"))))
+        '((python "https://github.com/tree-sitter/tree-sitter-python")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (html "https://github.com/tree-sitter/tree-sitter-html")
+          (css "https://github.com/tree-sitter/tree-sitter-css")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (c "https://github.com/tree-sitter/tree-sitter-c")
+          (cpp "https://github.com/tree-sitter/tree-sitter-cpp"))))
 
 (defun xz/install-treesit-grammars ()
   "Install all configured tree-sitter grammars."
   (interactive)
   (dolist (lang (mapcar #'car treesit-language-source-alist))
     (treesit-install-language-grammar lang)))
+
+(defun xz/format-buffer ()
+  "Format buffer using standard formatter, automatically fixing indentation syntax errors first."
+  (interactive)
+  ;; 1. Fix Indentation Errors (Editor heuristics)
+  (indent-region (point-min) (point-max))
+  ;; 2. Run Formatter (Black/Prettier)
+  (if (fboundp 'apheleia-format-buffer)
+      (call-interactively 'apheleia-format-buffer)
+    (lsp-format-buffer)))
 
 (use-package lsp-mode
   :ensure t
@@ -105,36 +114,22 @@
   (define-key lsp-command-map (kbd "=") 'xz/format-buffer)
   (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
   (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list)
-  ;; Force standard prefix
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
-
-
-(defun xz/format-buffer ()
-  "Format directory using standard formatter, automatically fixing indentation syntax errors first."
-  (interactive)
-  ;; 1. Fix Indentation Errors (Editor heuristics)
-  (indent-region (point-min) (point-max))
-  ;; 2. Run Formatter (Black/Prettier)
-  (if (fboundp 'apheleia-format-buffer)
-      (call-interactively 'apheleia-format-buffer)
-    (lsp-format-buffer)))
-
-
-
-  ;; Evil bindings for LSP
-  ;; Use quoted 'lsp-mode-map to allow lazy binding if evil loads first
-  (evil-define-key 'normal 'lsp-mode-map
-    (kbd "K") 'lsp-ui-doc-glance
-    (kbd "gd") 'lsp-find-definition
-    (kbd "gr") 'lsp-find-references
-    (kbd "gD") 'lsp-find-declaration
-    (kbd "gi") 'lsp-find-implementation
-    (kbd "gt") 'lsp-find-type-definition
-    (kbd "ga") 'lsp-execute-code-action
-    (kbd "rn") 'lsp-rename
-    ;; Error Navigation
-    (kbd "]e") 'flymake-goto-next-error
-    (kbd "[e") 'flymake-goto-prev-error))
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  
+  ;; Evil bindings for LSP (only set if evil is loaded)
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal lsp-mode-map
+      (kbd "K") 'lsp-ui-doc-glance
+      (kbd "gd") 'lsp-find-definition
+      (kbd "gr") 'lsp-find-references
+      (kbd "gD") 'lsp-find-declaration
+      (kbd "gi") 'lsp-find-implementation
+      (kbd "gt") 'lsp-find-type-definition
+      (kbd "ga") 'lsp-execute-code-action
+      (kbd "rn") 'lsp-rename
+      ;; Error Navigation
+      (kbd "]e") 'flymake-goto-next-error
+      (kbd "[e") 'flymake-goto-prev-error)))
 
 (use-package consult-lsp
   :ensure t
@@ -187,7 +182,6 @@
 
 ;; Pylsp Configuration (Built-in to lsp-mode)
 ;; Ensure you have installed: pip install "python-lsp-server[all]"
-;; Pylsp Configuration
 (with-eval-after-load 'lsp-mode
   (setq lsp-pylsp-plugins-black-enabled t
         lsp-pylsp-plugins-isort-enabled t
