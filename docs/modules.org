@@ -102,7 +102,7 @@ Developer tools and languages.
 | vterm            | Terminal                 |
 
 ** Languages Configured
-- Python (pyright + treesit)
+- Python (pylsp + treesit)
 - JavaScript/TypeScript (ts-ls + treesit)
 - C/C++ (clangd + treesit)
 - Web (HTML/CSS LSPs)

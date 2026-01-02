@@ -103,9 +103,19 @@
   (with-eval-after-load 'lsp-mode
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
-    (define-key lsp-command-map (kbd "=") 'apheleia-format-buffer) ; Use Apheleia for formatting
+    (define-key lsp-command-map (kbd "=") 'xz/format-buffer) ; Auto-fix indent + Format
     (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
     (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list))
+
+(defun xz/format-buffer ()
+  "Format directory using standard formatter, automatically fixing indentation syntax errors first."
+  (interactive)
+  ;; 1. Fix Indentation Errors (Editor heuristics)
+  (indent-region (point-min) (point-max))
+  ;; 2. Run Formatter (Black/Prettier)
+  (if (fboundp 'apheleia-format-buffer)
+      (call-interactively 'apheleia-format-buffer)
+    (lsp-format-buffer)))
 
 
 
@@ -173,10 +183,13 @@
       (pyvenv-activate venv-path)
       (message "Activated venv: %s" venv-path))))
 
-(use-package lsp-pyright
+(use-package lsp-pylsp
   :ensure t
+  :config
+  (setq lsp-pylsp-plugins-black-enabled t
+        lsp-pylsp-plugins-isort-enabled t
+        lsp-pylsp-plugins-flake8-enabled t)
   :hook (python-ts-mode . (lambda ()
-                          (require 'lsp-pyright)
                           (xz/auto-activate-python-env) ; Activate venv before LSP
                           (lsp-deferred))))
 

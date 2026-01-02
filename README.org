@@ -61,7 +61,7 @@ M-x xz/install-treesit-grammars
 | cmake      | vterm compilation |
 | ripgrep    | Consult grep |
 | fd         | Projectile |
-| pyright    | Python LSP |
+| python-lsp-server[all] | Python LSP (pylsp) |
 | clangd     | C/C++ LSP |
 | black      | Python Formatting |
 | prettier   | Web Formatting |
