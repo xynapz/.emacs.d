@@ -76,6 +76,13 @@
         lsp-auto-guess-root t          ; Don't ask to import projects
         read-process-output-max (* 1024 1024))
   
+        lsp-headerline-breadcrumb-enable nil
+        lsp-len-enable t               ; Code Lens (references)
+        lsp-inlay-hint-enable t        ; Inlay Hints (types/params)
+        lsp-auto-configure t
+        lsp-auto-guess-root t          ; Don't ask to import projects
+        read-process-output-max (* 1024 1024))
+  
   ;; Force the prefix map (C-c l) because the variable sometimes fails
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics) ; Explicitly bind error list
@@ -101,6 +108,21 @@
   :after (consult lsp-mode)
   :config
   (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
+
+(use-package lsp-treemacs
+  :ensure t
+  :after lsp-mode
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :config
+  (dap-auto-configure-mode)
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (dap-ui-controls-mode 1))
 
 (use-package lsp-ui
   :ensure t

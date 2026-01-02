@@ -165,6 +165,19 @@ We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
 
 - **Sideline**: Shows diagnostics and info on the right side of the code.
 - **Doc**: Shows documentation in a popup when hovering (or using =K=).
+- **Inlay Hints**: Shows type hints and parameter names inline (like VSCode).
+- **Code Lens**: Shows reference counts above functions.
+
+** Symbols Sidebar (Treemacs)
+
+Use =M-x lsp-treemacs-symbols= to view the outline of the current file.
+Use =M-x lsp-treemacs-errors-list= to view project errors.
+
+** Debugging (DAP)
+
+Debugging is provided by =dap-mode=.
+- Start: =M-x dap-debug=
+- Breakpoint: =M-x dap-breakpoint-toggle=
 
 ** Troubleshooting
 
