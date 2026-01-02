@@ -183,15 +183,16 @@
       (pyvenv-activate venv-path)
       (message "Activated venv: %s" venv-path))))
 
-(use-package lsp-pylsp
-  :ensure t
-  :config
+;; Pylsp Configuration (Built-in to lsp-mode)
+;; Ensure you have installed: pip install "python-lsp-server[all]"
+(with-eval-after-load 'lsp-mode
   (setq lsp-pylsp-plugins-black-enabled t
         lsp-pylsp-plugins-isort-enabled t
-        lsp-pylsp-plugins-flake8-enabled t)
-  :hook (python-ts-mode . (lambda ()
-                          (xz/auto-activate-python-env) ; Activate venv before LSP
-                          (lsp-deferred))))
+        lsp-pylsp-plugins-flake8-enabled t))
+
+(add-hook 'python-ts-mode-hook (lambda ()
+                                  (xz/auto-activate-python-env) ; Activate venv before LSP
+                                  (lsp-deferred)))
 
 (use-package vterm
   :ensure t
