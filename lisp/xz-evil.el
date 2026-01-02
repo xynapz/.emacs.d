@@ -30,6 +30,9 @@
           (insert "j")
           (when evt (push evt unread-command-events)))))))
 
+  ;; Revert Buffer
+  (define-key evil-normal-state-map (kbd "gR") 'revert-buffer)
+
 ;; 2. Evil Collection
 (use-package evil-collection
   :after evil
