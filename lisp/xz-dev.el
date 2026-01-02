@@ -88,16 +88,17 @@
          (lsp-mode . lsp-enable-which-key-integration))
   :init
   (setq lsp-keymap-prefix "C-c l")
-  :config
-  (setq lsp-idle-delay 0.500
-        lsp-log-io nil
-        lsp-completion-provider :none  ; Use Corfu
-        lsp-headerline-breadcrumb-enable nil
-        lsp-lens-enable t              ; Code Lens (references)
-        lsp-inlay-hint-enable t        ; Inlay Hints (types/params)
-        lsp-auto-configure t
-        lsp-auto-guess-root t          ; Don't ask to import projects
-        read-process-output-max (* 1024 1024))
+  :custom
+  (lsp-disabled-clients '(pyright)) ; Explicitly prefer Pylsp over Pyright
+  (lsp-idle-delay 0.500)
+  (lsp-log-io nil)
+  (lsp-completion-provider :none)   ; Use Corfu
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-lens-enable t)               ; Code Lens (references)
+  (lsp-inlay-hint-enable t)         ; Inlay Hints (types/params)
+  (lsp-auto-configure t)
+  (lsp-auto-guess-root t)           ; Don't ask to import projects
+  (read-process-output-max (* 1024 1024))
   
   ;; Force the prefix map (C-c l) because the variable sometimes fails
   (with-eval-after-load 'lsp-mode
@@ -185,6 +186,7 @@
 
 ;; Pylsp Configuration (Built-in to lsp-mode)
 ;; Ensure you have installed: pip install "python-lsp-server[all]"
+;; Pylsp Configuration
 (with-eval-after-load 'lsp-mode
   (setq lsp-pylsp-plugins-black-enabled t
         lsp-pylsp-plugins-isort-enabled t
