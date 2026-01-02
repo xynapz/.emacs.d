@@ -115,7 +115,7 @@ This allows formatting to succeed even when indentation errors (SyntaxError) exi
   (indent-region (point-min) (point-max))
   ;; 2. Run External Formatter (Strict)
   (if (fboundp 'apheleia-format-buffer)
-      (apheleia-format-buffer)
+      (call-interactively 'apheleia-format-buffer)
     (lsp-format-buffer)))
 
   ;; Evil bindings for LSP
