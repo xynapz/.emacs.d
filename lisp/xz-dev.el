@@ -82,7 +82,9 @@
   (with-eval-after-load 'lsp-mode
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
-    (define-key lsp-command-map (kbd "=") 'lsp-format-buffer))
+    (define-key lsp-command-map (kbd "=") 'lsp-format-buffer)
+    (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
+    (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list))
 
   ;; Evil bindings for LSP
   ;; Use quoted 'lsp-mode-map to allow lazy binding if evil loads first

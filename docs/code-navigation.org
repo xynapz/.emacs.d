@@ -156,10 +156,13 @@ We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
 | =rn= / =C-c l r= | Rename symbol    |
 | =ga= / =C-c l a= | Code actions     |
 | =C-c l ==   | Format buffer    |
-| =C-c l e=   | List errors      |
-| =C-c l h h= | Toggle Highlights|
-| =]e=        | Next Error       |
-| =[e=        | Previous Error   |
+| =C-c l e=   | List errors (Consult)|
+| =C-c l E=   | List errors (Tree)   |
+| =C-c l s=   | Symbols sidebar      |
+| =C-c l h h= | Toggle Highlights    |
+| =]e=        | Next Error           |
+| =[e=        | Previous Error       |
+| =gR=        | Revert Buffer        |
 
 ** UI Features (lsp-ui)
 
