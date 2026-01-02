@@ -93,6 +93,12 @@
       (kbd "ga") 'lsp-execute-code-action
       (kbd "rn") 'lsp-rename)))
 
+(use-package consult-lsp
+  :ensure t
+  :after (consult lsp-mode)
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
+
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode
