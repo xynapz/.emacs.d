@@ -103,9 +103,20 @@
   (with-eval-after-load 'lsp-mode
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
-    (define-key lsp-command-map (kbd "=") 'apheleia-format-buffer) ; Use Apheleia for formatting
+    (define-key lsp-command-map (kbd "=") 'xz/smart-format-buffer) ; Smart format (Indent + Black)
     (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
     (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list))
+
+(defun xz/smart-format-buffer ()
+  "First fix indentation using Emacs heuristics, then run the external formatter (e.g. Black).
+This allows formatting to succeed even when indentation errors (SyntaxError) exist."
+  (interactive)
+  ;; 1. Fix Structural Indentation (Heuristic)
+  (indent-region (point-min) (point-max))
+  ;; 2. Run External Formatter (Strict)
+  (if (fboundp 'apheleia-format-buffer)
+      (apheleia-format-buffer)
+    (lsp-format-buffer)))
 
   ;; Evil bindings for LSP
   ;; Use quoted 'lsp-mode-map to allow lazy binding if evil loads first
