@@ -38,7 +38,8 @@ M-x xz/install-treesit-grammars
 | =xz-core.el=       | Settings (UTF-8, Desktop Fix)   |
 | =xz-pkg.el=        | Package setup (ELPA/MELPA)      |
 | =xz-ui.el=         | UI, Nord Theme, Doom Modeline   |
-| =xz-editor.el=     | Evil, editing, windows          |
+| =xz-editor.el=     | Editor defaults, cleanup, lines |
+| =xz-evil.el=       | Evil Mode & Evil Collection     |
 | =xz-completion.el= | Vertico, Consult, Corfu         |
 | =xz-dev.el=        | LSP, Treesit, Magit, Projectile |
 | =xz-org.el=        | Org mode, agenda, capture       |
