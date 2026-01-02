@@ -15,24 +15,45 @@
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("elpa" . "https://elpa.gnu.org/packages/")))
-  (setq package-user-dir (expand-file-name "elpa" 
-                           (file-name-directory (or load-file-name 
-                                                    buffer-file-name
-                                                    user-emacs-directory))))
+  (setq package-user-dir (expand-file-name "elpa"
+                                           (file-name-directory (or load-file-name
+                                                                    buffer-file-name
+                                                                    user-emacs-directory))))
   (package-initialize)
-  
+
   ;; Install htmlize if not present
   (unless (package-installed-p 'htmlize)
     (unless package-archive-contents
       (package-refresh-contents))
     (package-install 'htmlize))
-  
+
   (require 'htmlize))
 
 (require 'org)
 (require 'ox-html)
-
 ;; Configuration
+
+;; Load Babel languages for code execution
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (latex . t)
+   (shell . t)
+   (C . t)))
+
+;; LaTeX configuration for babel
+(setq org-latex-create-formula-image-program 'dvisvgm)
+(add-to-list 'org-latex-packages-alist '("" "tikz" t))
+(setq org-babel-latex-preamble
+      (lambda (_)
+        "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}\n\\usetikzlibrary{backgrounds}\n\\tikzset{every picture/.style={show background rectangle, background rectangle/.style={fill=white}}}"))
+(setq org-babel-latex-pdf-svg-process "pdftocairo -svg %f %O")
+(setq org-format-latex-header
+      "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
+
+;; Don't prompt for babel evaluation
+(setq org-confirm-babel-evaluate nil)
 
 (defvar xzhh/log-file nil
   "Path to export log file. Set by caller or defaults to ./export.log")
