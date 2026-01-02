@@ -5,17 +5,13 @@
 ;; ensuring robust keybindings and collection setup.
 
 ;;; Code:
-
 ;; 1. Evil Core
 (use-package evil
   :ensure t
   :init
-  ;; These variables must be set before evil-mode is loaded.
-  ;; Note: evil-want-keybinding is set in init.el / early-init.el
   (setq evil-want-keybinding nil
         evil-want-C-u-scroll t
         evil-want-C-d-scroll t
-        evil-want-C-u-delete t
         evil-undo-system 'undo-redo
         evil-split-window-below t
         evil-vsplit-window-right t)
@@ -34,7 +30,7 @@
           (insert "j")
           (when evt (push evt unread-command-events)))))))
 
-;; 2. Evil Collection (The Fixer)
+;; 2. Evil Collection
 (use-package evil-collection
   :after evil
   :ensure t
@@ -44,12 +40,7 @@
         evil-collection-calendar-want-org-bindings t)
   :config
   (setq evil-want-integration t)
-  ;; Initialize ALL modes
-  (evil-collection-init)
-
-  ;; Dired re-initialization
-  (with-eval-after-load 'dired
-    (evil-collection-init 'dired)))
+  (evil-collection-init))
 
 ;; 3. Evil Surround
 (use-package evil-surround

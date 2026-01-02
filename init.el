@@ -15,14 +15,14 @@
 ;; 1. Package Management
 (require 'xz-pkg)
 
-;; 2. Core Settings (Editor defaults, Desktop session, etc.)
+;; 2. Core Settings (Editor defaults, Evil, Desktop session, etc.)
 (require 'xz-core)
+(require 'xz-editor)
 
 ;; 3. UI & Theme
 (require 'xz-ui)
 
-;; 4. Evil & Editing
-(require 'xz-editor)
+;; 4. Editing
 (require 'xz-evil)
 
 ;; 5. Completion (Vertico/Corfu)
