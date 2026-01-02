@@ -48,8 +48,9 @@ M-x xz/install-treesit-grammars
 * Features
 
 - *Evil Mode*: Full vim emulation + evil-collection
-- *LSP*: Robust lsp-mode with performance tuning
-- *Completion*: Modern stack (Vertico + Consult + Corfu)
+- *LSP*: IDE Features (Inlay hints, Debugging, Sidebar, Code Lens)
+- *Completion*: Modern stack (Vertico + Consult + Corfu + Yasnippet)
+- *Formatting*: Apheleia (Prettier/Black)
 - *Theme*: xz-nord (darker Nord variant)
 - *Org*: Pro capture templates and productivity system
 
@@ -62,6 +63,8 @@ M-x xz/install-treesit-grammars
 | fd         | Projectile |
 | pyright    | Python LSP |
 | clangd     | C/C++ LSP |
+| black      | Python Formatting |
+| prettier   | Web Formatting |
 
 * License
 

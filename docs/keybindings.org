@@ -17,37 +17,25 @@
 | =C-c s=       | Save buffer               | xz-editor      |
 | =C-c w=       | Delete trailing whitespace | xz-editor     |
 | =C-c r=       | Revert buffer             | xz-editor      |
+| =gR=          | Revert buffer             | xz-evil        |
 
 * Search / Navigation
-
-| Key     | Action            | Source        |
-|---------+-------------------+---------------|
-| =C-s=   | consult-line      | xz-completion |
-| =M-s r= | consult-ripgrep   | xz-completion |
-| =M-g g= | consult-goto-line | xz-completion |
-| =M-g i= | consult-imenu     | xz-completion |
-| =M-y=   | consult-yank-pop  | xz-completion |
-
-* Projectile (Projects)
-
-| Key         | Action                   |
-|-------------+--------------------------|
-| =C-c p p=   | Switch project           |
-| =C-c p f=   | Find file in project     |
-| =C-c p s r= | Ripgrep in project       |
-| =C-c p b=   | Switch buffer in project |
-| =C-c p k=   | Kill project buffers     |
+;; ... (unchanged)
 
 * LSP (Code Intelligence)
 
-| Key       | Action       |
-|-----------+--------------|
-| =C-c l r= | Rename       |
-| =C-c l a= | Code actions |
-| =C-c l == | Format       |
-| =gd=      | Definition   |
-| =gr=      | References   |
-| =K=       | Hover docs   |
+| Key         | Action                  | Note                 |
+|-------------+-------------------------+----------------------|
+| =gd= / =gr=     | Defimenition / Refs     | Evil Normal          |
+| =gD= / =gi=     | Declaration / Impl      | Evil Normal          |
+| =K=           | Hover docs              | Evil Normal          |
+| =]e= / =[e=     | Next / Prev Error       | Evil Normal          |
+| =C-c l ==     | Format Buffer           | Apheleia             |
+| =C-c l s=     | Symbols Sidebar         | Treemacs             |
+| =C-c l E=     | Errors Sidebar          | Treemacs             |
+| =C-c l e=     | Search Errors           | Consult              |
+| =C-c l r=     | Rename                  |                      |
+| =C-c l a=     | Code Actions            |                      |
 
 * Org Mode
 

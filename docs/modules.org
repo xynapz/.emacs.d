@@ -83,18 +83,23 @@ Modern completion stack.
 | marginalia | Rich annotations     |
 | consult    | Search commands      |
 | corfu      | In-buffer completion |
+| yasnippet  | Snippets & Templates |
 
 * xz-dev.el
 
 Developer tools and languages.
 
-| Package     | Purpose                  |
-|-------------+--------------------------|
-| lsp-mode    | Language Server Protocol |
-| treesit     | Syntax Highlighting      |
-| projectile  | Project management       |
-| magit       | Git client               |
-| vterm       | Terminal                 |
+| Package          | Purpose                  |
+|------------------+--------------------------|
+| lsp-mode         | Language Server Protocol |
+| consult-lsp      | LSP diagnostics search   |
+| lsp-treemacs     | Symbols/Errors sidebar   |
+| dap-mode         | Debugging (DAP)          |
+| apheleia         | Formatting (Black/Prettier)|
+| treesit          | Syntax Highlighting      |
+| projectile       | Project management       |
+| magit            | Git client               |
+| vterm            | Terminal                 |
 
 ** Languages Configured
 - Python (pyright + treesit)

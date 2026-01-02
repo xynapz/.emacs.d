@@ -23,7 +23,28 @@
 (use-package apheleia
   :ensure t
   :config
-  (apheleia-global-mode +1))
+  (apheleia-global-mode +1)
+  (add-to-list 'apheleia-mode-alist '(python-ts-mode . black))
+  (add-to-list 'apheleia-mode-alist '(js-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(typescript-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(tsx-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(css-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(html-mode . prettier)))
+
+;; Web Development Indentation (2 Spaces)
+(dolist (mode '(html-mode-hook
+                css-ts-mode-hook
+                js-ts-mode-hook
+                typescript-ts-mode-hook
+                tsx-ts-mode-hook))
+  (add-hook mode (lambda ()
+                   (setq-local tab-width 2)
+                   ;; Tree-sitter specific indentation variable
+                   (setq-local treesit-indent-offset 2)
+                   ;; Legacy/Specific variables just in case
+                   (setq-local css-indent-offset 2)
+                   (setq-local js-indent-level 2)
+                   (setq-local typescript-indent-level 2))))
 
 (use-package treesit
   :ensure nil
@@ -82,7 +103,7 @@
   (with-eval-after-load 'lsp-mode
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
-    (define-key lsp-command-map (kbd "=") 'lsp-format-buffer)
+    (define-key lsp-command-map (kbd "=") 'apheleia-format-buffer) ; Use Apheleia for formatting
     (define-key lsp-command-map (kbd "s") 'lsp-treemacs-symbols)
     (define-key lsp-command-map (kbd "E") 'lsp-treemacs-errors-list))
 

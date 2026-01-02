@@ -38,6 +38,12 @@
 ;; Whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Indentation Defaults (Global)
+;; Standard: Spaces > Tabs
+(setq-default indent-tabs-mode nil  ; Use spaces
+              tab-width 4           ; Default width
+              fill-column 80)       ; Default line length
+
 
 (provide 'xz-editor)
 ;;; xz-editor.el ends here
