@@ -73,6 +73,8 @@
   
   ;; Force the prefix map (C-c l) because the variable sometimes fails
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics) ; Explicitly bind error list
+  (define-key lsp-command-map (kbd "=") 'lsp-format-buffer)       ; Explicitly bind format
 
   ;; Evil bindings for LSP
   (with-eval-after-load 'evil
@@ -107,16 +109,18 @@
 
 (defun xz/auto-activate-python-env ()
   "Automatically activate .venv if it exists in the project root."
-  (let ((venv-path (expand-file-name ".venv" (projectile-project-root))))
-    (when (file-exists-p venv-path)
-      (pyvenv-activate venv-path))))
+  (let* ((root (projectile-project-root))
+         (venv-path (and root (expand-file-name ".venv" root))))
+    (when (and venv-path (file-exists-p venv-path))
+      (pyvenv-activate venv-path)
+      (message "Activated venv: %s" venv-path))))
 
 (use-package lsp-pyright
   :ensure t
   :hook (python-ts-mode . (lambda ()
                           (require 'lsp-pyright)
                           (xz/auto-activate-python-env) ; Activate venv before LSP
-                          (lsp))))
+                          (lsp-deferred))))
 
 (use-package vterm
   :ensure t
