@@ -91,7 +91,10 @@
       (kbd "gi") 'lsp-find-implementation
       (kbd "gt") 'lsp-find-type-definition
       (kbd "ga") 'lsp-execute-code-action
-      (kbd "rn") 'lsp-rename)))
+      (kbd "rn") 'lsp-rename
+      ;; Error Navigation
+      (kbd "]e") 'flymake-goto-next-error
+      (kbd "[e") 'flymake-goto-prev-error)))
 
 (use-package consult-lsp
   :ensure t

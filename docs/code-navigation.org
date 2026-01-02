@@ -158,6 +158,8 @@ We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
 | =C-c l ==   | Format buffer    |
 | =C-c l e=   | List errors      |
 | =C-c l h h= | Toggle Highlights|
+| =]e=        | Next Error       |
+| =[e=        | Previous Error   |
 
 ** UI Features (lsp-ui)
 
