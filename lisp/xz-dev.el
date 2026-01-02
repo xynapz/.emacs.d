@@ -20,6 +20,11 @@
   :config
   (setq magit-refresh-status-buffer nil))
 
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode +1))
+
 (use-package treesit
   :ensure nil
   :mode (("\\.py\\'" . python-ts-mode)
