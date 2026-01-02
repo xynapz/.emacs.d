@@ -72,12 +72,7 @@
         lsp-log-io nil
         lsp-completion-provider :none  ; Use Corfu
         lsp-headerline-breadcrumb-enable nil
-        lsp-auto-configure t
-        lsp-auto-guess-root t          ; Don't ask to import projects
-        read-process-output-max (* 1024 1024))
-  
-        lsp-headerline-breadcrumb-enable nil
-        lsp-lens-enable t              ; Code Lens (references) [FIXED TYPO]
+        lsp-lens-enable t              ; Code Lens (references)
         lsp-inlay-hint-enable t        ; Inlay Hints (types/params)
         lsp-auto-configure t
         lsp-auto-guess-root t          ; Don't ask to import projects
