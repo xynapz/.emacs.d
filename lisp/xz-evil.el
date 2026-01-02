@@ -12,7 +12,7 @@
   :init
   ;; These variables must be set before evil-mode is loaded.
   ;; Note: evil-want-keybinding is set in init.el / early-init.el
-  (setq evil-want-integration t
+  (setq evil-want-keybinding nil
         evil-want-C-u-scroll t
         evil-want-C-d-scroll t
         evil-want-C-u-delete t
@@ -21,10 +21,10 @@
         evil-vsplit-window-right t)
   :config
   (evil-mode 1)
-  
+
   ;; C-g to exit insert state
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  
+
   ;; jk to escape
   (define-key evil-insert-state-map (kbd "j")
     (lambda () (interactive)
@@ -43,10 +43,11 @@
   (setq evil-collection-setup-minibuffer t
         evil-collection-calendar-want-org-bindings t)
   :config
+  (setq evil-want-integration t)
   ;; Initialize ALL modes
   (evil-collection-init)
-  
-  ;; Force Dired re-initialization just in case
+
+  ;; Dired re-initialization
   (with-eval-after-load 'dired
     (evil-collection-init 'dired)))
 
