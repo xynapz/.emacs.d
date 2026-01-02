@@ -69,7 +69,22 @@
         lsp-headerline-breadcrumb-enable nil
         lsp-auto-configure t
         lsp-auto-guess-root t          ; Don't ask to import projects
-        read-process-output-max (* 1024 1024)))
+        read-process-output-max (* 1024 1024))
+  
+  ;; Force the prefix map (C-c l) because the variable sometimes fails
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+
+  ;; Evil bindings for LSP
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal lsp-mode-map
+      (kbd "K") 'lsp-ui-doc-glance
+      (kbd "gd") 'lsp-find-definition
+      (kbd "gr") 'lsp-find-references
+      (kbd "gD") 'lsp-find-declaration
+      (kbd "gi") 'lsp-find-implementation
+      (kbd "gt") 'lsp-find-type-definition
+      (kbd "ga") 'lsp-execute-code-action
+      (kbd "rn") 'lsp-rename)))
 
 (use-package lsp-ui
   :ensure t

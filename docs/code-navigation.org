@@ -144,15 +144,19 @@ We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
 | =gd=  | Go to definition  | =lsp-find-definition=   |
 | =gr=  | Find references   | =lsp-find-references=   |
 | =K=   | Hover (show docs) | =lsp-ui-doc-glance=     |
+| =gD=  | Go to declaration | =lsp-find-declaration=  |
+| =gi=  | Go to implementation| =lsp-find-implementation=|
+| =gt=  | Go to type def    | =lsp-find-type-definition=|
 | =C-o= | Jump back         | =xref-go-back=          |
 
 ** Actions and Refactoring
 
 | Key       | Action           |
 |-----------+------------------|
-| =C-c l r=   | Rename symbol    |
-| =C-c l a=   | Code actions     |
+| =rn= / =C-c l r= | Rename symbol    |
+| =ga= / =C-c l a= | Code actions     |
 | =C-c l ==   | Format buffer    |
+| =C-c l e=   | List errors      |
 | =C-c l h h= | Toggle Highlights|
 
 ** UI Features (lsp-ui)
