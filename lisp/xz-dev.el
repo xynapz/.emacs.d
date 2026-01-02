@@ -77,37 +77,39 @@
         read-process-output-max (* 1024 1024))
   
         lsp-headerline-breadcrumb-enable nil
-        lsp-len-enable t               ; Code Lens (references)
+        lsp-lens-enable t              ; Code Lens (references) [FIXED TYPO]
         lsp-inlay-hint-enable t        ; Inlay Hints (types/params)
         lsp-auto-configure t
         lsp-auto-guess-root t          ; Don't ask to import projects
         read-process-output-max (* 1024 1024))
   
   ;; Force the prefix map (C-c l) because the variable sometimes fails
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics) ; Explicitly bind error list
-  (define-key lsp-command-map (kbd "=") 'lsp-format-buffer)       ; Explicitly bind format
+  (with-eval-after-load 'lsp-mode
+    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+    (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
+    (define-key lsp-command-map (kbd "=") 'lsp-format-buffer))
 
   ;; Evil bindings for LSP
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal lsp-mode-map
-      (kbd "K") 'lsp-ui-doc-glance
-      (kbd "gd") 'lsp-find-definition
-      (kbd "gr") 'lsp-find-references
-      (kbd "gD") 'lsp-find-declaration
-      (kbd "gi") 'lsp-find-implementation
-      (kbd "gt") 'lsp-find-type-definition
-      (kbd "ga") 'lsp-execute-code-action
-      (kbd "rn") 'lsp-rename
-      ;; Error Navigation
-      (kbd "]e") 'flymake-goto-next-error
-      (kbd "[e") 'flymake-goto-prev-error)))
+  ;; Use quoted 'lsp-mode-map to allow lazy binding if evil loads first
+  (evil-define-key 'normal 'lsp-mode-map
+    (kbd "K") 'lsp-ui-doc-glance
+    (kbd "gd") 'lsp-find-definition
+    (kbd "gr") 'lsp-find-references
+    (kbd "gD") 'lsp-find-declaration
+    (kbd "gi") 'lsp-find-implementation
+    (kbd "gt") 'lsp-find-type-definition
+    (kbd "ga") 'lsp-execute-code-action
+    (kbd "rn") 'lsp-rename
+    ;; Error Navigation
+    (kbd "]e") 'flymake-goto-next-error
+    (kbd "[e") 'flymake-goto-prev-error))
 
 (use-package consult-lsp
   :ensure t
   :after (consult lsp-mode)
   :config
-  (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
+  (with-eval-after-load 'lsp-mode
+    (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols)))
 
 (use-package lsp-treemacs
   :ensure t
