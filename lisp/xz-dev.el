@@ -50,8 +50,7 @@
 
 (use-package lsp-mode
   :ensure t
-  :init
-  (setq lsp-keymap-prefix "C-c l")
+  :commands (lsp lsp-deferred)
   :hook ((python-ts-mode . lsp-deferred)
          (js-ts-mode . lsp-deferred)
          (typescript-ts-mode . lsp-deferred)
@@ -61,12 +60,14 @@
          (c-ts-mode . lsp-deferred)
          (c++-ts-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-idle-delay 0.500
         lsp-log-io nil
         lsp-completion-provider :none  ; Use Corfu
         lsp-headerline-breadcrumb-enable nil
+        lsp-auto-configure t
         lsp-auto-guess-root t          ; Don't ask to import projects
         read-process-output-max (* 1024 1024)))
 
@@ -77,9 +78,11 @@
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-position 'at-point)
   (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-show-hover t)
   (lsp-ui-sideline-show-diagnostics t)
-  (lsp-ui-sideline-show-code-actions t))
+  (lsp-ui-sideline-show-code-actions t)
+  :config
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
 ;; Python Environment
 (use-package pyvenv
