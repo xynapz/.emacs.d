@@ -34,11 +34,9 @@
 (use-package evil-collection
   :after evil
   :ensure t
-  :init
-  ;; Pre-load settings required for minibuffer and bindings
+  :config
   (setq evil-collection-setup-minibuffer t
         evil-collection-calendar-want-org-bindings t)
-  :config
   (setq evil-want-integration t)
   (evil-collection-init))
 
