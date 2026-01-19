@@ -209,14 +209,20 @@ Defaults to C++ but checks for C++ patterns in content and corresponding files."
   :custom
   (lsp-disabled-clients '(pyright)) ; Explicitly prefer Pylsp over Pyright
   (lsp-idle-delay 0.500)
-  (lsp-log-io nil)
-  (lsp-completion-provider :none)   ; Use Corfu
+  (lsp-log-io nil)                   ; Disable IO logging for performance
+  (lsp-completion-provider :none)    ; Use Corfu instead
   (lsp-headerline-breadcrumb-enable nil)
-  (lsp-lens-enable t)               ; Code Lens (references)
-  (lsp-inlay-hint-enable t)         ; Inlay Hints (types/params)
+  (lsp-modeline-diagnostics-enable nil) ; Use flymake instead
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-lens-enable nil)              ; Disable code lens (perf heavy)
+  (lsp-signature-auto-activate nil)  ; Manual signature help
+  (lsp-signature-render-documentation nil)
+  (lsp-enable-file-watchers nil)     ; Disable file watchers (big perf gain)
+  (lsp-enable-folding nil)           ; Use native folding
+  (lsp-enable-text-document-color nil)
+  (lsp-enable-on-type-formatting nil)
   (lsp-auto-configure t)
-  (lsp-auto-guess-root t)           ; Don't ask to import projects
-  (read-process-output-max (* 1024 1024))
+  (lsp-auto-guess-root t)
 
   :config
   (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)

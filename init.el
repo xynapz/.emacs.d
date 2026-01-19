@@ -22,8 +22,7 @@
 ;; 3. UI & Theme
 (require 'xz-ui)
 
-(require 'xz-evil)
-;; (require 'xz-meow)
+(require 'xz-meow)
 
 ;; 4. Completion (Vertico/Corfu)
 (require 'xz-completion)
@@ -33,7 +32,6 @@
 
 ;; 6. Org Mode & Export (Preserved modules)
 (require 'xz-org)
-(require 'xz-export)
 
 ;;; init.el ends here
 (custom-set-variables

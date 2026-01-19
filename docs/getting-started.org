@@ -10,21 +10,34 @@
 
 2. Start Emacs. It will automatically download dependencies.
 
-3. *Important*: If prompted to compile =vterm-module=, say *yes*. You will need =cmake= and =libtool= installed on your system.
+3. *Important*: If prompted to compile =vterm-module=, say *yes*. You need:
    - Debian/Ubuntu: =sudo apt install cmake libtool-bin libvterm-dev=
    - Fedora: =sudo dnf install cmake libtool libvterm-devel=
 
-4. Run post-install setup commands inside Emacs:
+4. Run post-install setup inside Emacs:
    - =M-x nerd-icons-install-fonts= (Installing fonts)
-   - =M-x xz/install-treesit-grammars= (Installing tree-sitter languages)
+   - =M-x xz/install-treesit-grammars= (Tree-sitter languages)
+
+* Modal Editing (Meow)
+
+This config uses *Meow* for modal editing (selection-first paradigm).
+
+Quick start:
+- =M-x meow-tutor= — Interactive 15-minute tutorial
+- =SPC ?= — Cheatsheet
+
+| State  | Key to Enter | Purpose          |
+|--------+--------------+------------------|
+| NORMAL | =ESC= / =jk= | Navigate/command |
+| INSERT | =i= / =a=    | Type text        |
 
 * Verification
 
 To verify everything is working:
-1. Open a Python file (=test.py=).
-2. Check if LSP starts (check mode line or =M-x lsp-describe-session=).
-3. Try completion (start typing, see Corfu popup).
-4. Try fuzzy finding files (=C-c p f= or =SPC f f= if mapped).
+1. Open a Python file (=test.py=)
+2. Check if LSP starts (mode line shows language server)
+3. Try completion (start typing, see Corfu popup)
+4. Try =SPC p f= for project file finding
 
 * Troubleshooting
 
@@ -32,9 +45,19 @@ To verify everything is working:
 Run =M-x nerd-icons-install-fonts= and restart Emacs.
 
 ** VTerm error
-Ensure you have CMake installed. Run =M-x vterm-module-compile=.
+Ensure CMake is installed. Run =M-x vterm-module-compile=.
 
 ** LSP not Starting
 Most likely the language server is missing.
-- Python: =npm i -g pyright=
+- Python: =pip install python-lsp-server=
 - JS/TS: =npm i -g typescript-language-server=
+
+* Key Files
+
+| File             | Purpose              |
+|------------------+----------------------|
+| =init.el=        | Entry point          |
+| =early-init.el=  | Performance settings |
+| =lisp/xz-meow.el=| Modal editing        |
+| =lisp/xz-dev.el= | LSP & languages      |
+| =docs/meow.org=  | Keybinding reference |

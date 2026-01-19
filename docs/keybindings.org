@@ -13,29 +13,45 @@
 | =C-x g=       | Magit status              | xz-dev         |
 | =C-c t=       | Toggle VTerm              | xz-dev         |
 | =C-c r r=     | Clean restart             | xz-pkg         |
-| =M-o=         | Other window              | xz-editor      |
-| =C-c s=       | Save buffer               | xz-editor      |
-| =C-c w=       | Delete trailing whitespace | xz-editor     |
-| =C-c r=       | Revert buffer             | xz-editor      |
-| =gR=          | Revert buffer             | xz-evil        |
+
+* Meow Leader (SPC)
+
+| Key       | Action              |
+|-----------+---------------------|
+| =SPC f=   | Find file           |
+| =SPC b=   | Switch buffer       |
+| =SPC s=   | Save buffer         |
+| =SPC k=   | Kill buffer         |
+| =SPC p=   | Projectile prefix   |
+| =SPC g=   | Magit status        |
+| =SPC a=   | Org agenda          |
+| =SPC c=   | Org capture         |
+| =SPC 1=   | Delete other windows|
+| =SPC 2=   | Split horizontal    |
+| =SPC 3=   | Split vertical      |
+| =SPC 0=   | Delete window       |
+| =SPC ?=   | Meow cheatsheet     |
 
 * Search / Navigation
-;; ... (unchanged)
+
+| Key       | Action                |
+|-----------+-----------------------|
+| =M-s l=   | consult-line          |
+| =M-s r=   | consult-ripgrep       |
+| =M-g g=   | consult-goto-line     |
+| =M-g i=   | consult-imenu         |
+| =M-g o=   | consult-outline       |
 
 * LSP (Code Intelligence)
 
-| Key         | Action                  | Note                 |
-|-------------+-------------------------+----------------------|
-| =gd= / =gr=     | Defimenition / Refs     | Evil Normal          |
-| =gD= / =gi=     | Declaration / Impl      | Evil Normal          |
-| =K=           | Hover docs              | Evil Normal          |
-| =]e= / =[e=     | Next / Prev Error       | Evil Normal          |
-| =C-c l ==     | Format Buffer           | Apheleia             |
-| =C-c l s=     | Symbols Sidebar         | Treemacs             |
-| =C-c l E=     | Errors Sidebar          | Treemacs             |
-| =C-c l e=     | Search Errors           | Consult              |
-| =C-c l r=     | Rename                  |                      |
-| =C-c l a=     | Code Actions            |                      |
+| Key         | Action               |
+|-------------+----------------------|
+| =C-c l ==   | Format Buffer        |
+| =C-c l s=   | Symbols Sidebar      |
+| =C-c l E=   | Errors Sidebar       |
+| =C-c l e=   | Search Errors        |
+| =C-c l r=   | Rename               |
+| =C-c l a=   | Code Actions         |
 
 * Org Mode
 
@@ -50,15 +66,17 @@
 | =C-c C-w= | Refile              |
 | =TAB=     | Fold/unfold         |
 
-* Evil Mode
+* Meow Modal Editing
 
-See [[file:code-navigation.org][code-navigation.org]] for full reference.
+See [[file:meow.org][meow.org]] for full reference.
 
 | Key   | Action                 |
 |-------+------------------------|
 | =ESC= | Normal mode            |
-| =jk=  | Escape (insert → normal) |
-| =gc=  | Comment (evil-commentary) |
-| =cs=  | Change surround        |
-| =ds=  | Delete surround        |
-| =ys=  | Add surround           |
+| =jk=  | Escape (insert→normal) |
+| =w=   | Select word            |
+| =x=   | Select line            |
+| =d=   | Delete selection       |
+| =c=   | Change selection       |
+| =y=   | Yank (copy)            |
+| =p=   | Paste                  |

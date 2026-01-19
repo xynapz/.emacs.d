@@ -1,0 +1,159 @@
+#+TITLE: Meow Modal Editing
+#+AUTHOR: Angel Dhakal
+#+STARTUP: overview
+#+OPTIONS: toc:2
+
+* Overview
+
+Meow is a lightweight modal editing system using a *selection-first* paradigm.
+Unlike Vim, you select text first, then apply an action.
+
+Config: =lisp/xz-meow.el=
+
+* States
+
+| State  | Indicator | Purpose                    |
+|--------+-----------+----------------------------|
+| NORMAL | [N]       | Navigation and commands    |
+| INSERT | [I]       | Text insertion             |
+| MOTION | [M]       | Special modes (dired, etc) |
+| KEYPAD | [K]       | Leader key commands        |
+| BEACON | [B]       | Multi-cursor via kmacro    |
+
+* Escape to Normal
+
+| Key       | Action             |
+|-----------+--------------------|
+| =ESC=     | Return to NORMAL   |
+| =jk=      | Escape (0.15s)     |
+| =C-g=     | Cancel / NORMAL    |
+
+* Movement (Normal)
+
+| Key | Action               |
+|-----+----------------------|
+| =h= | Left                 |
+| =j= | Down                 |
+| =k= | Up                   |
+| =l= | Right                |
+| =w= | Mark word (forward)  |
+| =b= | Back word            |
+| =e= | Next word end        |
+| =x= | Select line          |
+
+* Selection (Core Concept)
+
+Meow is *selection-first*. Select text, then act on it.
+
+| Key | Action                  |
+|-----+-------------------------|
+| =w= | Select word             |
+| =x= | Select line             |
+| =o= | Select block            |
+| =,= | Inner of thing          |
+| =.= | Bounds of thing         |
+| =[= | Beginning of thing      |
+| =]= | End of thing            |
+| =g= | Cancel selection        |
+| =;= | Reverse selection       |
+
+** Expand Selection
+
+| Key | Action                  |
+|-----+-------------------------|
+| =H= | Expand left             |
+| =J= | Expand down             |
+| =K= | Expand up               |
+| =L= | Expand right            |
+
+* Actions (On Selection)
+
+| Key | Action              |
+|-----+---------------------|
+| =d= | Delete              |
+| =s= | Kill (cut)          |
+| =c= | Change (delete+insert)|
+| =y= | Yank (copy)         |
+| =p= | Paste               |
+| =r= | Replace             |
+| =u= | Undo                |
+| =U= | Undo in selection   |
+
+* Insert Mode
+
+| Key | Action              |
+|-----+---------------------|
+| =i= | Insert before       |
+| =a= | Append after        |
+| =I= | Open line above     |
+| =A= | Open line below     |
+
+* Search
+
+| Key | Action              |
+|-----+---------------------|
+| =n= | Search (meow-search)|
+| =v= | Visit (consult)     |
+| =f= | Find char forward   |
+| =t= | Till char           |
+
+* Leader Key (SPC)
+
+Press =SPC= to enter KEYPAD state:
+
+| Key     | Action              |
+|---------+---------------------|
+| =SPC f= | Find file           |
+| =SPC b= | Switch buffer       |
+| =SPC s= | Save buffer         |
+| =SPC k= | Kill buffer         |
+| =SPC r= | Recent files        |
+| =SPC p= | Projectile prefix   |
+| =SPC g= | Magit status        |
+| =SPC a= | Org agenda          |
+| =SPC c= | Org capture         |
+| =SPC 1= | Delete other windows|
+| =SPC 2= | Split horizontal    |
+| =SPC 3= | Split vertical      |
+| =SPC 0= | Delete window       |
+| =SPC o= | Other window        |
+| =SPC ?= | Cheatsheet          |
+
+* KEYPAD for Commands
+
+KEYPAD lets you run Emacs commands without modifiers:
+
+| KEYPAD    | Equivalent    |
+|-----------+---------------|
+| =SPC x f= | =C-x C-f=     |
+| =SPC x s= | =C-x C-s=     |
+| =SPC x b= | =C-x b=       |
+| =SPC h k= | =C-h k=       |
+
+* Workflow Comparison
+
+** Vim/Evil: verb → object
+=ciw= = change inner word
+
+** Meow: select → verb
+=w c= = select word, then change
+
+* Quick Reference
+
+| Task              | Meow              |
+|-------------------+-------------------|
+| Delete word       | =w d=             |
+| Change word       | =w c=             |
+| Delete line       | =x d=             |
+| Copy line         | =x y=             |
+| Delete to EOL     | =x d= (from cursor)|
+| Undo              | =u=               |
+| Save file         | =SPC s=           |
+| Find file         | =SPC f=           |
+| Switch buffer     | =SPC b=           |
+| Git status        | =SPC g=           |
+
+* Learning
+
+Run =M-x meow-tutor= for an interactive 15-minute tutorial.
+Run =M-x meow-cheatsheet= or =SPC ?= for quick reference.

@@ -21,19 +21,12 @@
 
 (setq use-package-always-ensure t
       use-package-verbose nil
-      use-package-verbose nil
       use-package-expand-minimally t)
 
 (use-package which-key
   :ensure t
   :config
   (which-key-mode 1))
-
-;; Automatic package updates
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t))
 
 ;; Restart Emacs
 (use-package restart-emacs

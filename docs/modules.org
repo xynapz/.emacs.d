@@ -11,6 +11,7 @@ Managed in =init.el=:
 (require 'xz-pkg)        ; Packages
 (require 'xz-core)       ; Basics
 (require 'xz-ui)         ; UI & Theme
+(require 'xz-meow)       ; Modal Editing
 (require 'xz-editor)     ; Customizations
 (require 'xz-completion) ; Completion
 (require 'xz-dev)        ; Dev Tools
@@ -27,7 +28,6 @@ Foundational settings.
 | Encoding          | UTF-8               |
 | Backups           | Disabled            |
 | Auto Revert       | Enabled (Global)    |
-| Desktop           | Saved (filtered)    |
 | Recentf           | Enabled (200 items) |
 
 * xz-pkg.el
@@ -37,7 +37,7 @@ Package management infrastructure.
 | Package             | Purpose           |
 |---------------------+-------------------|
 | use-package         | Config macro      |
-| auto-package-update | Auto updates      |
+| which-key           | Key hints         |
 | restart-emacs       | Safe restarting   |
 
 * xz-ui.el
@@ -53,24 +53,26 @@ Visual appearance.
 
 * xz-editor.el
 
-General editor settings (whitespace, line numbers, parenting).
+General editor settings.
 
 | Package              | Purpose            |
 |----------------------+--------------------|
 | display-line-numbers | Relative lines     |
-| elect-pair           | Auto brackets      |
+| electric-pair        | Auto brackets      |
 | hl-line              | Highlight line     |
 
-* xz-evil.el
+* xz-meow.el
 
-Dedicated Evil Mode configuration.
+Modal editing with Meow.
 
-| Package          | Purpose            |
-|------------------+--------------------|
-| evil             | Core vim emulation |
-| evil-collection  | Omni-bindings      |
-| evil-surround    | Surround ops       |
-| evil-commentary  | Commenting         |
+| Feature          | Description          |
+|------------------+----------------------|
+| meow             | Core modal editing   |
+| QWERTY layout    | Standard bindings    |
+| Leader (SPC)     | Quick commands       |
+| jk escape        | Fast insert exit     |
+
+See [[file:meow.org][meow.org]] for keybindings.
 
 * xz-completion.el
 
@@ -95,7 +97,7 @@ Developer tools and languages.
 | consult-lsp      | LSP diagnostics search   |
 | lsp-treemacs     | Symbols/Errors sidebar   |
 | dap-mode         | Debugging (DAP)          |
-| apheleia         | Formatting (Black/Prettier)|
+| apheleia         | Formatting               |
 | treesit          | Syntax Highlighting      |
 | projectile       | Project management       |
 | magit            | Git client               |
@@ -105,7 +107,7 @@ Developer tools and languages.
 - Python (pylsp + treesit)
 - JavaScript/TypeScript (ts-ls + treesit)
 - C/C++ (clangd + treesit)
-- Web (HTML/CSS LSPs)
+- Go, Rust, YAML, Terraform
 
 * xz-org.el
 
@@ -113,4 +115,4 @@ Org mode setup. See [[file:org-guide.org][org-guide.org]].
 
 * xz-export.el
 
-Blog export for angeld site.
+Blog export functionality.

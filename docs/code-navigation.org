@@ -1,4 +1,4 @@
-#+TITLE: Code Navigation with Evil Mode
+#+TITLE: Code Navigation with Meow
 #+AUTHOR: Angel Dhakal
 #+STARTUP: overview
 #+OPTIONS: toc:2
@@ -7,332 +7,181 @@
 
 | Key   | Action                   | Mode   |
 |-------+--------------------------+--------|
-| =gg=    | Top of file              | Normal |
-| =G=     | Bottom of file           | Normal |
-| =:N=    | Go to line N             | Normal |
-| =gd=    | Go to definition         | Normal |
-| =gr=    | Find references          | Normal |
-| =K=     | Show docs (hover)        | Normal |
-| =C-o=   | Jump back                | Normal |
-| =C-i=   | Jump forward             | Normal |
-| =/=     | Search forward           | Normal |
-| =n= / =N= | Next / prev match        | Normal |
-| =*=     | Search word under cursor | Normal |
+| =w=   | Select word              | Normal |
+| =x=   | Select line              | Normal |
+| =f=   | Find char                | Normal |
+| =n=   | Search                   | Normal |
+| =SPC f= | Find file              | Leader |
+| =SPC b= | Switch buffer          | Leader |
+| =SPC g= | Git status             | Leader |
 
-* Evil Mode Basics
+* Meow Basics
 
-You have Vim bindings. Forget =C-n= / =C-p=.
+You have modal editing with Meow. It uses a *selection-first* paradigm.
 
-** Modes
+** States
 
-| Key | Enters Mode  | What It Does         |
-|-----+--------------+----------------------|
-| =ESC= | Normal       | Command mode         |
-| =i=   | Insert       | Type text            |
-| =v=   | Visual       | Select text          |
-| =V=   | Visual Line  | Select full lines    |
-| =C-v= | Visual Block | Column selection     |
-| =:=   | Command      | Ex commands (=:w=, =:q=) |
+| Key | State   | What It Does           |
+|-----+---------+------------------------|
+| =ESC= | Normal  | Navigation / Commands  |
+| =i=   | Insert  | Type text              |
+| =a=   | Insert  | Append after cursor    |
 
 ** Exiting Insert Mode
 
 | Key | Action           |
 |-----+------------------|
 | =ESC= | Return to Normal |
-| =C-[= | Same as ESC      |
 | =jk=  | (configured)     |
 
 * Movement (Normal Mode)
+
 ** Character / Word
 
 | Key | Action                 |
 |-----+------------------------|
-| =h=   | Left                   |
-| =j=   | Down                   |
-| =k=   | Up                     |
-| =l=   | Right                  |
-| =w=   | Next word start        |
-| =b=   | Previous word start    |
-| =e=   | End of word            |
-| =W=   | Next WORD (whitespace) |
-| =B=   | Previous WORD          |
+| =h= | Left                   |
+| =j= | Down                   |
+| =k= | Up                     |
+| =l= | Right                  |
+| =w= | Select word forward    |
+| =b= | Back word              |
+| =e= | Next word end          |
 
 ** Line
 
 | Key | Action                |
 |-----+-----------------------|
-| =0=   | Start of line         |
-| =^=   | First non-blank       |
-| =$=   | End of line           |
-| =_=   | First non-blank (alt) |
-
+| =x= | Select line           |
+| =0= | Delete window (leader)|
 
 ** Screen / File
 
 | Key | Action                  |
 |-----+-------------------------|
-| =gg=  | Top of file             |
-| =G=   | Bottom of file          |
-| =:42= | Go to line 42           |
-| =42G= | Go to line 42           |
-| =H=   | Top of screen           |
-| =M=   | Middle of screen        |
-| =L=   | Bottom of screen        |
-| =C-d= | Half page down          |
-| =C-u= | Half page up            |
-| =C-f= | Full page down          |
-| =C-b= | Full page up            |
-| =zz=  | Center cursor on screen |
+| =Q= | Go to line              |
+| =SPC 1= | Maximize window     |
 
-** Jumping
+* Selection (Core Concept)
 
-| Key | Action                     |
-|-----+----------------------------|
-| =%=   | Jump to matching bracket   |
-| ={=   | Previous paragraph         |
-| =}=   | Next paragraph             |
-| =[[=  | Previous function/section  |
-| =]]=  | Next function/section      |
-| =C-o= | Jump back (older position) |
-| =C-i= | Jump forward               |
-| =``=  | Last jump position         |
-| ='.=  | Last edit position         |
+Unlike Vim, Meow selects first, then acts.
 
-** Folding
+| Key | Action               |
+|-----+----------------------|
+| =w= | Select word          |
+| =x= | Select line          |
+| =o= | Select block         |
+| =,= | Inner of thing       |
+| =.= | Bounds of thing      |
+| =g= | Cancel selection     |
 
-| Key | Action           |
-|-----+------------------|
-| =za=  | Toggle fold      |
-| =zc=  | Close fold       |
-| =zo=  | Open fold        |
-| =zM=  | Close all folds  |
-| =zR=  | Open all folds   |
-| =zj=  | Next fold        |
-| =zk=  | Previous fold    |
+* Actions on Selection
+
+| Key | Action              |
+|-----+---------------------|
+| =d= | Delete              |
+| =s= | Kill (cut)          |
+| =c= | Change              |
+| =y= | Yank (copy)         |
+| =p= | Paste               |
+| =u= | Undo                |
 
 * Search
+
 ** In-Buffer
 
-| Key | Action                          |
-|-----+---------------------------------|
-| =/=   | Search forward                  |
-| =?=   | Search backward                 |
-| =n=   | Next match                      |
-| =N=   | Previous match                  |
-| =*=   | Search word under cursor (fwd)  |
-| =#=   | Search word under cursor (back) |
+| Key | Action              |
+|-----+---------------------|
+| =n= | meow-search         |
+| =v= | meow-visit          |
+| =f= | Find char           |
+| =t= | Till char           |
 
-Type =/pattern= then =RET= to search.
+** Consult
 
-** Consult (Your Config)
-
-| Key   | Action                      |
-|-------+-----------------------------|
-| =C-s=   | consult - line = fuzzy      |
-| =M-s r= | consult - ripgrep = project |
-| =M-g i= | =consult-imenu= (symbols)     |
-#+TBLFM: $2=consult-line= (fuzzy)
+| Key     | Action              |
+|---------+---------------------|
+| =M-s l= | consult-line        |
+| =M-s r= | consult-ripgrep     |
+| =M-g i= | consult-imenu       |
 
 * LSP Mode (Code Intelligence)
 
-We use =lsp-mode= with =lsp-ui= for a rich IDE experience.
+We use =lsp-mode= for IDE features.
 
 ** Navigation
 
-| Key | Action            | Binding               |
-|-----+-------------------+-----------------------|
-| =gd=  | Go to definition  | =lsp-find-definition=   |
-| =gr=  | Find references   | =lsp-find-references=   |
-| =K=   | Hover (show docs) | =lsp-ui-doc-glance=     |
-| =gD=  | Go to declaration | =lsp-find-declaration=  |
-| =gi=  | Go to implementation| =lsp-find-implementation=|
-| =gt=  | Go to type def    | =lsp-find-type-definition=|
-| =C-o= | Jump back         | =xref-go-back=          |
+| Key       | Action              |
+|-----------+---------------------|
+| =M-.=     | Go to definition    |
+| =M-,=     | Go back             |
+| =M-?=     | Find references     |
+| =C-c l r= | Rename symbol       |
+| =C-c l a= | Code actions        |
 
-** Actions and Refactoring
+** UI Features
 
-| Key       | Action           |
-|-----------+------------------|
-| =rn= / =C-c l r= | Rename symbol    |
-| =ga= / =C-c l a= | Code actions     |
-| =C-c l ==   | Format buffer    |
-| =C-c l e=   | List errors (Consult)|
-| =C-c l E=   | List errors (Tree)   |
-| =C-c l s=   | Symbols sidebar      |
-| =C-c l h h= | Toggle Highlights    |
-| =]e=        | Next Error           |
-| =[e=        | Previous Error       |
-| =gR=        | Revert Buffer        |
+- *Sideline*: Diagnostics on the right
+- *Flymake*: Error navigation
 
-** UI Features (lsp-ui)
+** Symbols Sidebar
 
-- **Sideline**: Shows diagnostics and info on the right side of the code.
-- **Doc**: Shows documentation in a popup when hovering (or using =K=).
-- **Inlay Hints**: Shows type hints and parameter names inline (like VSCode).
-- **Code Lens**: Shows reference counts above functions.
-
-** Symbols Sidebar (Treemacs)
-
-Use =M-x lsp-treemacs-symbols= to view the outline of the current file.
-Use =M-x lsp-treemacs-errors-list= to view project errors.
-
-** Debugging (DAP)
-
-Debugging is provided by =dap-mode=.
-- Start: =M-x dap-debug=
-- Breakpoint: =M-x dap-breakpoint-toggle=
-
-** Troubleshooting
-
-| Command | Purpose |
-|---------+---------|
-| =M-x lsp-describe-session= | View current server status |
-| =M-x lsp-log-io= | Enable IO logging if things break |
-| =M-x lsp-workspace-restart= | Restart the server |
-
-
-* Editing (Normal Mode)
-** Operators
-
-Vim operators combine with motions: =d + motion= = delete.
-
-| Key | Operator    | Example | Result        |
-|-----+-------------+---------+---------------|
-| =d=   | Delete      | =dw=      | Delete word   |
-| =c=   | Change      | =cw=      | Change word   |
-| =y=   | Yank (copy) | =yy=      | Copy line     |
-| =>=   | Indent      | =>>=      | Indent line   |
-| =<=   | Unindent    | =<<=      | Unindent line |
-| =gc=  | Comment     | =gcc=     | Comment line  |
-| =gq=  | Format      | =gqap=    | Format para   |
-
-** Common Combos
-
-| Keys | Action                  |
-|------+-------------------------|
-| =dd=   | Delete entire line      |
-| =cc=   | Change entire line      |
-| =yy=   | Yank (copy) entire line |
-| =D=    | Delete to end of line   |
-| =C=    | Change to end of line   |
-| =p=    | Paste after cursor      |
-| =P=    | Paste before cursor     |
-| =u=    | Undo                    |
-| =C-r=  | Redo                    |
-| =.=    | Repeat last command     |
-
-** Text Objects
-
-Operate on semantic "objects". Format: =operator + i/a + object=
-
-| Keys | Action                     |
-|------+----------------------------|
-| =diw=  | Delete inner word          |
-| =daw=  | Delete a word (with space) |
-| =ci"=  | Change inside quotes       |
-| =da(=  | Delete around parentheses  |
-| =yi{=  | Yank inside braces         |
-| =vip=  | Visual select paragraph    |
-
-Objects: =w= word, =" ' `= quotes, =( ) [ ] { }= brackets, =p= paragraph, =t= tag.
-
-* Evil Surround
-
-Your config has =evil-surround=.
-
-| Keys  | Action                      |
-|-------+-----------------------------|
-| =cs"'=  | Change surrounding =" to '=   |
-| =ds(=   | Delete surrounding parens   |
-| =ysiw]= | Surround word with =[]=       |
-| =yss)=  | Surround line with =()=       |
-| =S"=    | Surround selection (Visual) |
+=C-c l s= opens symbol tree (lsp-treemacs).
+=C-c l E= opens error list.
 
 * Windows / Buffers
+
 ** Window Splits
 
-| Key         | Action               |
-|-------------+----------------------|
-| =C-x 2=       | Split horizontal     |
-| =C-x 3=       | Split vertical       |
-| =C-x 0=       | Close this window    |
-| =C-x 1=       | Close other windows  |
-| =C-x o=       | Other window         |
-| =C-w h/j/k/l= | Move to window (vim) |
+| Key       | Action               |
+|-----------+----------------------|
+| =SPC 2=   | Split horizontal     |
+| =SPC 3=   | Split vertical       |
+| =SPC 0=   | Delete window        |
+| =SPC 1=   | Delete other windows |
+| =SPC o=   | Other window         |
 
 ** Buffers
 
-| Key     | Action                  |
-|---------+-------------------------|
-| =C-x b=   | =consult-buffer=          |
-| =C-x k=   | Kill buffer             |
-| =C-c p p= | Switch project            |
+| Key       | Action              |
+|-----------+---------------------|
+| =SPC b=   | consult-buffer      |
+| =SPC k=   | Kill buffer         |
+| =SPC p f= | Find file in project|
 
 * Projectile (Projects)
 
-| Key       | Action                   |
-|-----------+--------------------------|
-| =C-c p p=   | Switch project           |
-| =C-c p f=   | Find file in project     |
-| =C-c p s r= | Ripgrep in project       |
-| =C-c p b=   | Switch buffer in project |
-| =C-c p k=   | Kill project buffers     |
-
+| Key         | Action               |
+|-------------+----------------------|
+| =SPC p=     | Projectile prefix    |
+| =SPC p p=   | Switch project       |
+| =SPC p f=   | Find file in project |
+| =SPC p s r= | Ripgrep in project   |
 
 * Magit (Git)
 
-| Key   | Action       |
-|-------+--------------|
+| Key     | Action       |
+|---------+--------------|
+| =SPC g= | Magit status |
 | =C-x g= | Magit status |
-|       |              |
 
 Inside Magit:
 | Key | Action          |
 |-----+-----------------|
-| =s=   | Stage file/hunk |
-| =u=   | Unstage         |
-| =c c= | Commit          |
-| =P p= | Push            |
-| =F p= | Pull            |
-| =l l= | Log             |
-| =TAB= | Expand/collapse |
-| =q=   | Quit            |
-
-* Marks and Registers
-** Vim Marks
-
-| Key    | Action                   |
-|--------+--------------------------|
-| =ma=     | Set mark 'a'             |
-| ='a=     | Jump to mark 'a' (line)  |
-| =`a=     | Jump to mark 'a' (exact) |
-| =:marks= | List all marks           |
-
-** Registers
-
-| Key        | Action                |
-|------------+-----------------------|
-| ="ay=        | Yank to register a    |
-| ="ap=        | Paste from register a |
-| =:registers= | List all registers    |
-
-* Macros
-** Recording
-
-| Key | Action                        |
-|-----+-------------------------------|
-| =qa=  | Start recording to register a |
-| =q=   | Stop recording                |
-| =@a=  | Play macro a                  |
-| =@@=  | Repeat last macro             |
-| =5@a= | Play macro 5 times            |
+| =s= | Stage file/hunk |
+| =u= | Unstage         |
+| =c c= | Commit        |
+| =P p= | Push          |
+| =F p= | Pull          |
+| =TAB= | Expand/collapse|
+| =q=   | Quit          |
 
 * Daily Workflow
 
-1. =C-c p p= - Switch to project
-2. =C-c p f= - Find file
-3. =gd= - Jump to definition
-4. =C-o= - Jump back
-5. =C-s= - Search in file
+1. =SPC p p= - Switch to project
+2. =SPC p f= - Find file
+3. =M-.= - Jump to definition
+4. =M-,= - Jump back
+5. =M-s l= - Search in file
 6. =M-s r= - Search in project
-7. =C-x g= - Git status
+7. =SPC g= - Git status

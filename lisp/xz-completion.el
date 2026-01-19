@@ -11,11 +11,6 @@
   (vertico-cycle t)
   (vertico-count 18))
 
-;; Save history of minibuffer
-(use-package savehist
-  :init
-  (savehist-mode))
-
 ;; Rich annotations
 (use-package marginalia
   :ensure t

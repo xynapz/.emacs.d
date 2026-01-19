@@ -23,20 +23,32 @@
     
     ;; Leader key bindings (KEYPAD state via SPC)
     (meow-leader-define-key
-     ;; SPC j/k for line navigation
-     '("j" . "H-j")
-     '("k" . "H-k")
-     ;; Use SPC + number for digit argument
-     '("1" . meow-digit-argument)
-     '("2" . meow-digit-argument)
-     '("3" . meow-digit-argument)
-     '("4" . meow-digit-argument)
-     '("5" . meow-digit-argument)
-     '("6" . meow-digit-argument)
-     '("7" . meow-digit-argument)
-     '("8" . meow-digit-argument)
-     '("9" . meow-digit-argument)
-     '("0" . meow-digit-argument)
+     ;; File operations
+     '("f" . find-file)
+     '("b" . consult-buffer)
+     '("s" . save-buffer)
+     '("k" . kill-this-buffer)
+     '("r" . recentf-open-files)
+
+     ;; Project (Projectile)
+     '("p" . projectile-command-map)
+
+     ;; Git
+     '("g" . magit-status)
+
+     ;; Window management
+     '("1" . delete-other-windows)
+     '("2" . split-window-below)
+     '("3" . split-window-right)
+     '("0" . delete-window)
+     '("o" . other-window)
+
+     ;; Org
+     '("a" . org-agenda)
+     '("c" . org-capture)
+
+     ;; Help
+     '("h" . help-command)
      '("/" . meow-keypad-describe-key)
      '("?" . meow-cheatsheet))
     
