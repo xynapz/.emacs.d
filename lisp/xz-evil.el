@@ -35,12 +35,9 @@
   ;; C-g to exit insert state
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 
-  ;; USE EMACS STATE FOR PROBLEMATIC MODES (Org, Magit, etc.)
+  ;; USE EMACS STATE FOR PROBLEMATIC MODES
   ;; These modes have their own excellent keybindings
-  (dolist (mode '(org-mode
-                  org-agenda-mode
-                  org-capture-mode
-                  dired-mode
+  (dolist (mode '(dired-mode
                   eshell-mode
                   shell-mode
                   term-mode
@@ -102,7 +99,24 @@
                           profiler)))
 
 
-;; 4. EVIL EXTENSIONS (Lazy-loaded)
+;; 4. EVIL-ORG (Vim bindings for Org mode)
+(use-package evil-org
+  :ensure t
+  :after (evil org)
+  :hook (org-mode . evil-org-mode)
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys)
+  ;; Enable all key themes:
+  ;; - navigation: hjkl in headings
+  ;; - insert: better RET/o behavior
+  ;; - textobjects: vae (around element), vie (inner element)
+  ;; - additional: M-hjkl for heading manipulation
+  ;; - calendar: navigate calendar with hjkl
+  (evil-org-set-key-theme '(navigation insert textobjects additional calendar)))
+
+
+;; 5. EVIL EXTENSIONS (Lazy-loaded)
 
 ;; Surround (cs, ds, ys commands)
 (use-package evil-surround
@@ -131,11 +145,11 @@
               ("C-x" . evil-numbers/dec-at-pt)))
 
 
-;; 5. FOLDING SUPPORT
+;; 6. FOLDING SUPPORT
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
 
-;; 6. OPTIONAL: Quick toggle to Emacs state
+;; 7. OPTIONAL: Quick toggle to Emacs state
 ;; Sometimes I just want to use Emacs bindings temporarily
 (define-key evil-normal-state-map (kbd "C-z") 'evil-emacs-state)
 (define-key evil-emacs-state-map (kbd "C-z") 'evil-normal-state)
