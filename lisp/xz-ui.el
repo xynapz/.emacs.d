@@ -49,9 +49,8 @@
   :config
   (doom-modeline-mode 1))
 
-;; Dashboard / Start Screen (Optional)
-;; Use scratch buffer as startup screen, clean and simple
-(setq initial-scratch-message ";; Ready.\n\n")
+;; Keep default Emacs welcome screen
+;; (setq inhibit-startup-screen t)  ; Uncomment to disable welcome screen
 
 (provide 'xz-ui)
 ;;; xz-ui.el ends here

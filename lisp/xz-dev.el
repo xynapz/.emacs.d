@@ -223,6 +223,12 @@ Defaults to C++ but checks for C++ patterns in content and corresponding files."
   (lsp-enable-on-type-formatting nil)
   (lsp-auto-configure t)
   (lsp-auto-guess-root t)
+  ;; Large project optimizations
+  (lsp-file-watch-threshold nil)     ; No limit since watchers are off
+  (lsp-response-timeout 10)          ; Longer timeout for big projects
+  (lsp-enable-symbol-highlighting nil) ; Can be slow on large files
+  (lsp-enable-indentation nil)       ; Use native indentation
+  (lsp-before-save-edits nil)        ; Don't apply edits on save
 
   :config
   (define-key lsp-command-map (kbd "e") 'consult-lsp-diagnostics)
@@ -239,6 +245,16 @@ Defaults to C++ but checks for C++ patterns in content and corresponding files."
    '(("gopls.completeUnimported" t t)
      ("gopls.usePlaceholders" t t)
      ("gopls.staticcheck" t t)))
+
+  ;; C/C++ (clangd) - Optimized for large projects 
+  (setq lsp-clients-clangd-args
+        '("--background-index"        ; Index in background
+          "--clang-tidy"              ; Enable clang-tidy
+          "--completion-style=detailed"
+          "--header-insertion=never"  ; Don't auto-insert headers
+          "--pch-storage=memory"      ; Keep PCH in memory
+          "-j=4"                       ; Limit indexing threads
+          "--log=error"))             ; Reduce log verbosity
 
   ;; Rust
   (setq lsp-rust-analyzer-cargo-watch-command "clippy"
