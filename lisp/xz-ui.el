@@ -49,9 +49,20 @@
   :config
   (doom-modeline-mode 1))
 
-;; Ensure default Emacs welcome screen is shown
+;; Show default GNU Emacs splash screen
 (setq inhibit-startup-screen nil)
+(setq inhibit-startup-message nil)
+(setq inhibit-startup-echo-area-message nil)
 (setq initial-buffer-choice nil)
+
+;; ;; Force splash screen even in daemon mode
+;; (defun xz/show-splash-screen ()
+;;   "Show the default GNU Emacs splash screen."
+;;   (when (and (not (buffer-file-name))
+;;              (string= (buffer-name) "*scratch*"))
+;;     (fancy-splash-screen)))
+
+;; (add-hook 'emacs-startup-hook #'xz/show-splash-screen)
 
 (provide 'xz-ui)
 ;;; xz-ui.el ends here
