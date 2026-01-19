@@ -226,21 +226,6 @@ Defaults to C++ but checks for C++ patterns in content and corresponding files."
   (define-key lsp-command-map (kbd "t") 'xz/toggle-c-cpp-mode)
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
-  ;; Evil bindings for LSP (only set if evil is loaded)
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal lsp-mode-map
-      (kbd "K") 'lsp-ui-doc-glance
-      (kbd "gd") 'lsp-find-definition
-      (kbd "gr") 'lsp-find-references
-      (kbd "gD") 'lsp-find-declaration
-      (kbd "gi") 'lsp-find-implementation
-      (kbd "gt") 'lsp-find-type-definition
-      (kbd "ga") 'lsp-execute-code-action
-      (kbd "R") 'lsp-rename
-      ;; Error Navigation
-      (kbd "]e") 'flymake-goto-next-error
-      (kbd "[e") 'flymake-goto-prev-error))
-
   ;; Language-specific LSP settings
 
   ;; Golang

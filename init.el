@@ -22,7 +22,8 @@
 ;; 3. UI & Theme
 (require 'xz-ui)
 
-(require 'xz-evil)
+;; (require 'xz-evil)
+(require 'xz-meow)
 
 ;; 4. Completion (Vertico/Corfu)
 (require 'xz-completion)
