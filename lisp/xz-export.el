@@ -42,15 +42,6 @@
    (shell . t)
    (C . t)))
 
-;; LaTeX configuration for babel
-(setq org-latex-create-formula-image-program 'dvisvgm)
-(add-to-list 'org-latex-packages-alist '("" "tikz" t))
-(setq org-babel-latex-preamble
-      (lambda (_)
-        "\\documentclass[tikz]{standalone}\n\\usepackage{tikz}\n\\usetikzlibrary{backgrounds}\n\\tikzset{every picture/.style={show background rectangle, background rectangle/.style={fill=white}}}"))
-(setq org-babel-latex-pdf-svg-process "pdftocairo -svg %f %O")
-(setq org-format-latex-header
-      "\\documentclass{article}\n\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usepackage{amssymb}")
 
 ;; Don't prompt for babel evaluation
 (setq org-confirm-babel-evaluate nil)

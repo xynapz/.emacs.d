@@ -9,7 +9,7 @@
   (vertico-mode)
   :custom
   (vertico-cycle t)
-  (vertico-count 12))
+  (vertico-count 18))
 
 ;; Save history of minibuffer
 (use-package savehist

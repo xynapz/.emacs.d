@@ -22,16 +22,15 @@
 ;; 3. UI & Theme
 (require 'xz-ui)
 
-;; 4. Editing
 (require 'xz-evil)
 
-;; 5. Completion (Vertico/Corfu)
+;; 4. Completion (Vertico/Corfu)
 (require 'xz-completion)
 
-;; 6. Development (LSP, Treesit, Languages)
+;; 5. Development (LSP, Treesit, Languages)
 (require 'xz-dev)
 
-;; 7. Org Mode & Export (Preserved modules)
+;; 6. Org Mode & Export (Preserved modules)
 (require 'xz-org)
 (require 'xz-export)
 
@@ -41,6 +40,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("3e175343df8461d701e40ea88d5a6e39df8174b770dc40e05ba15e1485798374" default))
  '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

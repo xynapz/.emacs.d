@@ -9,7 +9,8 @@
 (use-package evil
   :ensure t
   :init
-  (setq evil-want-keybinding nil
+  (setq evil-want-integration t
+        evil-want-keybinding nil
         evil-want-C-u-scroll t
         evil-want-C-d-scroll t
         evil-undo-system 'undo-redo
@@ -23,15 +24,15 @@
 
   ;; jk to escape
   (define-key evil-insert-state-map (kbd "j")
-    (lambda () (interactive)
-      (let ((evt (read-event nil nil 0.15)))
-        (if (and evt (eq evt ?k))
-            (evil-normal-state)
-          (insert "j")
-          (when evt (push evt unread-command-events)))))))
+              (lambda () (interactive)
+                (let ((evt (read-event nil nil 0.15)))
+                  (if (and evt (eq evt ?k))
+                      (evil-normal-state)
+                    (insert "j")
+                    (when evt (push evt unread-command-events)))))))
 
-  ;; Revert Buffer
-  (define-key evil-normal-state-map (kbd "gR") 'revert-buffer)
+;; Revert Buffer
+(define-key evil-normal-state-map (kbd "gR") 'revert-buffer)
 
 ;; 2. Evil Collection
 (use-package evil-collection
@@ -40,7 +41,6 @@
   :config
   (setq evil-collection-setup-minibuffer t
         evil-collection-calendar-want-org-bindings t)
-  (setq evil-want-integration t)
   (evil-collection-init))
 
 ;; 3. Evil Surround
@@ -56,6 +56,12 @@
   :ensure t
   :config
   (evil-commentary-mode 1))
+
+(use-package evil-numbers
+  :bind (:map evil-normal-state-map
+              ("C-c +" . evil-numbers/inc-at-pt)
+              ("C-c -" . evil-numbers/dec-at-pt)))
+
 
 ;; 5. Folding Support (for evil-fold-action)
 (add-hook 'prog-mode-hook 'hs-minor-mode)

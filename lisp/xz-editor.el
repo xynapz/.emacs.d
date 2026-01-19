@@ -1,4 +1,4 @@
-;;; xz-editor.el --- Editing and Evil configuration -*- lexical-binding: t; -*-
+;;; xz-editor.el --- Editing configuration -*- lexical-binding: t; -*-
 
 ;;; Code:
 
