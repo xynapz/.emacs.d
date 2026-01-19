@@ -49,8 +49,9 @@
   :config
   (doom-modeline-mode 1))
 
-;; Keep default Emacs welcome screen
-;; (setq inhibit-startup-screen t)  ; Uncomment to disable welcome screen
+;; Ensure default Emacs welcome screen is shown
+(setq inhibit-startup-screen nil)
+(setq initial-buffer-choice nil)
 
 (provide 'xz-ui)
 ;;; xz-ui.el ends here
