@@ -84,9 +84,10 @@
   :after evil
   :config
   ;; Disable minibuffer setup (often causes issues)
-  (setq evil-collection-setup-minibuffer nil)
+  (setq evil-collection-setup-minibuffer nil
+        evil-collection-calendar-want-org-bindings t)
 
-  ;; SELECTIVE: Only init specific modes I need
+  ;; SELECTIVE: Only init specific modes I need (including org)
   (evil-collection-init '(magit
                           ibuffer
                           vertico
@@ -96,24 +97,10 @@
                           xref
                           ediff
                           flymake
-                          profiler)))
-
-
-;; 4. EVIL-ORG (Vim bindings for Org mode)
-(use-package evil-org
-  :ensure t
-  :after (evil org)
-  :hook (org-mode . evil-org-mode)
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys)
-  ;; Enable all key themes:
-  ;; - navigation: hjkl in headings
-  ;; - insert: better RET/o behavior
-  ;; - textobjects: vae (around element), vie (inner element)
-  ;; - additional: M-hjkl for heading manipulation
-  ;; - calendar: navigate calendar with hjkl
-  (evil-org-set-key-theme '(navigation insert textobjects additional calendar)))
+                          profiler
+                          org
+                          org-agenda
+                          calendar)))
 
 
 ;; 5. EVIL EXTENSIONS (Lazy-loaded)
